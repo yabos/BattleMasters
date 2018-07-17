@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2017
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleHit_Origin", "BattleHit_Origin.csproj", "{CAD0BE66-57C0-FED8-3327-546A4CC64EBC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleHit_Origin.Plugins", "BattleHit_Origin.Plugins.csproj", "{EE4E2E7A-85F4-7EE8-4C5D-0F1E2DA0E909}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleHit_Origin.Editor", "BattleHit_Origin.Editor.csproj", "{4DD7C4D4-5FF0-0EA4-ED6B-701128813A9B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CAD0BE66-57C0-FED8-3327-546A4CC64EBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAD0BE66-57C0-FED8-3327-546A4CC64EBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAD0BE66-57C0-FED8-3327-546A4CC64EBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAD0BE66-57C0-FED8-3327-546A4CC64EBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE4E2E7A-85F4-7EE8-4C5D-0F1E2DA0E909}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE4E2E7A-85F4-7EE8-4C5D-0F1E2DA0E909}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE4E2E7A-85F4-7EE8-4C5D-0F1E2DA0E909}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE4E2E7A-85F4-7EE8-4C5D-0F1E2DA0E909}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DD7C4D4-5FF0-0EA4-ED6B-701128813A9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DD7C4D4-5FF0-0EA4-ED6B-701128813A9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DD7C4D4-5FF0-0EA4-ED6B-701128813A9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DD7C4D4-5FF0-0EA4-ED6B-701128813A9B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
