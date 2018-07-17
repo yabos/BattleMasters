@@ -43,17 +43,30 @@ public class Actor : MonoBehaviour
         {
             Debug.LogError("Class : HeroActionEvent => mHero is null");
         }
+
+        //var info1 = Anim.GetCurrentAnimatorStateInfo(0);
+        //Debug.LogError(info1.fullPathHash);
+        //if (newState != info1.fullPathHash)
+        //{
+        //    animator.Play(newState, -1, 0f);
+        //    var info2 = animator.GetCurrentAnimatorStateInfo(0);
+        //    if (info1.nameHash == info2.nameHash)
+        //    {
+        //        Debug.LogWarning("State not changed");
+        //    }
+        //}
     }
 
-    public void PlayAnimation(AnimationActor eActiveAni)
+    public void PlayAnimation(int hash, AnimationActor eActiveAni)
     {
-        Anim.SetBool("Idle", false);
-        Anim.SetBool("Atk", false);
-        Anim.SetBool("Cnt", false);
-        Anim.SetBool("Defeat", false);
-        Anim.SetBool("Fake", false);
+        //Anim.SetBool("Idle", false);
+        //Anim.SetBool("Atk", false);
+        //Anim.SetBool("Cnt", false);
+        //Anim.SetBool("Defeat", false);
+        //Anim.SetBool("Fake", false);
 
-        Anim.SetBool(ClipName[(int)eActiveAni], true);
+        //Anim.SetBool(ClipName[(int)eActiveAni], true);
+        Anim.Play(ClipName[(int)eActiveAni], -1, 0f);
     }
 
     public void SetAnimationSpeed(AnimationActor eActiveAni, float fSeepd = 1.0f)
