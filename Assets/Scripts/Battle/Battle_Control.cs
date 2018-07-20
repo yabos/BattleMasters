@@ -25,12 +25,15 @@ public class Battle_Control : MonoBehaviour
 
     List<Hero_Control> mListMyHeroes = new List<Hero_Control>();
     List<Hero_Control> mListEnemyHeroes = new List<Hero_Control>();
+    BattleUI_Control mBattleUI;
 
-	SpriteRenderer mLoading = null;
+    SpriteRenderer mLoading = null;
     int m_iLoadingState = 0;
 
-    Transform mBattleStartTo = null;
-    List<NearPath> mListBattleEndPos = new List<NearPath>();
+    public int ActiveTurnHero
+    {
+        get; set;
+    }
 
     public eBattleState BattleState
     {
@@ -48,25 +51,21 @@ public class Battle_Control : MonoBehaviour
         get { return mListEnemyHeroes; }
     }
 
-    public Transform BattleStartTo
-    {
-        get { return mBattleStartTo; }
-    }
-
-    public List<NearPath> ListBattleEndPos
-    {
-        get { return mListBattleEndPos; }
-    }
-
     void Start()
     {
 		mLoading = GetComponent<SpriteRenderer> ();
 
         mBattleState = eBattleState.eBattle_Ready;
+        mBattleUI = UIManager.Instance().GetUI() as BattleUI_Control;
     }
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            mBattleUI.SetActiveTurnHeroUI(1002);
+        }
+
         LoadingProcess();
     }   
 
@@ -87,18 +86,8 @@ public class Battle_Control : MonoBehaviour
                 break;
 
             case 3:
-                //AggroInit();
-                m_iLoadingState++;
-                break;
-
-            case 4:
-                InitBattlePos();
-                break;
-
-			case 5:
-				BattleUI_Control ui = UIManager.Instance ().GetUI () as BattleUI_Control;
-				ui.ActiveLoadingIMG (false);
-                ui.CreateTurnIcon();
+                mBattleUI.ActiveLoadingIMG (false);
+                mBattleUI.CreateTurnIcon();
                 m_iLoadingState++;
 				break;
         }
@@ -109,7 +98,7 @@ public class Battle_Control : MonoBehaviour
 		GameObject goMap = VResources.Load<GameObject>(stMapLoadPath + iMapNo.ToString());
         if (goMap != null)
         { 
-            GameObject Map = GameObject.Instantiate( goMap ) as GameObject;
+            GameObject Map = Instantiate( goMap ) as GameObject;
             if (Map != null)
             {
                 Map.transform.parent = transform;
@@ -188,62 +177,27 @@ public class Battle_Control : MonoBehaviour
         m_iLoadingState++;
     }
 
-    //void AggroInit()
-    //{
-    //    foreach (var nodeMy in mListMyHeroes)
-    //    {
-    //        foreach (var nodeEnemy in mListEnemyHeroes)
-    //        {
-    //            nodeMy.DicAggro.Add(nodeEnemy, 1);
-    //        }
-    //    }
-
-    //    foreach (var nodeEnemy in mListEnemyHeroes)
-    //    {
-    //        foreach (var nodeMy in mListMyHeroes)
-    //        {
-    //            nodeEnemy.DicAggro.Add(nodeMy, 1);
-    //        }
-    //    }
-
-    //    m_iLoadingState++;
-    //}
-
-    void InitBattlePos()
+    public void SetActiveTurnHero(int heroNo)
     {
-        Transform tStartTo = transform.Find("Map/RegenPos/MyTeam/StartTo");
-        if (tStartTo != null)
-        {
-            mBattleStartTo = tStartTo;
-        }
+        ActiveTurnHero = heroNo;
+        mBattleUI.SetActiveTurnHeroUI(heroNo);
 
-        for (int i = 0; i < 6; ++i)
-        {
-            Transform tEndPath = transform.Find("Map/RegenPos/MyTeam/EndPath" + i.ToString());
-            if (tEndPath == null) continue;
-            NearPath np = new NearPath();
-            np.mIsEntered = false;
-            np.mTran = tEndPath;
-            mListBattleEndPos.Add(np);
-        }
-
-        m_iLoadingState++;
     }
 
-    public void CheckEndBattle()
+    public Hero_Control GetHeroControl(int heroNo)
     {
-        bool bAliveEnemy = false;
-        for (int i = 0; i < mListEnemyHeroes.Count; ++i)
+        var hero = ListMyHeroes.Find(x => x.HeroNo.Equals(heroNo));
+        if (hero != null)
         {
-            if (!mListEnemyHeroes[i].IsDie)
-            {
-                bAliveEnemy = true;
-            }
+            return hero;
         }
 
-        if (!bAliveEnemy)
+        hero = ListEnemyHeroes.Find(x => x.HeroNo.Equals(heroNo));
+        if (hero != null)
         {
-            mBattleState = eBattleState.eBattle_Win;
+            return hero;
         }
+
+        return null;
     }
 }

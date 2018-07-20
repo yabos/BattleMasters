@@ -7,9 +7,7 @@ public class TB_Hero
     public int mHP;
     public int mAtk;
     public int mDef;
-    public float mSpeed;
-    public float mBlowPower;
-    public float mBlowTolerance;
+    public int mSpeed;
+
     public string stResPath;
-    public float mScale;    
 }
