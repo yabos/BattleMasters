@@ -1,21 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class BattleUI_Control : BaseUI
 {
 	Transform mBattleLoading = null;
-
     Transform mHeroHp = null;
+    Transform mTrunIconRoot;    
 
 	// Use this for initialization
 	void Start ()
     {
         mHeroHp = transform.Find("Anchor/HeroHP");
-        if (mHeroHp == null) return;
-
 		mBattleLoading = transform.Find ("Anchor/Loading");
-		if (mBattleLoading == null)return;
-	}
+        mTrunIconRoot = transform.Find("Anchor/Turn");
+     }
 	
 	// Update is called once per frame
 	void Update ()
@@ -95,6 +94,36 @@ public class BattleUI_Control : BaseUI
             if (tChild.name.Equals(uid.ToString()))
             {
                 NGUITools.Destroy(tChild.gameObject);
+            }
+        }
+    }
+
+    public void CreateTurnIcon()
+    {
+        CreateTurnIcon(GameMain.Instance().BattleControl.ListMyHeroes);
+        CreateTurnIcon(GameMain.Instance().BattleControl.ListEnemyHeroes);
+
+    }
+
+    void CreateTurnIcon(List<Hero_Control> listHero)
+    {
+        for (int i = 0; i < listHero.Count; ++i)
+        {
+            GameObject goIcon = GameObject.Instantiate(VResources.Load<GameObject>("UI/Battle/TurnIcon")) as GameObject;
+            if (goIcon != null)
+            {
+                goIcon.transform.parent = mTrunIconRoot;
+                goIcon.name = listHero[i].HeroNo.ToString();
+
+                goIcon.transform.localPosition = Vector3.zero;
+                goIcon.transform.localRotation = Quaternion.identity;
+                goIcon.transform.localScale = new Vector3(6, 6, 0);
+
+                var icon = goIcon.GetComponent<TurnIcon>();
+                if (icon != null)
+                {
+                    icon.SetTurnIcon(listHero[i].HeroNo);
+                }
             }
         }
     }

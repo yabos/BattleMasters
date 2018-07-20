@@ -98,7 +98,8 @@ public class Battle_Control : MonoBehaviour
 			case 5:
 				BattleUI_Control ui = UIManager.Instance ().GetUI () as BattleUI_Control;
 				ui.ActiveLoadingIMG (false);
-				m_iLoadingState++;
+                ui.CreateTurnIcon();
+                m_iLoadingState++;
 				break;
         }
     }
