@@ -19,13 +19,9 @@ public class GameMain : MonoBehaviour
 
     public static readonly string stBattleRootPath = "Battle/Prefabs/Battle_Root";
 
-    //ComDef.GameState mGameState = ComDef.GameState.GAMESTATE_LOBBY;
+    public float mGameSpeed = 1f;
 
-    public float mGameSpeed = 2f;
-
-    GameObject mUIRoot = null;    
-    UIManager mUIManager = null;
-
+    GameObject mUIRoot = null;
     GameObject mBattleRoot = null;
     Battle_Control mBattleControl = null;
 

@@ -153,4 +153,9 @@ public class UIManager : MonoBehaviour
 
 		return mCurrUI.GetComponent<BaseUI>();
 	}
+
+    public void SendEvent(EBattleEvent uIEvent)
+    {
+        GetUI().SendEvent(uIEvent);
+    }
 }

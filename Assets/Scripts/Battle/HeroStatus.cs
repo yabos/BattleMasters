@@ -19,6 +19,12 @@ public class HeroStatus : MonoBehaviour
         mSpeed.text = heroCont.Speed.ToString();
         mAtk.text = heroCont.Atk.ToString();
         mCri.text = heroCont.Def.ToString();
+
+        var tw = GetComponent<TweenPosition>();
+        if (tw != null)
+        {
+            tw.ResetToBeginning();
+        }
     }
 
     public void SetPos(Vector3 vWorldPos)

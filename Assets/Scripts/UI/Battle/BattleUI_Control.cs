@@ -50,6 +50,19 @@ public class BattleUI_Control : BaseUI
         }
     }
 
+    public override void SendEvent(EBattleEvent uIEvent)
+    {
+        if (uIEvent == EBattleEvent.UIEVENT_SELECT_TARGET)
+        {
+            var profile = GetProfile(GetBC().ActiveTargetHero);
+            if (profile != null)
+            {
+                profile.TweenPosSpriteProfile(true);
+                GetBC().SetBattleStateSelAtk();
+            }
+        }
+    }
+
     Battle_Control GetBC()
     {
         if (mBattle_Control == null)
@@ -230,20 +243,36 @@ public class BattleUI_Control : BaseUI
 
     public void SetActiveTurnHeroUI(int heroNo)
     {
+        var bp = GetProfile(heroNo);
+        if (bp != null)
+        {
+            var heroCont = mBattle_Control.GetHeroControl(heroNo);
+            if (heroCont != null)
+            {
+                bp.SetProfile(heroCont);
+            }
+        }
+    }
+
+    BattleProfile GetProfile(int heroNo)
+    {
         var heroCont = mBattle_Control.GetHeroControl(heroNo);
-        if (heroCont == null) return;
-
-        BattleProfile bp = new BattleProfile();
-        if (heroCont.MyTeam)
+        if (heroCont != null)
         {
-            bp = mProfiles[0];
-            
-        }
-        else
-        {
-            bp = mProfiles[1];
+            BattleProfile bp = new BattleProfile();
+            if (heroCont.MyTeam)
+            {
+                bp = mProfiles[0];
+
+            }
+            else
+            {
+                bp = mProfiles[1];
+            }
+
+            return bp;
         }
 
-        bp.SetProfile(heroCont);
+        return null;
     }
 }

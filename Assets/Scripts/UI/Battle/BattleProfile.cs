@@ -18,7 +18,8 @@ public class BattleProfile : MonoBehaviour
         mStatus.InitStatus(heroCont);
         if (heroCont.MyTeam == false)
         {
-            mStatus.SetPos(heroCont.transform.position);
+            //mStatus.SetPos(heroCont.transform.position);
+
             mTargetBtn.position = heroCont.transform.position;
         }
 
@@ -55,5 +56,33 @@ public class BattleProfile : MonoBehaviour
                 tp.ResetToBeginning();
             }
         }
+    }
+
+    public void TweenPosSpriteProfile(bool isPlay)
+    {
+        ActiveSpriteProfile(true);
+
+        var tp = mSpriteProfile.GetComponent<TweenPosition>();
+        if (tp != null)
+        {
+            if (isPlay)
+            {
+                tp.PlayForward();
+            }
+            else
+            {
+                tp.ResetToBeginning();
+            }
+        }
+    }
+
+    public void OnTweenPosSpriteProfileFinish()
+    {
+        mTargetBtn.gameObject.SetActive(false);
+    }
+
+    public void ActiveSpriteProfile(bool active)
+    {
+        mSpriteProfile.gameObject.SetActive(active);
     }
 }

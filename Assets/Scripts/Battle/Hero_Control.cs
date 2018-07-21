@@ -173,39 +173,8 @@ public class Hero_Control : MonoBehaviour
 
     void Update()
     {
-        //MyStateControl();
         HPGaugePosUpdate();
     }
-
-    void MyStateControl()
-    {
-        switch ((int)mHeroState)
-        {
-            case (int)eHeroState.HEROSTATE_IDLE:
-                Battle_Control bc = GameMain.Instance().BattleControl;
-                if (bc != null)
-                {
-                    if (bc.BattleState == Battle_Control.eBattleState.eBattle_Ready)
-                    {
-                        // 전투 준비 중일 때 시작 위치로 아군이동
-                    }
-                    else if (bc.BattleState == Battle_Control.eBattleState.eBattle_Ing)
-                    {
-                        // 피아 모두 적을 탐색
-                    }
-                    else if (bc.BattleState == Battle_Control.eBattleState.eBattle_Win)
-                    {
-                        // 아군 이겼을 때 포즈 후 다음 스테이지로
-                    }
-                    else if (bc.BattleState == Battle_Control.eBattleState.eBattle_Lose)
-                    {
-                        // 적이 이겼을 때 포즈
-                    }
-                }                
-                break;
-           
-        }
-    }    
 
     IEnumerator HeroDeathAlphaFade()
     {

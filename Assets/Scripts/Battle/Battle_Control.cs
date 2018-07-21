@@ -14,6 +14,7 @@ public class Battle_Control : MonoBehaviour
     {
         eBattle_Ready,
         eBattle_Ing,
+        eBattle_SelAtk,
         eBattle_Win,
         eBattle_Lose,
         eBattle_End,
@@ -31,6 +32,11 @@ public class Battle_Control : MonoBehaviour
     int m_iLoadingState = 0;
 
     public int ActiveTurnHero
+    {
+        get; set;
+    }
+
+    public int ActiveTargetHero
     {
         get; set;
     }
@@ -59,30 +65,41 @@ public class Battle_Control : MonoBehaviour
         mBattleUI = UIManager.Instance().GetUI() as BattleUI_Control;
     }
 
+    int beforeHeroNo = 0;
     void Update()
     {
         LoadingProcess();
 
-        if (mBattleState == eBattleState.eBattle_Ing)
+       if (mBattleState == eBattleState.eBattle_Ing)
         {
             if (Input.GetMouseButtonDown(0) && ActiveTurnHero > 0)
             {
                 Vector2 wp = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 Ray2D ray = new Ray2D(wp, Vector2.zero);
                 RaycastHit2D[] hits = Physics2D.RaycastAll(ray.origin, ray.direction);
-
+                
                 foreach (var hit in hits)
                 {
                     var heroCont = hit.collider.GetComponentInParent<Hero_Control>();
                     if (heroCont == null) continue;
                     if (heroCont.MyTeam) continue;
+                    if (beforeHeroNo.Equals(heroCont.HeroNo)) continue;
 
                     SetEnemyOutline(heroCont.HeroNo);
                     mBattleUI.SetActiveTurnHeroUI(heroCont.HeroNo);
+                    ActiveTargetHero = heroCont.HeroNo;
+                    beforeHeroNo = heroCont.HeroNo;
                 }
             }
-        }
-    }   
+        }        
+    }
+
+    public void SetBattleStateSelAtk()
+    {
+        BattleState = eBattleState.eBattle_SelAtk;
+
+
+    }
 
     void LoadingProcess()
     {
