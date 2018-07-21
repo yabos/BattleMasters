@@ -9,6 +9,7 @@ public class BattleProfile : MonoBehaviour
     public UISprite mSpriteProfile;
 
     public HeroStatus mStatus;
+    public Transform mTargetBtn;
 
     public void SetProfile(Hero_Control heroCont)
     {
@@ -18,6 +19,7 @@ public class BattleProfile : MonoBehaviour
         if (heroCont.MyTeam == false)
         {
             mStatus.SetPos(heroCont.transform.position);
+            mTargetBtn.position = heroCont.transform.position;
         }
 
         ActiveProfile(true, heroCont.MyTeam);
