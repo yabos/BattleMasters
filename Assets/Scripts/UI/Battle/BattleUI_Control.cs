@@ -178,8 +178,7 @@ public class BattleUI_Control : BaseUI
         Battle_Control bc = GetBC();
         if (bc != null)
         {
-            if (bc.BattleState == Battle_Control.eBattleState.eBattle_Ready ||
-                bc.BattleState == Battle_Control.eBattleState.eBattle_Ing)
+            if (bc.BattleState == Battle_Control.eBattleState.eBattle_Ing)
             {
                 List<Hero_Control> listTemp = new List<Hero_Control>();
                 listTemp.AddRange(bc.ListMyHeroes);
@@ -246,6 +245,5 @@ public class BattleUI_Control : BaseUI
         }
 
         bp.SetProfile(heroCont);
-        bp.ActiveProfile(true);
     }
 }

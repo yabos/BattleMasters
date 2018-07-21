@@ -24,6 +24,8 @@ public class Hero_Control : MonoBehaviour
     public readonly int ATTPOS_MAXCOUNT = 2;
 
     Actor mActor = null;
+    Outline mOutline = null;
+
     eHeroState mHeroState = eHeroState.HEROSTATE_IDLE;
 
     Guid mHeroUid = new Guid();
@@ -38,19 +40,11 @@ public class Hero_Control : MonoBehaviour
     string mStResPath = null;
 
     bool mMyTeam = false;
-    bool mIsMove = false;
     bool mIsDie = false;
 
-    Transform mEf_HP = null;
-
-    //Dictionary<Hero_Control, int> mDicAggro = new Dictionary<Hero_Control, int>();
-    Hero_Control mTarget = null;
-    eAttPos mAttPos = eAttPos.ATTPOS_NONE;
-    List<Hero_Control> mListAttPos = new List<Hero_Control>();
     SpriteRenderer mSR = new SpriteRenderer();
-
-    float mBlowTime = 0;
-
+    Transform mEf_HP = null;
+    Hero_Control mTarget = null;    
     GameObject mHeroObj = null;
 
     public Guid HeroUid
@@ -113,22 +107,10 @@ public class Hero_Control : MonoBehaviour
         get { return mStResPath; }
     }
 
-    //public Dictionary<Hero_Control, int> DicAggro
-    //{
-    //    set { mDicAggro = value; }
-    //    get { return mDicAggro; }
-    //}
-
     public Hero_Control Target
     {
         set { mTarget = value; }
         get { return mTarget; }
-    }
-
-    public eAttPos AttPos
-    {
-        set { mAttPos = value; }
-        get { return mAttPos; }
     }
 
     public bool MyTeam
@@ -161,17 +143,13 @@ public class Hero_Control : MonoBehaviour
         get { return mIsDie; }
     }
 
-    void Awake()
-    {
-        
-    }
-
     public void InitHero()
     {
         Transform tObj = transform.Find("Obj");
         if (tObj != null)
         {
             mActor = tObj.GetComponent<Actor>();
+            mOutline = tObj.GetComponent<Outline>();
 
             mEf_HP = tObj.Find("ef_HP");
             if (mEf_HP == null)
@@ -312,5 +290,15 @@ public class Hero_Control : MonoBehaviour
 		BattleUI_Control bcUI = UIManager.Instance().GetUI() as BattleUI_Control;
         if (bcUI == null) return;
         bcUI.UpdatePosHPGauge(mHeroUid, mEf_HP);
+    }
+
+    public Actor GetActor()
+    {
+        return mActor;
+    }
+
+    public Outline GetOutline()
+    {
+        return mOutline;
     }
 }

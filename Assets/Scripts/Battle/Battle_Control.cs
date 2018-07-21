@@ -61,12 +61,27 @@ public class Battle_Control : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            mBattleUI.SetActiveTurnHeroUI(1002);
-        }
-
         LoadingProcess();
+
+        if (mBattleState == eBattleState.eBattle_Ing)
+        {
+            if (Input.GetMouseButtonDown(0) && ActiveTurnHero > 0)
+            {
+                Vector2 wp = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Ray2D ray = new Ray2D(wp, Vector2.zero);
+                RaycastHit2D[] hits = Physics2D.RaycastAll(ray.origin, ray.direction);
+
+                foreach (var hit in hits)
+                {
+                    var heroCont = hit.collider.GetComponentInParent<Hero_Control>();
+                    if (heroCont == null) continue;
+                    if (heroCont.MyTeam) continue;
+
+                    SetEnemyOutline(heroCont.HeroNo);
+                    mBattleUI.SetActiveTurnHeroUI(heroCont.HeroNo);
+                }
+            }
+        }
     }   
 
     void LoadingProcess()
@@ -86,8 +101,14 @@ public class Battle_Control : MonoBehaviour
                 break;
 
             case 3:
+                //activate all Outline scripts in game
+                foreach (Outline vCurOutline in (Outline[])FindObjectsOfType(typeof(Outline)))
+                {
+                    vCurOutline.Initialise();
+                }
                 mBattleUI.ActiveLoadingIMG (false);
                 mBattleUI.CreateTurnIcon();
+                mBattleState = eBattleState.eBattle_Ing;
                 m_iLoadingState++;
 				break;
         }
@@ -181,7 +202,6 @@ public class Battle_Control : MonoBehaviour
     {
         ActiveTurnHero = heroNo;
         mBattleUI.SetActiveTurnHeroUI(heroNo);
-
     }
 
     public Hero_Control GetHeroControl(int heroNo)
@@ -199,5 +219,13 @@ public class Battle_Control : MonoBehaviour
         }
 
         return null;
+    }
+
+    void SetEnemyOutline(int heroNo)
+    {
+        foreach (var elem in mListEnemyHeroes)
+        {
+            elem.GetOutline().eraseRenderer = !elem.HeroNo.Equals(heroNo);
+        }
     }
 }

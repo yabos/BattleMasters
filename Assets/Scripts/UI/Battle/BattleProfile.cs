@@ -8,14 +8,33 @@ public class BattleProfile : MonoBehaviour
 
     public UISprite mSpriteProfile;
 
+    public HeroStatus mStatus;
+
     public void SetProfile(Hero_Control heroCont)
     {
         mSpriteProfile.spriteName = heroCont.HeroNo.ToString();
+
+        mStatus.InitStatus(heroCont);
+        if (heroCont.MyTeam == false)
+        {
+            mStatus.SetPos(heroCont.transform.position);
+        }
+
+        ActiveProfile(true, heroCont.MyTeam);
     }
 
-    public void ActiveProfile(bool active)
+    void ActiveProfile(bool active, bool myTeam)
     {
         mProfile.SetActive(active);
+
+        if (myTeam == true)
+        {
+            mSpriteProfile.gameObject.SetActive(active);            
+        }
+        else
+        {
+            mSpriteProfile.gameObject.SetActive(false);
+        }
 
         TweenPosProfile(true);
     }
