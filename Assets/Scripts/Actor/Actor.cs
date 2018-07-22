@@ -10,6 +10,8 @@ public class Actor : MonoBehaviour
         ANI_CNT,
         ANI_FAKE,
         ANI_DEFEAT,
+        ANI_TRACE,
+        ANI_BREAK,
         ANI_MAX,
     }
 
@@ -20,6 +22,8 @@ public class Actor : MonoBehaviour
         "Cnt",
         "Fake",
         "Defeat",
+        "Trace",
+        "Break",
     };
 
     public Animator Anim = null;
@@ -57,7 +61,7 @@ public class Actor : MonoBehaviour
         //}
     }
 
-    public void PlayAnimation(int hash, AnimationActor eActiveAni)
+    public void PlayAnimation(AnimationActor eActiveAni)
     {
         //Anim.SetBool("Idle", false);
         //Anim.SetBool("Atk", false);

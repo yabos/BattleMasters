@@ -45,7 +45,7 @@ public class TurnTimer : MonoBehaviour
                 {
                     if (GameMain.Instance().BattleControl.ActiveTargetHero > 0)
                     {
-                        GameMain.Instance().BattleControl.mBattleUI.SetBattleSelActionType();
+                        GameMain.Instance().BattleControl.BattleUI.SetBattleSelActionType();
                     }
                     else
                     {

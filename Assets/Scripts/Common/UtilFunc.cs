@@ -62,4 +62,14 @@ public class UtilFunc
 
         return hero;
     }
+
+    public static void ChangeLayersRecursively(Transform trans, string name)
+    {
+        trans.gameObject.layer = LayerMask.NameToLayer(name);
+        foreach (Transform child in trans)
+        {
+            child.gameObject.layer = LayerMask.NameToLayer(name);
+            ChangeLayersRecursively(child, name);
+        }
+    }
 }

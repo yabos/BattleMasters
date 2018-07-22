@@ -8,9 +8,10 @@ public class Hero_Control : MonoBehaviour
     public enum eHeroState
     {
         HEROSTATE_IDLE = 0,
+        HEROSTATE_TRACE_ATK,
+        HEROSTATE_CNT_ATK,
+        HEROSTATE_FAKE_ATK,
         HEROSTATE_ATK,
-        HEROSTATE_CNT,
-        HEROSTATE_FAKE,
         HEROSTATE_DEFEAT,
     }
 
@@ -44,6 +45,7 @@ public class Hero_Control : MonoBehaviour
     Transform mEf_HP = null;
     Hero_Control mTarget = null;    
     GameObject mHeroObj = null;
+    Vector3 mInitPos;
 
     public Guid HeroUid
     {
@@ -137,6 +139,8 @@ public class Hero_Control : MonoBehaviour
 
     public void InitHero()
     {
+        mInitPos = transform.position;
+
         Transform tObj = transform.Find("Obj");
         if (tObj != null)
         {
@@ -166,6 +170,30 @@ public class Hero_Control : MonoBehaviour
     void Update()
     {
         HPGaugePosUpdate();
+        UpdateState();
+    }
+
+    float fElasedTime = 0;
+    void UpdateState()
+    {
+        if (mHeroState == eHeroState.HEROSTATE_TRACE_ATK)
+        {
+            fElasedTime += Time.deltaTime;
+
+            PlayAnm(Actor.AnimationActor.ANI_TRACE);
+
+            if (fElasedTime <= 0.5f)
+            {
+                Vector3 vPos = transform.position;
+                vPos.x += 0.1f;
+                transform.position = vPos;
+            }
+            else if (fElasedTime > 0.5f)
+            {
+                PlayAnm(Actor.AnimationActor.ANI_ATK);
+
+            }
+        }
     }
 
     IEnumerator HeroDeathAlphaFade()
@@ -261,5 +289,10 @@ public class Hero_Control : MonoBehaviour
     public Outline GetOutline()
     {
         return mOutline;
+    }
+
+    public void PlayAnm(Actor.AnimationActor anim)
+    {
+        mActor.PlayAnimation(anim);
     }
 }

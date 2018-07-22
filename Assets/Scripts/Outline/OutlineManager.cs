@@ -161,9 +161,9 @@ public class OutlineManager : MonoBehaviour
     private void CreateMaterialsIfNeeded()
     {
         if (outlineShader == null)
-            outlineShader = Resources.Load<Shader>("Mats/OutlineShader");
+            outlineShader = Resources.Load<Shader>("Shader/OutlineShader");
         if (outlineBufferShader == null)
-			outlineBufferShader = Resources.Load<Shader>("Mats/OutlineBufferShader");
+			outlineBufferShader = Resources.Load<Shader>("Shader/OutlineBufferShader");
         if (outlineShaderMaterial == null)
         {
             outlineShaderMaterial = new Material(outlineShader);

@@ -26,4 +26,6 @@ public class Define
 
     public static readonly float SELECT_TARGET_LIMITTIME = 3;
     public static readonly float SELECT_ACTIONTYPE_LIMITTIME = 5;
+
+    public static readonly float TRACE_SPEED = 2;
 }

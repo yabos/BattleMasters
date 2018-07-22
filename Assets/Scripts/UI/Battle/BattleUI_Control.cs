@@ -337,7 +337,25 @@ public class BattleUI_Control : BaseUI
         ActiveTurnTimer(true);
     }
 
-    public void ActiveTurnTimer(bool active)
+
+    public void ActiveHUDUI(bool active)
+    {
+        ActiveTurnUI(active);
+        ActiveHPUI(active);
+        ActiveTurnTimer(active);        
+    }
+
+    void ActiveTurnUI(bool active)
+    {
+        mTrunIconRoot.gameObject.SetActive(active);
+    }
+
+    void ActiveHPUI(bool active)
+    {
+        mHeroHp.gameObject.SetActive(active);
+    }
+
+    void ActiveTurnTimer(bool active)
     {
         mGoTurnTimer.SetActive(active);
     }

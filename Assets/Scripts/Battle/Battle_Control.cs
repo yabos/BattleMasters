@@ -2,12 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class NearPath
-{
-    public bool mIsEntered = false;
-    public Transform mTran = null;
-}
-
 public class Battle_Control : MonoBehaviour
 {
     public enum eBattleState
@@ -16,6 +10,7 @@ public class Battle_Control : MonoBehaviour
         eBattle_Ing,
         eBattle_SelAtk,
         eBattle_Action,
+        eBattle_Direction,
         eBattle_Win,
         eBattle_Lose,
         eBattle_End,
@@ -27,7 +22,13 @@ public class Battle_Control : MonoBehaviour
 
     List<Hero_Control> mListMyHeroes = new List<Hero_Control>();
     List<Hero_Control> mListEnemyHeroes = new List<Hero_Control>();
-    public BattleUI_Control mBattleUI;
+
+    public BattleUI_Control BattleUI
+    {
+        get; set;
+    }
+
+    public GameObject mBlur;
 
     SpriteRenderer mLoading = null;
     int m_iLoadingState = 0;
@@ -63,7 +64,7 @@ public class Battle_Control : MonoBehaviour
 		mLoading = GetComponent<SpriteRenderer> ();
 
         mBattleState = eBattleState.eBattle_Ready;
-        mBattleUI = UIManager.Instance().GetUI() as BattleUI_Control;
+        BattleUI = UIManager.Instance().GetUI() as BattleUI_Control;
     }
 
     int beforeHeroNo = 0;
@@ -87,7 +88,7 @@ public class Battle_Control : MonoBehaviour
                     if (beforeHeroNo.Equals(heroCont.HeroNo)) continue;
 
                     SetEnemyOutline(heroCont.HeroNo);
-                    mBattleUI.SetActiveTurnHeroUI(heroCont.HeroNo);
+                    BattleUI.SetActiveTurnHeroUI(heroCont.HeroNo);
                     ActiveTargetHero = heroCont.HeroNo;
                     beforeHeroNo = heroCont.HeroNo;
                 }
@@ -98,17 +99,39 @@ public class Battle_Control : MonoBehaviour
     public void SetBattleStateSelActionType()
     {
         BattleState = eBattleState.eBattle_SelAtk;
-        mBattleUI.ActiveSelActionType(true);
-        mBattleUI.SetTurnTimer(Define.SELECT_ACTIONTYPE_LIMITTIME, ETurnTimeType.TURNTIME_SEL_ACTIONTYPE);
+
+        BattleUI.ActiveSelActionType(true);
+        BattleUI.SetTurnTimer(Define.SELECT_ACTIONTYPE_LIMITTIME, ETurnTimeType.TURNTIME_SEL_ACTIONTYPE);
     }
 
     public void SetBattleStateAction()
     {
         BattleState = eBattleState.eBattle_Action;
 
-        mBattleUI.ActiveBattleProfile(false);
-        mBattleUI.ActiveTurnTimer(false);
+        mBlur.SetActive(true);
+        BattleUI.ActiveBattleProfile(false);
+        BattleUI.ActiveHUDUI(false);        
         EnemyOutlineOff();
+
+        var Hero = GetHeroControl(ActiveTurnHero);
+        if (Hero != null)
+        {
+            UtilFunc.ChangeLayersRecursively(Hero.transform, "UI");
+            Hero.HeroState = Hero_Control.eHeroState.HEROSTATE_TRACE_ATK;
+        }
+
+        Hero = GetHeroControl(ActiveTargetHero);
+        if (Hero != null)
+        {
+            UtilFunc.ChangeLayersRecursively(Hero.transform, "UI");
+            Hero.PlayAnm(Actor.AnimationActor.ANI_FAKE);
+        }
+    }
+
+    public void SetBattleDirection()
+    {
+        BattleState = eBattleState.eBattle_Direction;
+
     }
 
     void LoadingProcess()
@@ -133,8 +156,8 @@ public class Battle_Control : MonoBehaviour
                 {
                     vCurOutline.Initialise();
                 }
-                mBattleUI.ActiveLoadingIMG (false);
-                mBattleUI.CreateTurnIcon();
+                BattleUI.ActiveLoadingIMG (false);
+                BattleUI.CreateTurnIcon();
                 SoundManager.Instance().PlayBattleBGM(SoundManager.eBattleBGM.eBattleBGM_Normal);
                 mBattleState = eBattleState.eBattle_Ing;
                 m_iLoadingState++;
@@ -229,8 +252,8 @@ public class Battle_Control : MonoBehaviour
     public void SetActiveTurnHero(int heroNo)
     {
         ActiveTurnHero = heroNo;
-        mBattleUI.SetActiveTurnHeroUI(heroNo);
-        mBattleUI.SetTurnTimer(Define.SELECT_TARGET_LIMITTIME, ETurnTimeType.TURNTIME_SEL_TARGET);
+        BattleUI.SetActiveTurnHeroUI(heroNo);
+        BattleUI.SetTurnTimer(Define.SELECT_TARGET_LIMITTIME, ETurnTimeType.TURNTIME_SEL_TARGET);
     }
 
     public Hero_Control GetHeroControl(int heroNo)
