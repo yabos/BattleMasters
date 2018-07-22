@@ -10,10 +10,17 @@ public class Battle_Control : MonoBehaviour
         eBattle_Ing,
         eBattle_SelAtk,
         eBattle_Action,
-        eBattle_Direction,
         eBattle_Win,
         eBattle_Lose,
         eBattle_End,
+    }
+
+    public enum EBattlePosType
+    {
+        BPT_TRACE_FAKE,
+        BPT_CNT_BREAK,
+        BPT_FAKE_CNT,
+        BPT_DRAW,
     }
 
     public static readonly string stMapLoadPath = "Map/";
@@ -22,6 +29,9 @@ public class Battle_Control : MonoBehaviour
 
     List<Hero_Control> mListMyHeroes = new List<Hero_Control>();
     List<Hero_Control> mListEnemyHeroes = new List<Hero_Control>();
+
+    Transform [] mBattlePosMyTeam = new Transform[4];
+    Transform [] mBattlePosEnemy = new Transform[4];
 
     public BattleUI_Control BattleUI
     {
@@ -112,26 +122,114 @@ public class Battle_Control : MonoBehaviour
         BattleUI.ActiveBattleProfile(false);
         BattleUI.ActiveHUDUI(false);        
         EnemyOutlineOff();
+        HeroAction();
+    }
 
-        var Hero = GetHeroControl(ActiveTurnHero);
-        if (Hero != null)
+    void HeroAction()
+    {
+        var MyTeamHero = GetHeroControl(ActiveTurnHero);
+        if (MyTeamHero != null)
         {
-            UtilFunc.ChangeLayersRecursively(Hero.transform, "UI");
-            Hero.HeroState = Hero_Control.eHeroState.HEROSTATE_TRACE_ATK;
+            UtilFunc.ChangeLayersRecursively(MyTeamHero.transform, "UI");
+            Debug.LogError("Player : " + MyTeamHero.ActionType);
         }
 
-        Hero = GetHeroControl(ActiveTargetHero);
-        if (Hero != null)
+        var EnemyHero = GetHeroControl(ActiveTargetHero);
+        if (EnemyHero != null)
         {
-            UtilFunc.ChangeLayersRecursively(Hero.transform, "UI");
-            Hero.PlayAnm(Actor.AnimationActor.ANI_FAKE);
+            UtilFunc.ChangeLayersRecursively(EnemyHero.transform, "UI");
+            Debug.LogError("Enemy : " + EnemyHero.ActionType);
+        }
+
+        eHeroState myHeroAction = GetActionState(MyTeamHero.ActionType, EnemyHero.ActionType);
+        Vector3 vPos = GetTeamPos(myHeroAction, true);
+        MyTeamHero.ChangeState(myHeroAction, vPos);
+
+        eHeroState enemyHeroAction = GetActionState(EnemyHero.ActionType, MyTeamHero.ActionType);
+        vPos = GetTeamPos(enemyHeroAction, false);
+        EnemyHero.ChangeState(enemyHeroAction, vPos);
+    }
+
+    Vector3 GetTeamPos(eHeroState stateAction, bool myTeam)
+    {
+        if (stateAction == eHeroState.HEROSTATE_TRACE_ATK || stateAction == eHeroState.HEROSTATE_BREAK_DEFEAT)
+        {
+            if (myTeam)
+            {
+                return mBattlePosMyTeam[(int)EBattlePosType.BPT_TRACE_FAKE].position;
+            }
+            else
+            {
+                return mBattlePosEnemy[(int)EBattlePosType.BPT_TRACE_FAKE].position;
+            }
+        }
+        else if (stateAction == eHeroState.HEROSTATE_CNT_ATK || stateAction == eHeroState.HEROSTATE_CNT_DEFEAT)
+        {
+            if (myTeam)
+            {
+                return mBattlePosMyTeam[(int)EBattlePosType.BPT_CNT_BREAK].position;
+            }
+            else
+            {
+                return mBattlePosEnemy[(int)EBattlePosType.BPT_CNT_BREAK].position;
+            }
+        }
+        else if (stateAction == eHeroState.HEROSTATE_FAKE_ATK || stateAction == eHeroState.HEROSTATE_FAKE_DEFEAT)
+        {
+            if (myTeam)
+            {
+                return mBattlePosMyTeam[(int)EBattlePosType.BPT_FAKE_CNT].position;
+            }
+            else
+            {
+                return mBattlePosEnemy[(int)EBattlePosType.BPT_FAKE_CNT].position;
+            }
+        }
+        else
+        {
+            if (myTeam)
+            {
+                return mBattlePosMyTeam[(int)EBattlePosType.BPT_DRAW].position;
+            }
+            else
+            {
+                return mBattlePosEnemy[(int)EBattlePosType.BPT_DRAW].position;
+            }
         }
     }
 
-    public void SetBattleDirection()
+    eHeroState GetActionState(EAtionType me, EAtionType your)
     {
-        BattleState = eBattleState.eBattle_Direction;
-
+        // Win
+        if (me == EAtionType.ACTION_ATK && your == EAtionType.ACTION_FAKE)
+        {
+            return eHeroState.HEROSTATE_TRACE_ATK;
+        }
+        else if (me == EAtionType.ACTION_COUNT && your == EAtionType.ACTION_ATK)
+        {
+            return eHeroState.HEROSTATE_CNT_ATK;
+        }
+        else if (me == EAtionType.ACTION_FAKE && your == EAtionType.ACTION_COUNT)
+        {
+            return eHeroState.HEROSTATE_FAKE_ATK;
+        }
+        // Defeat
+        else if (me == EAtionType.ACTION_FAKE && your == EAtionType.ACTION_ATK)
+        {
+            return eHeroState.HEROSTATE_FAKE_DEFEAT;
+        }
+        else if (me == EAtionType.ACTION_ATK && your == EAtionType.ACTION_COUNT)
+        {
+            return eHeroState.HEROSTATE_BREAK_DEFEAT;
+        }
+        else if (me == EAtionType.ACTION_COUNT && your == EAtionType.ACTION_FAKE)
+        {
+            return eHeroState.HEROSTATE_CNT_DEFEAT;
+        }
+        else
+        {
+            return eHeroState.HEROSTATE_DRAW;
+        }
     }
 
     void LoadingProcess()
@@ -179,6 +277,18 @@ public class Battle_Control : MonoBehaviour
                 Map.transform.position = Vector3.zero;
                 Map.transform.rotation = Quaternion.identity;
                 //Map.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+
+                mBattlePosMyTeam[(int)EBattlePosType.BPT_TRACE_FAKE] = Map.transform.Find("BattlePos/TraceFake/MyTeam");
+                mBattlePosEnemy[(int)EBattlePosType.BPT_TRACE_FAKE] = Map.transform.Find("BattlePos/TraceFake/Enemy");
+
+                mBattlePosMyTeam[(int)EBattlePosType.BPT_CNT_BREAK] = Map.transform.Find("BattlePos/CntBreak/MyTeam");
+                mBattlePosEnemy[(int)EBattlePosType.BPT_CNT_BREAK] = Map.transform.Find("BattlePos/CntBreak/Enemy");
+
+                mBattlePosMyTeam[(int)EBattlePosType.BPT_FAKE_CNT] = Map.transform.Find("BattlePos/FakeCnt/MyTeam");
+                mBattlePosEnemy[(int)EBattlePosType.BPT_FAKE_CNT] = Map.transform.Find("BattlePos/FakeCnt/Enemy");
+
+                mBattlePosMyTeam[(int)EBattlePosType.BPT_DRAW] = Map.transform.Find("BattlePos/Draw/MyTeam");
+                mBattlePosEnemy[(int)EBattlePosType.BPT_DRAW] = Map.transform.Find("BattlePos/Draw/Enemy");
             }
         }
 

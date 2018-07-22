@@ -66,19 +66,19 @@ public class BattleUI_Control : BaseUI
         }
         else if (uIEvent == EBattleEvent.UIEVENT_ACTION_ATK)
         {
-            SetHeroActionType(Hero_Control.EAtionType.ACTION_ATK);            
+            SetHeroActionType(EAtionType.ACTION_ATK);            
         }
         else if (uIEvent == EBattleEvent.UIEVENT_ACTION_COUNT)
         {
-            SetHeroActionType(Hero_Control.EAtionType.ACTION_COUNT);
+            SetHeroActionType(EAtionType.ACTION_COUNT);
         }
         else if (uIEvent == EBattleEvent.UIEVENT_ACTION_FAKE)
         {
-            SetHeroActionType(Hero_Control.EAtionType.ACTION_FAKE);
+            SetHeroActionType(EAtionType.ACTION_FAKE);
         }
     }
 
-    void SetHeroActionType(Hero_Control.EAtionType eAtionType)
+    void SetHeroActionType(EAtionType eAtionType)
     {
         int heroNo = GetBC().ActiveTurnHero;
         var heroCont = mBattle_Control.GetHeroControl(heroNo);
@@ -93,7 +93,7 @@ public class BattleUI_Control : BaseUI
         heroCont = mBattle_Control.GetHeroControl(heroNo);
         if (heroCont != null)
         {
-            heroCont.ActionType = (Hero_Control.EAtionType)Random.Range(0, (int)Hero_Control.EAtionType.ACTION_MAX);
+            heroCont.ActionType = (EAtionType)Random.Range(0, (int)EAtionType.ACTION_MAX);
         }
 
         GetBC().SetBattleStateAction();
@@ -305,7 +305,7 @@ public class BattleUI_Control : BaseUI
         var heroCont = mBattle_Control.GetHeroControl(heroNo);
         if (heroCont != null)
         {
-            BattleProfile bp = new BattleProfile();
+            BattleProfile bp = null;
             if (heroCont.MyTeam)
             {
                 bp = mProfiles[0];

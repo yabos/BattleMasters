@@ -70,7 +70,7 @@ public class Actor : MonoBehaviour
         //Anim.SetBool("Fake", false);
 
         //Anim.SetBool(ClipName[(int)eActiveAni], true);
-        Anim.Play(ClipName[(int)eActiveAni], -1, 0f);
+        Anim.Play(ClipName[(int)eActiveAni], 0, 0f);
     }
 
     public void SetAnimationSpeed(AnimationActor eActiveAni, float fSeepd = 1.0f)

@@ -3,26 +3,28 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+public enum eHeroState
+{
+    HEROSTATE_IDLE = 0,
+    HEROSTATE_TRACE_ATK,
+    HEROSTATE_CNT_ATK,
+    HEROSTATE_FAKE_ATK,
+    HEROSTATE_FAKE_DEFEAT,
+    HEROSTATE_BREAK_DEFEAT,
+    HEROSTATE_CNT_DEFEAT,
+    HEROSTATE_DRAW,
+}
+
+public enum EAtionType
+{
+    ACTION_ATK,
+    ACTION_COUNT,
+    ACTION_FAKE,
+    ACTION_MAX
+}
+
 public class Hero_Control : MonoBehaviour
 {
-    public enum eHeroState
-    {
-        HEROSTATE_IDLE = 0,
-        HEROSTATE_TRACE_ATK,
-        HEROSTATE_CNT_ATK,
-        HEROSTATE_FAKE_ATK,
-        HEROSTATE_ATK,
-        HEROSTATE_DEFEAT,
-    }
-
-    public enum EAtionType
-    {        
-        ACTION_ATK,
-        ACTION_COUNT,
-        ACTION_FAKE,
-        ACTION_MAX
-    }
-
     Actor mActor = null;
     Outline mOutline = null;
 
@@ -185,14 +187,108 @@ public class Hero_Control : MonoBehaviour
             if (fElasedTime <= 0.5f)
             {
                 Vector3 vPos = transform.position;
-                vPos.x += 0.1f;
+                if (MyTeam)
+                    vPos.x += 0.1f;
+                else
+                    vPos.x -= 0.1f;
+
                 transform.position = vPos;
             }
             else if (fElasedTime > 0.5f)
             {
                 PlayAnm(Actor.AnimationActor.ANI_ATK);
-
+                mHeroState = eHeroState.HEROSTATE_IDLE;
+                Debug.Log("HEROSTATE_TRACE_ATK");
             }
+        }
+        else if (mHeroState == eHeroState.HEROSTATE_CNT_ATK)
+        {            
+            fElasedTime += Time.deltaTime;
+
+            PlayAnm(Actor.AnimationActor.ANI_CNT);
+
+            if (fElasedTime <= 0.5f)
+            {
+                Vector3 vPos = transform.position;
+                if (MyTeam)
+                    vPos.x += 0.1f;
+                else
+                    vPos.x -= 0.1f;
+                transform.position = vPos;
+            }
+            else if (fElasedTime > 0.5f)
+            {
+                PlayAnm(Actor.AnimationActor.ANI_ATK);
+                mHeroState = eHeroState.HEROSTATE_IDLE;
+                Debug.Log("HEROSTATE_CNT_ATK");
+            }
+        }
+        else if (mHeroState == eHeroState.HEROSTATE_FAKE_ATK)
+        {            
+            fElasedTime += Time.deltaTime;
+
+            PlayAnm(Actor.AnimationActor.ANI_FAKE);
+
+            if (fElasedTime <= 0.5f)
+            {
+                Vector3 vPos = transform.position;
+                if (MyTeam)
+                    vPos.x += 0.1f;
+                else
+                    vPos.x -= 0.1f;
+                transform.position = vPos;
+            }
+            else if (fElasedTime > 0.5f)
+            {
+                PlayAnm(Actor.AnimationActor.ANI_ATK);
+                mHeroState = eHeroState.HEROSTATE_IDLE;
+                Debug.Log("HEROSTATE_FAKE_ATK");
+            }
+        }
+        else if (mHeroState == eHeroState.HEROSTATE_BREAK_DEFEAT)
+        {            
+            fElasedTime += Time.deltaTime;
+
+            PlayAnm(Actor.AnimationActor.ANI_BREAK);
+
+            if (fElasedTime > 0.5f)
+            {
+                PlayAnm(Actor.AnimationActor.ANI_DEFEAT);
+                mHeroState = eHeroState.HEROSTATE_IDLE;
+                Debug.Log("HEROSTATE_BREAK_DEFEAT");
+            }
+        }
+        else if (mHeroState == eHeroState.HEROSTATE_CNT_DEFEAT)
+        {            
+            fElasedTime += Time.deltaTime;
+
+            PlayAnm(Actor.AnimationActor.ANI_CNT);
+
+            if (fElasedTime > 0.5f)
+            {
+                PlayAnm(Actor.AnimationActor.ANI_DEFEAT);
+                mHeroState = eHeroState.HEROSTATE_IDLE;
+                Debug.Log("HEROSTATE_CNT_DEFEAT");
+            }
+        }
+        else if (mHeroState == eHeroState.HEROSTATE_FAKE_DEFEAT)
+        {            
+            fElasedTime += Time.deltaTime;
+
+            PlayAnm(Actor.AnimationActor.ANI_FAKE);
+
+            if (fElasedTime > 0.5f)
+            {
+                PlayAnm(Actor.AnimationActor.ANI_DEFEAT);
+                mHeroState = eHeroState.HEROSTATE_IDLE;
+                Debug.Log("HEROSTATE_FAKE_DEFEAT");
+            }
+        }
+        else if (mHeroState == eHeroState.HEROSTATE_DRAW)
+        {
+            PlayAnm(Actor.AnimationActor.ANI_ATK);
+            mHeroState = eHeroState.HEROSTATE_IDLE;
+            Debug.Log("DRAW");
         }
     }
 
@@ -294,5 +390,10 @@ public class Hero_Control : MonoBehaviour
     public void PlayAnm(Actor.AnimationActor anim)
     {
         mActor.PlayAnimation(anim);
+    }
+
+    public void ChangeState(eHeroState state, Vector3 battleStartPos)
+    {
+        HeroState = state;
     }
 }
