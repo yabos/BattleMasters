@@ -22,7 +22,7 @@ public class TurnIcon : MonoBehaviour
 
     void Update()
     {
-        if (MoveSpeedCount > 0)
+        if (MoveSpeedCount > 0 && GameMain.Instance().BattleControl.ActiveTurnHero == 0)
         {
             float ratioMax = MoveSpeedCount / Define.TURN_MAX;
             var pos = transform.localPosition;
@@ -30,9 +30,9 @@ public class TurnIcon : MonoBehaviour
 
             if (ratioMax > ratioPos)
             {
-                pos.x = (Define.TURNICON_POS_X_LENGTH * ratioMax) + Define.TURNICON_START_POS_X; ;                
+                pos.x = (Define.TURNICON_POS_X_LENGTH * ratioMax) + Define.TURNICON_START_POS_X;              
 
-                if (pos.x >= Define.TURNICON_END_POS_X)
+                if (pos.x > Define.TURNICON_END_POS_X)
                 {
                     pos.x = Define.TURNICON_END_POS_X;
                     GameMain.Instance().BattleControl.SetActiveTurnHero(mHeroNo);

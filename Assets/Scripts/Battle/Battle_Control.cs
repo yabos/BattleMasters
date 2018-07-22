@@ -15,6 +15,7 @@ public class Battle_Control : MonoBehaviour
         eBattle_Ready,
         eBattle_Ing,
         eBattle_SelAtk,
+        eBattle_Action,
         eBattle_Win,
         eBattle_Lose,
         eBattle_End,
@@ -26,7 +27,7 @@ public class Battle_Control : MonoBehaviour
 
     List<Hero_Control> mListMyHeroes = new List<Hero_Control>();
     List<Hero_Control> mListEnemyHeroes = new List<Hero_Control>();
-    BattleUI_Control mBattleUI;
+    public BattleUI_Control mBattleUI;
 
     SpriteRenderer mLoading = null;
     int m_iLoadingState = 0;
@@ -94,10 +95,20 @@ public class Battle_Control : MonoBehaviour
         }        
     }
 
-    public void SetBattleStateSelAtk()
+    public void SetBattleStateSelActionType()
     {
         BattleState = eBattleState.eBattle_SelAtk;
         mBattleUI.ActiveSelActionType(true);
+        mBattleUI.SetTurnTimer(Define.SELECT_ACTIONTYPE_LIMITTIME, ETurnTimeType.TURNTIME_SEL_ACTIONTYPE);
+    }
+
+    public void SetBattleStateAction()
+    {
+        BattleState = eBattleState.eBattle_Action;
+
+        mBattleUI.ActiveBattleProfile(false);
+        mBattleUI.ActiveTurnTimer(false);
+        EnemyOutlineOff();
     }
 
     void LoadingProcess()
@@ -219,7 +230,7 @@ public class Battle_Control : MonoBehaviour
     {
         ActiveTurnHero = heroNo;
         mBattleUI.SetActiveTurnHeroUI(heroNo);
-        mBattleUI.SetTurnTimer(10);
+        mBattleUI.SetTurnTimer(Define.SELECT_TARGET_LIMITTIME, ETurnTimeType.TURNTIME_SEL_TARGET);
     }
 
     public Hero_Control GetHeroControl(int heroNo)
@@ -244,6 +255,14 @@ public class Battle_Control : MonoBehaviour
         foreach (var elem in mListEnemyHeroes)
         {
             elem.GetOutline().eraseRenderer = !elem.HeroNo.Equals(heroNo);
+        }
+    }
+
+    void EnemyOutlineOff()
+    {
+        foreach (var elem in mListEnemyHeroes)
+        {
+            elem.GetOutline().eraseRenderer = true;
         }
     }
 }

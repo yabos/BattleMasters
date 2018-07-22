@@ -62,12 +62,50 @@ public class BattleUI_Control : BaseUI
     {
         if (uIEvent == EBattleEvent.UIEVENT_SELECT_TARGET)
         {
-            var profile = GetProfile(GetBC().ActiveTargetHero);
-            if (profile != null)
-            {
-                profile.TweenPosSpriteProfile(true);
-                GetBC().SetBattleStateSelAtk();
-            }
+            SetBattleSelActionType();
+        }
+        else if (uIEvent == EBattleEvent.UIEVENT_ACTION_ATK)
+        {
+            SetHeroActionType(Hero_Control.EAtionType.ACTION_ATK);            
+        }
+        else if (uIEvent == EBattleEvent.UIEVENT_ACTION_COUNT)
+        {
+            SetHeroActionType(Hero_Control.EAtionType.ACTION_COUNT);
+        }
+        else if (uIEvent == EBattleEvent.UIEVENT_ACTION_FAKE)
+        {
+            SetHeroActionType(Hero_Control.EAtionType.ACTION_FAKE);
+        }
+    }
+
+    void SetHeroActionType(Hero_Control.EAtionType eAtionType)
+    {
+        int heroNo = GetBC().ActiveTurnHero;
+        var heroCont = mBattle_Control.GetHeroControl(heroNo);
+        if (heroCont != null)
+        {
+            heroCont.ActionType = eAtionType;
+        }
+
+        // 원래는 상대방의 입력 정보를 알아와야되는데
+        // 지금은 AI로 대체 . 랜덤으로 타입을 정해준다.
+        heroNo = GetBC().ActiveTargetHero;
+        heroCont = mBattle_Control.GetHeroControl(heroNo);
+        if (heroCont != null)
+        {
+            heroCont.ActionType = (Hero_Control.EAtionType)Random.Range(0, (int)Hero_Control.EAtionType.ACTION_MAX);
+        }
+
+        GetBC().SetBattleStateAction();
+    }
+
+    public void SetBattleSelActionType()
+    {
+        var profile = GetProfile(GetBC().ActiveTargetHero);
+        if (profile != null)
+        {
+            profile.TweenPosSpriteProfile(true);
+            GetBC().SetBattleStateSelActionType();
         }
     }
 
@@ -293,14 +331,20 @@ public class BattleUI_Control : BaseUI
         }
     }
 
-    public void SetTurnTimer(float fTime)
+    public void SetTurnTimer(float fTime, ETurnTimeType type)
     {
-        mTurnTime.SetTimer(fTime);
+        mTurnTime.SetTimer(fTime, type);
         ActiveTurnTimer(true);
     }
 
-    void ActiveTurnTimer(bool active)
+    public void ActiveTurnTimer(bool active)
     {
         mGoTurnTimer.SetActive(active);
+    }
+
+    public void ActiveBattleProfile(bool active)
+    {
+        mProfiles[0].gameObject.SetActive(active);
+        mProfiles[1].gameObject.SetActive(active);
     }
 }

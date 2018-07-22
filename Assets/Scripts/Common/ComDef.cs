@@ -23,4 +23,7 @@ public class Define
     public static readonly float TURNICON_START_POS_X = -1000;
     public static readonly float TURNICON_END_POS_X = 1000;
     public static readonly float TURNICON_POS_X_LENGTH = 2000;
+
+    public static readonly float SELECT_TARGET_LIMITTIME = 3;
+    public static readonly float SELECT_ACTIONTYPE_LIMITTIME = 5;
 }

@@ -14,19 +14,19 @@ public class Hero_Control : MonoBehaviour
         HEROSTATE_DEFEAT,
     }
 
-    public enum eAttPos
-    {
-        ATTPOS_NONE = 0,
-        ATTPOS_LEFT,
-        ATTPOS_RIGHT,
+    public enum EAtionType
+    {        
+        ACTION_ATK,
+        ACTION_COUNT,
+        ACTION_FAKE,
+        ACTION_MAX
     }
-
-    public readonly int ATTPOS_MAXCOUNT = 2;
 
     Actor mActor = null;
     Outline mOutline = null;
 
     eHeroState mHeroState = eHeroState.HEROSTATE_IDLE;
+    EAtionType mActionType = EAtionType.ACTION_MAX;
 
     Guid mHeroUid = new Guid();
     int mHeroNo = 0;
@@ -35,8 +35,6 @@ public class Hero_Control : MonoBehaviour
     int mAtk = 0;
     int mDef = 0;    
     float mSpeed = 0;
-    float mBlowPower = 0;
-    float mBlowTolerance = 0;
     string mStResPath = null;
 
     bool mMyTeam = false;
@@ -89,22 +87,16 @@ public class Hero_Control : MonoBehaviour
         get { return mSpeed; }
     }
 
-    public float BlowPower
-    {
-        set { mBlowPower = value; }
-        get { return mBlowPower; }
-    }
-
-    public float BlowTolerance
-    {
-        set { mBlowTolerance = value; }
-        get { return mBlowTolerance; }
-    }
-
     public string StResPath
     {
         set { mStResPath = value; }
         get { return mStResPath; }
+    }
+
+    public EAtionType ActionType
+    {
+        set { mActionType = value; }
+        get { return mActionType; }
     }
 
     public Hero_Control Target
