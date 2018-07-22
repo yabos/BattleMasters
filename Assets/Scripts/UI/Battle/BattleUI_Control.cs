@@ -275,4 +275,13 @@ public class BattleUI_Control : BaseUI
 
         return null;
     }
+
+    public void ActiveSelActionType(bool active)
+    {
+        var profile = GetProfile(GetBC().ActiveTurnHero);
+        if (profile != null)
+        {
+            profile.ActiveSelActionType(active);
+        }
+    }
 }

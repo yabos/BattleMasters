@@ -10,6 +10,7 @@ public class BattleProfile : MonoBehaviour
 
     public HeroStatus mStatus;
     public Transform mTargetBtn;
+    public Transform mSelectActionType;
 
     public void SetProfile(Hero_Control heroCont)
     {
@@ -84,5 +85,10 @@ public class BattleProfile : MonoBehaviour
     public void ActiveSpriteProfile(bool active)
     {
         mSpriteProfile.gameObject.SetActive(active);
+    }
+
+    public void ActiveSelActionType(bool active)
+    {
+        mSelectActionType.gameObject.SetActive(active);
     }
 }

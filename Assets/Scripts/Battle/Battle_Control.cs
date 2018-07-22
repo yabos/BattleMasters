@@ -97,8 +97,7 @@ public class Battle_Control : MonoBehaviour
     public void SetBattleStateSelAtk()
     {
         BattleState = eBattleState.eBattle_SelAtk;
-
-
+        mBattleUI.ActiveSelActionType(true);
     }
 
     void LoadingProcess()
@@ -125,6 +124,7 @@ public class Battle_Control : MonoBehaviour
                 }
                 mBattleUI.ActiveLoadingIMG (false);
                 mBattleUI.CreateTurnIcon();
+                SoundManager.Instance().PlayBattleBGM(SoundManager.eBattleBGM.eBattleBGM_Normal);
                 mBattleState = eBattleState.eBattle_Ing;
                 m_iLoadingState++;
 				break;
