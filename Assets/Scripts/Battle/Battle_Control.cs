@@ -219,6 +219,7 @@ public class Battle_Control : MonoBehaviour
     {
         ActiveTurnHero = heroNo;
         mBattleUI.SetActiveTurnHeroUI(heroNo);
+        mBattleUI.SetTurnTimer(10);
     }
 
     public Hero_Control GetHeroControl(int heroNo)

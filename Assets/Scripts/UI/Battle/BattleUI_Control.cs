@@ -14,6 +14,8 @@ public class BattleUI_Control : BaseUI
     Battle_Control mBattle_Control;
 
     BattleProfile[] mProfiles = new BattleProfile[2];
+    GameObject mGoTurnTimer;
+    TurnTimer mTurnTime;
 
 	// Use this for initialization
 	void Start ()
@@ -32,6 +34,12 @@ public class BattleUI_Control : BaseUI
         {
             mProfiles[1] = Tran.GetComponent<BattleProfile>();
         }
+
+        mGoTurnTimer = transform.Find("Anchor/Timer").gameObject;
+        if (mGoTurnTimer != null)
+        {
+            mTurnTime = mGoTurnTimer.GetComponent<TurnTimer>();
+        }
     }
 
     // Update is called once per frame
@@ -42,10 +50,10 @@ public class BattleUI_Control : BaseUI
 
         if (GetBC() != null && GetBC().ActiveTurnHero == 0)
         {
-            if (ElapsedTime >= 0.5f)
+            if (ElapsedTime >= 0.1f)
             {
                 UpdateTurnCount();
-                ElapsedTime -= 0.5f;
+                ElapsedTime -= 0.1f;
             }
         }
     }
@@ -283,5 +291,16 @@ public class BattleUI_Control : BaseUI
         {
             profile.ActiveSelActionType(active);
         }
+    }
+
+    public void SetTurnTimer(float fTime)
+    {
+        mTurnTime.SetTimer(fTime);
+        ActiveTurnTimer(true);
+    }
+
+    void ActiveTurnTimer(bool active)
+    {
+        mGoTurnTimer.SetActive(active);
     }
 }
