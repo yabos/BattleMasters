@@ -7,7 +7,7 @@ public class Battle_Control : MonoBehaviour
     public enum eBattleState
     {
         eBattle_Ready,
-        eBattle_Ing,
+        eBattle_TurnStart,
         eBattle_SelAtk,
         eBattle_Action,
         eBattle_Win,
@@ -82,14 +82,14 @@ public class Battle_Control : MonoBehaviour
     {
         LoadingProcess();
 
-       if (mBattleState == eBattleState.eBattle_Ing)
+        if (mBattleState == eBattleState.eBattle_TurnStart)
         {
             if (Input.GetMouseButtonDown(0) && ActiveTurnHero > 0)
             {
                 Vector2 wp = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 Ray2D ray = new Ray2D(wp, Vector2.zero);
                 RaycastHit2D[] hits = Physics2D.RaycastAll(ray.origin, ray.direction);
-                
+
                 foreach (var hit in hits)
                 {
                     var heroCont = hit.collider.GetComponentInParent<Hero_Control>();
@@ -103,8 +103,24 @@ public class Battle_Control : MonoBehaviour
                     beforeHeroNo = heroCont.HeroNo;
                 }
             }
-        }        
+        }
+        else if (mBattleState == eBattleState.eBattle_Action)
+        {
+
+        }
     }
+
+    //bool IsEndTurn()
+    //{
+    //    for (int i = 0; i < ListMyHeroes.Count; ++i)
+    //    {
+    //        if (ListMyHeroes[i].HeroNo == ActiveTurnHero &&
+    //            ListMyHeroes[i].MyTurn == false)
+    //        {
+    //            return true;
+    //        }
+    //    }
+    //}
 
     public void SetBattleStateSelActionType()
     {
@@ -114,7 +130,7 @@ public class Battle_Control : MonoBehaviour
         BattleUI.SetTurnTimer(Define.SELECT_ACTIONTYPE_LIMITTIME, ETurnTimeType.TURNTIME_SEL_ACTIONTYPE);
     }
 
-    public void SetBattleStateAction()
+    public void SetBattleStateActionStart()
     {
         BattleState = eBattleState.eBattle_Action;
 
@@ -125,20 +141,29 @@ public class Battle_Control : MonoBehaviour
         HeroAction();
     }
 
+    public void SetBattleStateActionEnd()
+    {
+        BattleState = eBattleState.eBattle_TurnStart;
+
+        mBlur.SetActive(false);
+        ActiveTurnHero = 0;
+        ActiveTargetHero = 0;
+    }
+
     void HeroAction()
     {
         var MyTeamHero = GetHeroControl(ActiveTurnHero);
         if (MyTeamHero != null)
         {
             UtilFunc.ChangeLayersRecursively(MyTeamHero.transform, "UI");
-            Debug.LogError("Player : " + MyTeamHero.ActionType);
+            Debug.Log("Player : " + MyTeamHero.ActionType);
         }
 
         var EnemyHero = GetHeroControl(ActiveTargetHero);
         if (EnemyHero != null)
         {
             UtilFunc.ChangeLayersRecursively(EnemyHero.transform, "UI");
-            Debug.LogError("Enemy : " + EnemyHero.ActionType);
+            Debug.Log("Enemy : " + EnemyHero.ActionType);
         }
 
         eHeroState myHeroAction = GetActionState(MyTeamHero.ActionType, EnemyHero.ActionType);
@@ -257,7 +282,7 @@ public class Battle_Control : MonoBehaviour
                 BattleUI.ActiveLoadingIMG (false);
                 BattleUI.CreateTurnIcon();
                 SoundManager.Instance().PlayBattleBGM(SoundManager.eBattleBGM.eBattleBGM_Normal);
-                mBattleState = eBattleState.eBattle_Ing;
+                mBattleState = eBattleState.eBattle_TurnStart;
                 m_iLoadingState++;
 				break;
         }
@@ -362,6 +387,12 @@ public class Battle_Control : MonoBehaviour
     public void SetActiveTurnHero(int heroNo)
     {
         ActiveTurnHero = heroNo;
+        var hero = GetHeroControl(heroNo);
+        if (hero != null)
+        {
+            hero.MyTurn = true;
+        }
+
         BattleUI.SetActiveTurnHeroUI(heroNo);
         BattleUI.SetTurnTimer(Define.SELECT_TARGET_LIMITTIME, ETurnTimeType.TURNTIME_SEL_TARGET);
     }

@@ -19,13 +19,20 @@ public class SaveData
 
 public class Define
 {
+    //  턴 종료까지 시간 1000 = 1초
     public static readonly float TURN_MAX = 10000;
     public static readonly float TURNICON_START_POS_X = -1000;
     public static readonly float TURNICON_END_POS_X = 1000;
     public static readonly float TURNICON_POS_X_LENGTH = 2000;
 
+    // 적 선택까지 제한시간
     public static readonly float SELECT_TARGET_LIMITTIME = 3;
+    // 공격 타입 선택까지 제한시간
     public static readonly float SELECT_ACTIONTYPE_LIMITTIME = 5;
 
-    public static readonly float TRACE_SPEED = 2;
+    // 트레이스시에 가는 거리 정도 (이 값만큼 더해짐)
+    public static readonly float TRACE_SPEED_X = 0.3f;
+
+    // 전투모드시에 캐릭터 확대 정도.
+    public static readonly float BATTLE_MOD_SCALE = 1.3f;
 }

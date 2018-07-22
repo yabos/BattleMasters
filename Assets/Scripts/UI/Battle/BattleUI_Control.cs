@@ -93,10 +93,11 @@ public class BattleUI_Control : BaseUI
         heroCont = mBattle_Control.GetHeroControl(heroNo);
         if (heroCont != null)
         {
-            heroCont.ActionType = (EAtionType)Random.Range(0, (int)EAtionType.ACTION_MAX);
+            heroCont.ActionType = EAtionType.ACTION_COUNT;
+            //heroCont.ActionType = (EAtionType)Random.Range(0, (int)EAtionType.ACTION_MAX);
         }
 
-        GetBC().SetBattleStateAction();
+        GetBC().SetBattleStateActionStart();
     }
 
     public void SetBattleSelActionType()
@@ -237,7 +238,7 @@ public class BattleUI_Control : BaseUI
         Battle_Control bc = GetBC();
         if (bc != null)
         {
-            if (bc.BattleState == Battle_Control.eBattleState.eBattle_Ing)
+            if (bc.BattleState == Battle_Control.eBattleState.eBattle_TurnStart)
             {
                 List<Hero_Control> listTemp = new List<Hero_Control>();
                 listTemp.AddRange(bc.ListMyHeroes);

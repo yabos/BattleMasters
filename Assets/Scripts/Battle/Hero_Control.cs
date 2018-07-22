@@ -13,6 +13,7 @@ public enum eHeroState
     HEROSTATE_BREAK_DEFEAT,
     HEROSTATE_CNT_DEFEAT,
     HEROSTATE_DRAW,
+    HEROSTATE_DIE,
 }
 
 public enum EAtionType
@@ -42,6 +43,7 @@ public class Hero_Control : MonoBehaviour
 
     bool mMyTeam = false;
     bool mIsDie = false;
+    bool mMyTurn = false;
 
     SpriteRenderer mSR = new SpriteRenderer();
     Transform mEf_HP = null;
@@ -139,6 +141,12 @@ public class Hero_Control : MonoBehaviour
         get { return mIsDie; }
     }
 
+    public bool MyTurn
+    {
+        set { mMyTurn = value; }
+        get { return mMyTurn; }
+    }
+
     public void InitHero()
     {
         mInitPos = transform.position;
@@ -188,9 +196,9 @@ public class Hero_Control : MonoBehaviour
             {
                 Vector3 vPos = transform.position;
                 if (MyTeam)
-                    vPos.x += 0.1f;
+                    vPos.x += Define.TRACE_SPEED_X;
                 else
-                    vPos.x -= 0.1f;
+                    vPos.x -= Define.TRACE_SPEED_X;
 
                 transform.position = vPos;
             }
@@ -198,11 +206,11 @@ public class Hero_Control : MonoBehaviour
             {
                 PlayAnm(Actor.AnimationActor.ANI_ATK);
                 mHeroState = eHeroState.HEROSTATE_IDLE;
-                Debug.Log("HEROSTATE_TRACE_ATK");
+                fElasedTime = 0;
             }
         }
         else if (mHeroState == eHeroState.HEROSTATE_CNT_ATK)
-        {            
+        {
             fElasedTime += Time.deltaTime;
 
             PlayAnm(Actor.AnimationActor.ANI_CNT);
@@ -211,42 +219,46 @@ public class Hero_Control : MonoBehaviour
             {
                 Vector3 vPos = transform.position;
                 if (MyTeam)
-                    vPos.x += 0.1f;
+                    vPos.x += Define.TRACE_SPEED_X;
                 else
-                    vPos.x -= 0.1f;
+                    vPos.x -= Define.TRACE_SPEED_X;
                 transform.position = vPos;
             }
             else if (fElasedTime > 0.5f)
             {
                 PlayAnm(Actor.AnimationActor.ANI_ATK);
                 mHeroState = eHeroState.HEROSTATE_IDLE;
-                Debug.Log("HEROSTATE_CNT_ATK");
+                fElasedTime = 0;
             }
         }
         else if (mHeroState == eHeroState.HEROSTATE_FAKE_ATK)
-        {            
+        {
             fElasedTime += Time.deltaTime;
 
-            PlayAnm(Actor.AnimationActor.ANI_FAKE);
-
-            if (fElasedTime <= 0.5f)
+            if (fElasedTime <= 0.2f)
             {
+                PlayAnm(Actor.AnimationActor.ANI_FAKE);
+            }
+            else if (fElasedTime <= 0.5f)
+            {
+                PlayAnm(Actor.AnimationActor.ANI_TRACE);
+
                 Vector3 vPos = transform.position;
                 if (MyTeam)
-                    vPos.x += 0.1f;
+                    vPos.x += Define.TRACE_SPEED_X;
                 else
-                    vPos.x -= 0.1f;
+                    vPos.x -= Define.TRACE_SPEED_X;
                 transform.position = vPos;
             }
             else if (fElasedTime > 0.5f)
             {
                 PlayAnm(Actor.AnimationActor.ANI_ATK);
                 mHeroState = eHeroState.HEROSTATE_IDLE;
-                Debug.Log("HEROSTATE_FAKE_ATK");
+                fElasedTime = 0;
             }
         }
         else if (mHeroState == eHeroState.HEROSTATE_BREAK_DEFEAT)
-        {            
+        {
             fElasedTime += Time.deltaTime;
 
             PlayAnm(Actor.AnimationActor.ANI_BREAK);
@@ -255,11 +267,11 @@ public class Hero_Control : MonoBehaviour
             {
                 PlayAnm(Actor.AnimationActor.ANI_DEFEAT);
                 mHeroState = eHeroState.HEROSTATE_IDLE;
-                Debug.Log("HEROSTATE_BREAK_DEFEAT");
+                fElasedTime = 0;
             }
         }
         else if (mHeroState == eHeroState.HEROSTATE_CNT_DEFEAT)
-        {            
+        {
             fElasedTime += Time.deltaTime;
 
             PlayAnm(Actor.AnimationActor.ANI_CNT);
@@ -268,11 +280,11 @@ public class Hero_Control : MonoBehaviour
             {
                 PlayAnm(Actor.AnimationActor.ANI_DEFEAT);
                 mHeroState = eHeroState.HEROSTATE_IDLE;
-                Debug.Log("HEROSTATE_CNT_DEFEAT");
+                fElasedTime = 0;
             }
         }
         else if (mHeroState == eHeroState.HEROSTATE_FAKE_DEFEAT)
-        {            
+        {
             fElasedTime += Time.deltaTime;
 
             PlayAnm(Actor.AnimationActor.ANI_FAKE);
@@ -281,14 +293,23 @@ public class Hero_Control : MonoBehaviour
             {
                 PlayAnm(Actor.AnimationActor.ANI_DEFEAT);
                 mHeroState = eHeroState.HEROSTATE_IDLE;
-                Debug.Log("HEROSTATE_FAKE_DEFEAT");
+                fElasedTime = 0;
             }
         }
         else if (mHeroState == eHeroState.HEROSTATE_DRAW)
         {
             PlayAnm(Actor.AnimationActor.ANI_ATK);
             mHeroState = eHeroState.HEROSTATE_IDLE;
-            Debug.Log("DRAW");
+        }
+        else if(mHeroState == eHeroState.HEROSTATE_IDLE)
+        {
+            //fElasedTime += Time.deltaTime;
+            //if (fElasedTime >= 1)
+            //{
+            //    transform.localScale = Vector3.one;
+            //    transform.position = mInitPos;
+            //    MyTurn = false;
+            //}
         }
     }
 
@@ -395,5 +416,7 @@ public class Hero_Control : MonoBehaviour
     public void ChangeState(eHeroState state, Vector3 battleStartPos)
     {
         HeroState = state;
+        transform.position = battleStartPos;
+        transform.localScale = new Vector3( Define.BATTLE_MOD_SCALE, Define.BATTLE_MOD_SCALE, Define.BATTLE_MOD_SCALE);
     }
 }
