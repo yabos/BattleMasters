@@ -4,26 +4,28 @@ using System.Collections.Generic;
 
 public class GameMain : MonoBehaviour  
 {
-    private static GameMain instance;  
-    private static GameObject container;
-    public static GameMain Instance()  
-    {  
-        if( !instance )  
-        {  
-            container = new GameObject();
-            container.name = "GameMain";
-            instance = container.AddComponent(typeof(GameMain)) as GameMain;  
-        }  
-        return instance;  
-    }  
+    private static GameMain _instance;
+    public static GameMain Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType(typeof(GameMain)) as GameMain;
+                if (_instance == null)
+                {
+                    GameObject dataManaer = new GameObject("GameMain", typeof(GameMain));
+                    _instance = dataManaer.GetComponent<GameMain>();
+                }
+            }
 
-    public static readonly string stBattleRootPath = "Battle/Prefabs/Battle_Root";
+            return _instance;
+        }
+    }
 
     public float mGameSpeed = 1f;
 
     GameObject mUIRoot = null;
-    GameObject mBattleRoot = null;
-    Battle_Control mBattleControl = null;
 
     public GameObject UIRoot
     {
@@ -31,36 +33,11 @@ public class GameMain : MonoBehaviour
         get { return mUIRoot; }
     }
 
-    public GameObject BattleRoot
-    {
-        set { mBattleRoot = value; }
-        get { return mBattleRoot; }
-    }
-
-    public Battle_Control BattleControl
-    {
-        set { mBattleControl = value; }
-        get { return mBattleControl; }
-    }
-
     void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Debug.LogError("Duplicate GameMain");
-        }
-    }
-
-    // Use this for initialization
-    void Start () 
     {
         Init();
     }
-	
+
 	// Update is called once per frame
 	void Update () 
     {
@@ -89,42 +66,31 @@ public class GameMain : MonoBehaviour
 
     void TitleUILoad()
     {
-        UIManager.Instance().TitleUILoad();
+        UIManager.Instance().LoadUI(UIManager.eUIState.UIState_Title, TitleLoadingDone);
+    }
+
+    void TitleLoadingDone()
+    {
+        GoLobby();
     }
 
     public void GoLobby()
     {
-        UIManager.Instance().LoadUI(UIManager.eUIState.UIState_Lobby);
+        UIManager.Instance().LoadUI(UIManager.eUIState.UIState_Lobby, LobbyLoadingDone);
+    }
+
+    void LobbyLoadingDone()
+    {
+        GoBattle();
     }
 
     public void GoBattle()
     {
-        UIManager.Instance().LoadUI(UIManager.eUIState.UIState_Battle);
-        StartCoroutine(LoadBattleRoot());
+        UIManager.Instance().LoadUI(UIManager.eUIState.UIState_Battle, BattleLoadingDone);
     }
 
-    // test loading code
-    bool bisLoading = false;
-    IEnumerator LoadBattleRoot()
+    void BattleLoadingDone()
     {
-        bisLoading = true;
-        yield return null;
-
-		GameObject goBattleRoot = VResources.Load<GameObject>(stBattleRootPath);
-        if (goBattleRoot != null)
-        {
-            mBattleRoot = GameObject.Instantiate(goBattleRoot);
-            if (mBattleRoot != null)
-            {
-                mBattleRoot.transform.name = "Battle_Root";
-                mBattleRoot.transform.position = Vector3.zero;
-                mBattleRoot.transform.rotation = Quaternion.identity;
-                mBattleRoot.transform.localScale = Vector3.one;
-
-                mBattleControl = mBattleRoot.GetComponent<Battle_Control>();
-            }
-        }
-
-        bisLoading = false;
+        BattleManager.Instance.InitBattleManager();
     }
 }

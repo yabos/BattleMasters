@@ -11,8 +11,6 @@ public class BattleUI_Control : BaseUI
 
     public List<TurnIcon> mListTurnIcons = new List<TurnIcon>();
 
-    Battle_Control mBattle_Control;
-
     BattleProfile[] mProfiles = new BattleProfile[2];
     GameObject mGoTurnTimer;
     TurnTimer mTurnTime;
@@ -48,7 +46,7 @@ public class BattleUI_Control : BaseUI
     {
         ElapsedTime += Time.deltaTime;
 
-        if (GetBC() != null && GetBC().ActiveTurnHero == 0)
+        if (BattleManager.Instance.ActiveTurnHero == 0)
         {
             if (ElapsedTime >= 0.1f)
             {
@@ -80,8 +78,8 @@ public class BattleUI_Control : BaseUI
 
     void SetHeroActionType(EAtionType eAtionType)
     {
-        int heroNo = GetBC().ActiveTurnHero;
-        var heroCont = mBattle_Control.GetHeroControl(heroNo);
+        int heroNo = BattleManager.Instance.ActiveTurnHero;
+        var heroCont = BattleManager.Instance.GetHeroControl(heroNo);
         if (heroCont != null)
         {
             heroCont.ActionType = eAtionType;
@@ -89,40 +87,24 @@ public class BattleUI_Control : BaseUI
 
         // 원래는 상대방의 입력 정보를 알아와야되는데
         // 지금은 AI로 대체 . 랜덤으로 타입을 정해준다.
-        heroNo = GetBC().ActiveTargetHero;
-        heroCont = mBattle_Control.GetHeroControl(heroNo);
+        heroNo = BattleManager.Instance.ActiveTargetHero;
+        heroCont = BattleManager.Instance.GetHeroControl(heroNo);
         if (heroCont != null)
         {
-            heroCont.ActionType = EAtionType.ACTION_COUNT;
+            heroCont.ActionType = EAtionType.ACTION_FAKE;
             //heroCont.ActionType = (EAtionType)Random.Range(0, (int)EAtionType.ACTION_MAX);
         }
 
-        GetBC().SetBattleStateActionStart();
+        BattleManager.Instance.SetBattleStateActionStart();
     }
 
     public void SetBattleSelActionType()
     {
-        var profile = GetProfile(GetBC().ActiveTargetHero);
+        var profile = GetProfile(BattleManager.Instance.ActiveTargetHero);
         if (profile != null)
         {
             profile.TweenPosSpriteProfile(true);
-            GetBC().SetBattleStateSelActionType();
-        }
-    }
-
-    Battle_Control GetBC()
-    {
-        if (mBattle_Control == null)
-        {
-            mBattle_Control = GameMain.Instance().BattleControl;
-            if (mBattle_Control == null)
-                return null;
-            else
-                return mBattle_Control;
-        }
-        else
-        {
-            return mBattle_Control;
+            BattleManager.Instance.SetBattleStateSelActionType();
         }
     }
 
@@ -204,8 +186,8 @@ public class BattleUI_Control : BaseUI
 
     public void CreateTurnIcon()
     {
-        CreateTurnIcon(GetBC().ListMyHeroes);
-        CreateTurnIcon(GetBC().ListEnemyHeroes);
+        CreateTurnIcon(BattleManager.Instance.ListMyHeroes);
+        CreateTurnIcon(BattleManager.Instance.ListEnemyHeroes);
     }
 
     void CreateTurnIcon(List<Hero_Control> listHero)
@@ -235,22 +217,18 @@ public class BattleUI_Control : BaseUI
     
     void UpdateTurnCount()
     {
-        Battle_Control bc = GetBC();
-        if (bc != null)
+        if (BattleManager.Instance.BattleState == eBattleState.eBattle_TurnStart)
         {
-            if (bc.BattleState == Battle_Control.eBattleState.eBattle_TurnStart)
+            List<Hero_Control> listTemp = new List<Hero_Control>();
+            listTemp.AddRange(BattleManager.Instance.ListMyHeroes);
+            listTemp.AddRange(BattleManager.Instance.ListEnemyHeroes);
+
+            for (int i = 0; i < listTemp.Count; ++i)
             {
-                List<Hero_Control> listTemp = new List<Hero_Control>();
-                listTemp.AddRange(bc.ListMyHeroes);
-                listTemp.AddRange(bc.ListEnemyHeroes);
-
-                for (int i = 0; i < listTemp.Count; ++i)
-                {
-                    UpdateTurnIconSpeed(listTemp[i].HeroNo, listTemp[i].Speed);
-                }
-
-                UpdateTurnIconDepth();
+                UpdateTurnIconSpeed(listTemp[i].HeroNo, listTemp[i].Speed);
             }
+
+            UpdateTurnIconDepth();
         }
     }
 
@@ -293,7 +271,7 @@ public class BattleUI_Control : BaseUI
         var bp = GetProfile(heroNo);
         if (bp != null)
         {
-            var heroCont = mBattle_Control.GetHeroControl(heroNo);
+            var heroCont = BattleManager.Instance.GetHeroControl(heroNo);
             if (heroCont != null)
             {
                 bp.SetProfile(heroCont);
@@ -303,7 +281,7 @@ public class BattleUI_Control : BaseUI
 
     BattleProfile GetProfile(int heroNo)
     {
-        var heroCont = mBattle_Control.GetHeroControl(heroNo);
+        var heroCont = BattleManager.Instance.GetHeroControl(heroNo);
         if (heroCont != null)
         {
             BattleProfile bp = null;
@@ -325,7 +303,7 @@ public class BattleUI_Control : BaseUI
 
     public void ActiveSelActionType(bool active)
     {
-        var profile = GetProfile(GetBC().ActiveTurnHero);
+        var profile = GetProfile(BattleManager.Instance.ActiveTurnHero);
         if (profile != null)
         {
             profile.ActiveSelActionType(active);

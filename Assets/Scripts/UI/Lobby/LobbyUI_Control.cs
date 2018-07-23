@@ -11,7 +11,7 @@ public class LobbyUI_Control : BaseUI
     // Update is called once per frame
     void GoBattle(GameObject go)
     {
-        GameMain gm = GameMain.Instance();
+        GameMain gm = GameMain.Instance;
         if (gm == null) return;
 
         

@@ -12,7 +12,7 @@ public class TitleUI_Control : BaseUI
     void GoLobby(GameObject go)
     {
         //StartCoroutine(GameMain.Instance().LoadBattleRoot());
-        GameMain gm = GameMain.Instance();
+        GameMain gm = GameMain.Instance;
         if (gm == null) return;
 
         gm.GoLobby();

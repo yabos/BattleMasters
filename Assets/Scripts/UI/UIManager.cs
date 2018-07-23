@@ -50,11 +50,7 @@ public class UIManager : MonoBehaviour
         {
             Debug.LogError("Duplicate UIManager");
         }
-    }
 
-    // Use this for initialization
-    public void TitleUILoad () 
-    {
         mUICameraRoot = GameObject.Find("UIRoot/Camera").transform;
         if (mUICameraRoot == null)
         {
@@ -68,22 +64,14 @@ public class UIManager : MonoBehaviour
             Debug.LogError("Not Find UICamera!");
             return;
         }
-
-        LoadUI(eUIState.UIState_Title);
-    }
-	
-	// Update is called once per frame
-	void Update () 
-    {
-	
-	}
-
-    public void LoadUI(eUIState state)
-    {
-        StartCoroutine(LoadUICoroutine(state));
     }
 
-    IEnumerator LoadUICoroutine(eUIState state)
+    public void LoadUI(eUIState state, Action finish)
+    {
+        StartCoroutine(LoadUICoroutine(state, finish));
+    }
+
+    IEnumerator LoadUICoroutine(eUIState state, Action finish)
     {
         DestroyUI();
         yield return new WaitForEndOfFrame();
@@ -120,6 +108,8 @@ public class UIManager : MonoBehaviour
 
             mCurrUI = uiRoot;
             mUISate = state;
+
+            finish();
         }        
     }
 

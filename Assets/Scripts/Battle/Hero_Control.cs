@@ -3,19 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public enum eHeroState
-{
-    HEROSTATE_IDLE = 0,
-    HEROSTATE_TRACE_ATK,
-    HEROSTATE_CNT_ATK,
-    HEROSTATE_FAKE_ATK,
-    HEROSTATE_FAKE_DEFEAT,
-    HEROSTATE_BREAK_DEFEAT,
-    HEROSTATE_CNT_DEFEAT,
-    HEROSTATE_DRAW,
-    HEROSTATE_DIE,
-}
-
 public enum EAtionType
 {
     ACTION_ATK,
@@ -26,10 +13,12 @@ public enum EAtionType
 
 public class Hero_Control : MonoBehaviour
 {
+    HeroBattleActionManager mActionManager;
+
     Actor mActor = null;
     Outline mOutline = null;
 
-    eHeroState mHeroState = eHeroState.HEROSTATE_IDLE;
+    EHeroBattleAction mHeroState = EHeroBattleAction.HEROSTATE_IDLE;
     EAtionType mActionType = EAtionType.ACTION_MAX;
 
     Guid mHeroUid = new Guid();
@@ -37,7 +26,7 @@ public class Hero_Control : MonoBehaviour
     int mHP = 0;
     int mMaxHP = 0;
     int mAtk = 0;
-    int mDef = 0;    
+    int mDef = 0;
     float mSpeed = 0;
     string mStResPath = null;
 
@@ -47,9 +36,12 @@ public class Hero_Control : MonoBehaviour
 
     SpriteRenderer mSR = new SpriteRenderer();
     Transform mEf_HP = null;
-    Hero_Control mTarget = null;    
+    Hero_Control mTarget = null;
     GameObject mHeroObj = null;
-    Vector3 mInitPos;
+    public Vector3 InitPos
+    {
+        get; set;
+    }
 
     public Guid HeroUid
     {
@@ -123,7 +115,7 @@ public class Hero_Control : MonoBehaviour
         get { return mHeroObj; }
     }
 
-    public eHeroState HeroState
+    public EHeroBattleAction HeroState
     {
         set { mHeroState = value; }
         get { return mHeroState; }
@@ -147,9 +139,24 @@ public class Hero_Control : MonoBehaviour
         get { return mMyTurn; }
     }
 
+    public Actor Actor
+    {
+        set { mActor = value; }
+        get { return mActor; }
+    }
+
+    public Outline Outline
+    {
+        set { mOutline = value; }
+        get { return mOutline; }
+    }
+
     public void InitHero()
     {
-        mInitPos = transform.position;
+        InitPos = transform.position;
+
+        mActionManager = new HeroBattleActionManager();
+        mActionManager.Initialize(this);
 
         Transform tObj = transform.Find("Obj");
         if (tObj != null)
@@ -179,137 +186,38 @@ public class Hero_Control : MonoBehaviour
 
     void Update()
     {
+        float fTimeDelta = Time.deltaTime;
+
         HPGaugePosUpdate();
-        UpdateState();
+
+        if (mActionManager != null)
+        {
+            mActionManager.Update(fTimeDelta);
+        }
     }
 
-    float fElasedTime = 0;
-    void UpdateState()
+    void HPGaugePosUpdate()
     {
-        if (mHeroState == eHeroState.HEROSTATE_TRACE_ATK)
+        if (IsDie) return;
+
+        BattleUI_Control bcUI = UIManager.Instance().GetUI() as BattleUI_Control;
+        if (bcUI == null) return;
+        bcUI.UpdatePosHPGauge(mHeroUid, mEf_HP);
+    }
+
+    public void PlayAnimation(Actor.AnimationActor anim)
+    {
+        if (mActor != null)
         {
-            fElasedTime += Time.deltaTime;
-
-            PlayAnm(Actor.AnimationActor.ANI_TRACE);
-
-            if (fElasedTime <= 0.5f)
-            {
-                Vector3 vPos = transform.position;
-                if (MyTeam)
-                    vPos.x += Define.TRACE_SPEED_X;
-                else
-                    vPos.x -= Define.TRACE_SPEED_X;
-
-                transform.position = vPos;
-            }
-            else if (fElasedTime > 0.5f)
-            {
-                PlayAnm(Actor.AnimationActor.ANI_ATK);
-                mHeroState = eHeroState.HEROSTATE_IDLE;
-                fElasedTime = 0;
-            }
+            mActor.PlayAnimation(anim);
         }
-        else if (mHeroState == eHeroState.HEROSTATE_CNT_ATK)
+    }
+
+    public void ChangeState(EHeroBattleAction eAction, byte[] data = null, bool bRefresh = false)
+    {
+        if (mActionManager != null)
         {
-            fElasedTime += Time.deltaTime;
-
-            PlayAnm(Actor.AnimationActor.ANI_CNT);
-
-            if (fElasedTime <= 0.5f)
-            {
-                Vector3 vPos = transform.position;
-                if (MyTeam)
-                    vPos.x += Define.TRACE_SPEED_X;
-                else
-                    vPos.x -= Define.TRACE_SPEED_X;
-                transform.position = vPos;
-            }
-            else if (fElasedTime > 0.5f)
-            {
-                PlayAnm(Actor.AnimationActor.ANI_ATK);
-                mHeroState = eHeroState.HEROSTATE_IDLE;
-                fElasedTime = 0;
-            }
-        }
-        else if (mHeroState == eHeroState.HEROSTATE_FAKE_ATK)
-        {
-            fElasedTime += Time.deltaTime;
-
-            if (fElasedTime <= 0.2f)
-            {
-                PlayAnm(Actor.AnimationActor.ANI_FAKE);
-            }
-            else if (fElasedTime <= 0.5f)
-            {
-                PlayAnm(Actor.AnimationActor.ANI_TRACE);
-
-                Vector3 vPos = transform.position;
-                if (MyTeam)
-                    vPos.x += Define.TRACE_SPEED_X;
-                else
-                    vPos.x -= Define.TRACE_SPEED_X;
-                transform.position = vPos;
-            }
-            else if (fElasedTime > 0.5f)
-            {
-                PlayAnm(Actor.AnimationActor.ANI_ATK);
-                mHeroState = eHeroState.HEROSTATE_IDLE;
-                fElasedTime = 0;
-            }
-        }
-        else if (mHeroState == eHeroState.HEROSTATE_BREAK_DEFEAT)
-        {
-            fElasedTime += Time.deltaTime;
-
-            PlayAnm(Actor.AnimationActor.ANI_BREAK);
-
-            if (fElasedTime > 0.5f)
-            {
-                PlayAnm(Actor.AnimationActor.ANI_DEFEAT);
-                mHeroState = eHeroState.HEROSTATE_IDLE;
-                fElasedTime = 0;
-            }
-        }
-        else if (mHeroState == eHeroState.HEROSTATE_CNT_DEFEAT)
-        {
-            fElasedTime += Time.deltaTime;
-
-            PlayAnm(Actor.AnimationActor.ANI_CNT);
-
-            if (fElasedTime > 0.5f)
-            {
-                PlayAnm(Actor.AnimationActor.ANI_DEFEAT);
-                mHeroState = eHeroState.HEROSTATE_IDLE;
-                fElasedTime = 0;
-            }
-        }
-        else if (mHeroState == eHeroState.HEROSTATE_FAKE_DEFEAT)
-        {
-            fElasedTime += Time.deltaTime;
-
-            PlayAnm(Actor.AnimationActor.ANI_FAKE);
-
-            if (fElasedTime > 0.5f)
-            {
-                PlayAnm(Actor.AnimationActor.ANI_DEFEAT);
-                mHeroState = eHeroState.HEROSTATE_IDLE;
-                fElasedTime = 0;
-            }
-        }
-        else if (mHeroState == eHeroState.HEROSTATE_DRAW)
-        {
-            PlayAnm(Actor.AnimationActor.ANI_ATK);
-            mHeroState = eHeroState.HEROSTATE_IDLE;
-        }
-        else if(mHeroState == eHeroState.HEROSTATE_IDLE)
-        {
-            //fElasedTime += Time.deltaTime;
-            //if (fElasedTime >= 1)
-            //{
-            //    transform.localScale = Vector3.one;
-            //    transform.position = mInitPos;
-            //    MyTurn = false;
-            //}
+            mActionManager.ChangeAction(eAction, data, bRefresh);
         }
     }
 
@@ -345,8 +253,7 @@ public class Hero_Control : MonoBehaviour
             Transform tCen = HeroObj.transform.Find("ef_Center");
             if( tCen != null )
             {
-                Battle_Control bc = GameMain.Instance().BattleControl;
-                Transform tEffect = bc.transform.Find("Effect");
+                Transform tEffect = BattleManager.Instance.transform.Find("Effect");
                 
                 goEfc.transform.parent = tEffect; 
                 goEfc.transform.position = tCen.position;
@@ -389,34 +296,24 @@ public class Hero_Control : MonoBehaviour
         SR.color = Color.white;
     }
 
-    void HPGaugePosUpdate()
+    public void ClearActionMode()
     {
-        if (IsDie) return;
+        //transform.position = mInitPos;
+        transform.localScale = Vector3.one;
 
-		BattleUI_Control bcUI = UIManager.Instance().GetUI() as BattleUI_Control;
-        if (bcUI == null) return;
-        bcUI.UpdatePosHPGauge(mHeroUid, mEf_HP);
+        UtilFunc.ChangeLayersRecursively(transform, "Default");
+
+        // BattleState 넣기 전까지 임시로 블러해제 넣는다. 나중에 빼야함
+        BattleManager.Instance.ActiveBlur(false);
     }
 
-    public Actor GetActor()
+    public void SetPosition(Vector3 vPos)
     {
-        return mActor;
+        transform.position = vPos;
     }
 
-    public Outline GetOutline()
+    public void SetScale(Vector3 vScale)
     {
-        return mOutline;
-    }
-
-    public void PlayAnm(Actor.AnimationActor anim)
-    {
-        mActor.PlayAnimation(anim);
-    }
-
-    public void ChangeState(eHeroState state, Vector3 battleStartPos)
-    {
-        HeroState = state;
-        transform.position = battleStartPos;
-        transform.localScale = new Vector3( Define.BATTLE_MOD_SCALE, Define.BATTLE_MOD_SCALE, Define.BATTLE_MOD_SCALE);
+        transform.localScale = vScale;
     }
 }
