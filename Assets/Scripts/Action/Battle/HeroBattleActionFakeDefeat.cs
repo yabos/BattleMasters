@@ -41,7 +41,7 @@ public class HeroBattleActionFakeDefeat : HeroBattleAction
         }
         else if (m_fTimeElapsed > 1f)
         {
-            m_Owner.ChangeState(EHeroBattleAction.HEROSTATE_IDLE);
+            m_Owner.ChangeState(EHeroBattleAction.HeroAction_Idle);
         }
     }
 }

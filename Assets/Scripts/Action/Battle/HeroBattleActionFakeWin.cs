@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HeroBattleActionFakeAtk : HeroBattleAction
+public class HeroBattleActionFakeWin : HeroBattleAction
 {
     protected float m_fTimeElapsed;
 

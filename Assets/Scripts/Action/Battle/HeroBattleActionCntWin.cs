@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HeroBattleActionCntAtk : HeroBattleAction
+public class HeroBattleActionCntWin : HeroBattleAction
 {
     
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HeroBattleActionTraceAtk : HeroBattleAction
+public class HeroBattleActionAtkWin : HeroBattleAction
 {
     protected float m_fTimeElapsed;
 
@@ -25,7 +25,6 @@ public class HeroBattleActionTraceAtk : HeroBattleAction
         base.DoEnd(eNextAction);
     }
 
-    bool isMove = false;
     public override void Update(float fTimeDelta)
     {
         base.Update(fTimeDelta);
@@ -46,39 +45,19 @@ public class HeroBattleActionTraceAtk : HeroBattleAction
         }
         else if (m_fTimeElapsed > 1f)
         {
-            //  그냥 되돌아 오는 모션을 애니메이션 커브로 해도 될 듯
-            isMove = moveSomething(m_Owner.gameObject, m_Owner.InitPos); // change room bool
-
-            // move GameObject to GameObject marker
-            //if (isMove == false)
-            m_Owner.PlayAnimation(Actor.AnimationActor.ANI_IDLE);
-            if (timeTaken > 6)
+            var tp = m_Owner.gameObject.AddComponent<TweenPosition>();
+            if (tp != null)
             {
-                m_Owner.ChangeState(EHeroBattleAction.HEROSTATE_IDLE);
-                m_Owner.transform.localScale = Vector3.one;
+                tp.style = UITweener.Style.Once;
+                tp.duration = 0.3f;
+                tp.from = m_Owner.transform.position;
+                tp.to = m_Owner.InitPos;                
+                tp.animationCurve = m_Owner.Actor.BackStepCurve;                
+                tp.PlayForward();
+
+                Object.Destroy(tp, tp.duration);
+                m_Owner.ChangeState(EHeroBattleAction.HeroAction_Idle);
             }
         }
-    }
-
-    float timeTaken;
-
-    public bool moveSomething(GameObject start, Vector3 end)
-    { 
-        // return bool when finished moving
-        if (start.transform.position == end)
-        {
-            return false;
-        }
-        else
-        {
-            timeTaken += (float)move(start, end);
-            return true;
-        }
-    }
-    public float move(GameObject start, Vector3 end)
-    {
-        start.transform.position = Vector3.Lerp(start.transform.position, end, Time.deltaTime * 10);
-        start.transform.localScale = Vector3.Lerp(start.transform.localScale, Vector3.one, Time.deltaTime * 7);
-        return Time.deltaTime * 10;
     }
 }

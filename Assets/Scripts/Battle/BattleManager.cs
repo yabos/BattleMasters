@@ -216,7 +216,7 @@ public class BattleManager : MonoBehaviour
 
     Vector3 GetTeamPos(EHeroBattleAction stateAction, bool myTeam)
     {
-        if (stateAction == EHeroBattleAction.HEROSTATE_TRACE_ATK || stateAction == EHeroBattleAction.HEROSTATE_BREAK_DEFEAT)
+        if (stateAction == EHeroBattleAction.HeroAction_AtkWin || stateAction == EHeroBattleAction.HeroAction_CntDefeat)
         {
             if (myTeam)
             {
@@ -227,7 +227,7 @@ public class BattleManager : MonoBehaviour
                 return mBattlePosEnemy[(int)EBattlePosType.BPT_TRACE_FAKE].position;
             }
         }
-        else if (stateAction == EHeroBattleAction.HEROSTATE_CNT_ATK || stateAction == EHeroBattleAction.HEROSTATE_CNT_DEFEAT)
+        else if (stateAction == EHeroBattleAction.HeroAction_CntWin || stateAction == EHeroBattleAction.HeroAction_FakeDefeat)
         {
             if (myTeam)
             {
@@ -238,7 +238,7 @@ public class BattleManager : MonoBehaviour
                 return mBattlePosEnemy[(int)EBattlePosType.BPT_CNT_BREAK].position;
             }
         }
-        else if (stateAction == EHeroBattleAction.HEROSTATE_FAKE_ATK || stateAction == EHeroBattleAction.HEROSTATE_FAKE_DEFEAT)
+        else if (stateAction == EHeroBattleAction.HeroAction_FakeWin || stateAction == EHeroBattleAction.HeroAction_AtkDefeat)
         {
             if (myTeam)
             {
@@ -267,33 +267,33 @@ public class BattleManager : MonoBehaviour
         // Win
         if (me == EAtionType.ACTION_ATK && your == EAtionType.ACTION_FAKE)
         {
-            return EHeroBattleAction.HEROSTATE_TRACE_ATK;
+            return EHeroBattleAction.HeroAction_AtkWin;
         }
         else if (me == EAtionType.ACTION_COUNT && your == EAtionType.ACTION_ATK)
         {
-            return EHeroBattleAction.HEROSTATE_CNT_ATK;
+            return EHeroBattleAction.HeroAction_CntWin;
         }
         else if (me == EAtionType.ACTION_FAKE && your == EAtionType.ACTION_COUNT)
         {
-            return EHeroBattleAction.HEROSTATE_FAKE_ATK;
+            return EHeroBattleAction.HeroAction_FakeWin;
         }
         // Defeat
         else if (me == EAtionType.ACTION_FAKE && your == EAtionType.ACTION_ATK)
         {
-            return EHeroBattleAction.HEROSTATE_FAKE_DEFEAT;
+            return EHeroBattleAction.HeroAction_AtkDefeat;
         }
         else if (me == EAtionType.ACTION_ATK && your == EAtionType.ACTION_COUNT)
         {
-            return EHeroBattleAction.HEROSTATE_BREAK_DEFEAT;
+            return EHeroBattleAction.HeroAction_CntDefeat;
         }
         else if (me == EAtionType.ACTION_COUNT && your == EAtionType.ACTION_FAKE)
         {
-            return EHeroBattleAction.HEROSTATE_CNT_DEFEAT;
+            return EHeroBattleAction.HeroAction_FakeDefeat;
         }
         else
         {
             // draw
-            return EHeroBattleAction.HERO_BTL_ACT_MAX;
+            return EHeroBattleAction.HeroAction_Max;
         }
     }
 
@@ -380,9 +380,7 @@ public class BattleManager : MonoBehaviour
                         hero.transform.localScale = Vector3.one;
                     }
 
-                    hero.InitHero();
-                    hero.SR.sortingOrder = i + 1;
-
+                    hero.InitHero(i + 1);
                     mListMyHeroes.Add(hero);
                 }
             }
@@ -411,9 +409,7 @@ public class BattleManager : MonoBehaviour
                         hero.transform.localScale = Vector3.one;
                     }
 
-                    hero.InitHero();
-                    hero.SR.sortingOrder = i + 1;
-
+                    hero.InitHero(i + 1);
                     mListEnemyHeroes.Add(hero);
                 }
             }

@@ -18,7 +18,7 @@ public class Hero_Control : MonoBehaviour
     Actor mActor = null;
     Outline mOutline = null;
 
-    EHeroBattleAction mHeroState = EHeroBattleAction.HEROSTATE_IDLE;
+    EHeroBattleAction mHeroState = EHeroBattleAction.HeroAction_Idle;
     EAtionType mActionType = EAtionType.ACTION_MAX;
 
     Guid mHeroUid = new Guid();
@@ -33,8 +33,7 @@ public class Hero_Control : MonoBehaviour
     bool mMyTeam = false;
     bool mIsDie = false;
     bool mMyTurn = false;
-
-    SpriteRenderer mSR = new SpriteRenderer();
+   
     Transform mEf_HP = null;
     Hero_Control mTarget = null;
     GameObject mHeroObj = null;
@@ -121,12 +120,6 @@ public class Hero_Control : MonoBehaviour
         get { return mHeroState; }
     }
 
-    public SpriteRenderer SR
-    {
-        set { mSR = value; }
-        get { return mSR; }
-    }
-
     public bool IsDie
     {
         set { mIsDie = value; }
@@ -151,7 +144,7 @@ public class Hero_Control : MonoBehaviour
         get { return mOutline; }
     }
 
-    public void InitHero()
+    public void InitHero(int sortingOrder)
     {
         InitPos = transform.position;
 
@@ -162,24 +155,13 @@ public class Hero_Control : MonoBehaviour
         if (tObj != null)
         {
             mActor = tObj.GetComponent<Actor>();
+            mActor.SR.sortingOrder = sortingOrder;
             mOutline = tObj.GetComponent<Outline>();
 
             mEf_HP = tObj.Find("ef_HP");
             if (mEf_HP == null)
             {
                 Debug.LogError("Not Find ef_HP!");
-            }
-        }
-
-        SpriteRenderer[] sr = transform.GetComponentsInChildren<SpriteRenderer>();
-        if (sr != null && sr.Length > 0)
-        {
-            for (int i = 0; i < sr.Length; ++i)
-            {
-                if (sr[i].name.Equals("Shadow") == false)
-                {
-                    SR = sr[i];
-                }
             }
         }
     }
@@ -227,7 +209,7 @@ public class Hero_Control : MonoBehaviour
         {
             for (int iAlpha = 10; iAlpha >= 0; --iAlpha)
             {
-                SR.color = new Color(1f, 1f, 1f, ((float)iAlpha) * 0.1f);
+                Actor.SR.color = new Color(1f, 1f, 1f, ((float)iAlpha) * 0.1f);
                 yield return null;
             }
 
@@ -289,11 +271,11 @@ public class Hero_Control : MonoBehaviour
 
     IEnumerator DamagedHeroColor(float fDelay)
     {
-        SR.color = new Color(1f, 142f/255f, 54f/255f);
+        Actor.SR.color = new Color(1f, 142f/255f, 54f/255f);
 
         yield return new WaitForSeconds(fDelay);
 
-        SR.color = Color.white;
+        Actor.SR.color = Color.white;
     }
 
     public void ClearActionMode()

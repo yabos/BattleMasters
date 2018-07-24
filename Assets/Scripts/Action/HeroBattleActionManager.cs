@@ -4,34 +4,34 @@ using UnityEngine;
 
 public enum EHeroBattleAction
 {
-    HEROSTATE_IDLE = 0,
-    HEROSTATE_TRACE_ATK,
-    HEROSTATE_CNT_ATK,
-    HEROSTATE_FAKE_ATK,
-    HEROSTATE_FAKE_DEFEAT,
-    HEROSTATE_BREAK_DEFEAT,
-    HEROSTATE_CNT_DEFEAT,
-    HEROSTATE_ATK_DEFEAT,
-    HEROSTATE_DEFEAT_ATK,
-    HEROSTATE_WIN,
-    HEROSTATE_LOSE,
-    HEROSTATE_DIE,
-    HERO_BTL_ACT_MAX,
+    HeroAction_Idle = 0,
+    HeroAction_AtkWin,
+    HeroAction_CntWin,
+    HeroAction_FakeWin,
+    HeroAction_AtkDefeat,
+    HeroAction_CntDefeat,
+    HeroAction_FakeDefeat,
+    HeroAction_DrawAtkDefeat,
+    HeroAction_DrawDefeatAtk,
+    HeroAction_BattleWin,
+    HeroAction_BattleLose,
+    HeroAction_BattleDie,
+    HeroAction_Max,
 }
 
 public class HeroBattleActionManager
 {
-    protected HeroBattleAction[] m_Actions = new HeroBattleAction[(int)EHeroBattleAction.HERO_BTL_ACT_MAX]
+    protected HeroBattleAction[] m_Actions = new HeroBattleAction[(int)EHeroBattleAction.HeroAction_Max]
     {
         new HeroBattleActionIdle(),
-        new HeroBattleActionTraceAtk(),
-        new HeroBattleActionCntAtk(),
-        new HeroBattleActionFakeAtk(),
-        new HeroBattleActionFakeDefeat(),
-        new HeroBattleActionBreakDefeat(),
-        new HeroBattleActionCntDefeat(),
+        new HeroBattleActionAtkWin(),
+        new HeroBattleActionCntWin(),
+        new HeroBattleActionFakeWin(),
         new HeroBattleActionAtkDefeat(),
-        new HeroBattleActionDefeatAtk(),
+        new HeroBattleActionCntDefeat(),
+        new HeroBattleActionFakeDefeat(),        
+        new HeroBattleActionDrawAtkDefeat(),
+        new HeroBattleActionDrawDefeatAtk(),
         new HeroBattleActionWin(),
         new HeroBattleActionLose(),
         new HeroBattleActionDie(),
@@ -43,11 +43,11 @@ public class HeroBattleActionManager
 
     public virtual void Initialize(Hero_Control owner)
     {
-        m_ePreviousAction = m_eCurrentAction = EHeroBattleAction.HEROSTATE_IDLE;
+        m_ePreviousAction = m_eCurrentAction = EHeroBattleAction.HeroAction_Idle;
 
         m_Owner = owner;
         
-        for (int i = (int)EHeroBattleAction.HEROSTATE_IDLE; i < (int)EHeroBattleAction.HERO_BTL_ACT_MAX; i++)
+        for (int i = (int)EHeroBattleAction.HeroAction_Idle; i < (int)EHeroBattleAction.HeroAction_Max; i++)
         {
             m_Actions[i].Initialize(m_Owner, this);
         }
@@ -57,7 +57,7 @@ public class HeroBattleActionManager
 
     public virtual void Release()
     {
-        for (int i = (int)EHeroBattleAction.HEROSTATE_IDLE; i < (int)EHeroBattleAction.HERO_BTL_ACT_MAX; i++)
+        for (int i = (int)EHeroBattleAction.HeroAction_Idle; i < (int)EHeroBattleAction.HeroAction_Max; i++)
         {
             m_Actions[i].Release();
         }

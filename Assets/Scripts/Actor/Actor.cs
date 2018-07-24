@@ -29,7 +29,14 @@ public class Actor : MonoBehaviour
     public Animator Anim = null;
     AnimationActor mAniState = AnimationActor.ANI_IDLE;
 
-    Hero_Control mHero = null;
+    public AnimationCurve BackStepCurve;
+    SpriteRenderer mSR = new SpriteRenderer();
+
+    public SpriteRenderer SR
+    {
+        set { mSR = value; }
+        get { return mSR; }
+    }
 
     public AnimationActor AniState
     {
@@ -38,38 +45,25 @@ public class Actor : MonoBehaviour
     }
 
     // Use this for initialization
-    void Start () 
+    void Awake () 
     {
         Anim = transform.GetComponent<Animator>();
 
-        mHero = transform.parent.GetComponent<Hero_Control>();
-        if (mHero == null)
+        SpriteRenderer[] sr = transform.GetComponentsInChildren<SpriteRenderer>();
+        if (sr != null && sr.Length > 0)
         {
-            Debug.LogError("Class : HeroActionEvent => mHero is null");
+            for (int i = 0; i < sr.Length; ++i)
+            {
+                if (sr[i].name.Equals("Shadow") == false)
+                {
+                    SR = sr[i];
+                }
+            }
         }
-
-        //var info1 = Anim.GetCurrentAnimatorStateInfo(0);
-        //Debug.LogError(info1.fullPathHash);
-        //if (newState != info1.fullPathHash)
-        //{
-        //    animator.Play(newState, -1, 0f);
-        //    var info2 = animator.GetCurrentAnimatorStateInfo(0);
-        //    if (info1.nameHash == info2.nameHash)
-        //    {
-        //        Debug.LogWarning("State not changed");
-        //    }
-        //}
     }
 
     public void PlayAnimation(AnimationActor eActiveAni)
-    {
-        //Anim.SetBool("Idle", false);
-        //Anim.SetBool("Atk", false);
-        //Anim.SetBool("Cnt", false);
-        //Anim.SetBool("Defeat", false);
-        //Anim.SetBool("Fake", false);
-
-        //Anim.SetBool(ClipName[(int)eActiveAni], true);
+    {        
         Anim.Play(ClipName[(int)eActiveAni], 0, 0f);
     }
 
