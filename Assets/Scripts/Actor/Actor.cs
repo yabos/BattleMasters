@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Actor : MonoBehaviour 
 {
-    public enum AnimationActor
+    public enum AniType
     { 
         ANI_IDLE,
         ANI_ATK,
@@ -27,7 +27,7 @@ public class Actor : MonoBehaviour
     };
 
     public Animator Anim = null;
-    AnimationActor mAniState = AnimationActor.ANI_IDLE;
+    AniType mAniState = AniType.ANI_IDLE;
 
     public AnimationCurve BackStepCurve;
     SpriteRenderer mSR = new SpriteRenderer();
@@ -38,7 +38,7 @@ public class Actor : MonoBehaviour
         get { return mSR; }
     }
 
-    public AnimationActor AniState
+    public AniType AniState
     {
         set { mAniState = value; }
         get { return mAniState; }
@@ -62,12 +62,12 @@ public class Actor : MonoBehaviour
         }
     }
 
-    public void PlayAnimation(AnimationActor eActiveAni)
+    public void PlayAnimation(AniType eActiveAni)
     {        
         Anim.Play(ClipName[(int)eActiveAni], 0, 0f);
     }
 
-    public void SetAnimationSpeed(AnimationActor eActiveAni, float fSeepd = 1.0f)
+    public void SetAnimationSpeed(AniType eActiveAni, float fSeepd = 1.0f)
     {
         Anim.speed = fSeepd;
     }

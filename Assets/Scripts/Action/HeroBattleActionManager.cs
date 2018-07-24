@@ -88,11 +88,9 @@ public class HeroBattleActionManager
         if (m_eCurrentAction != eAction || bRefresh == true)
         {
             m_ePreviousAction = m_eCurrentAction;
-
             m_Actions[(int)m_ePreviousAction].DoEnd(eAction);
 
             m_eCurrentAction = eAction;
-
             m_Actions[(int)m_eCurrentAction].DoStart(data);
         }
     }

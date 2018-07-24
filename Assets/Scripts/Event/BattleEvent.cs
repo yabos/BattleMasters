@@ -17,6 +17,6 @@ public class BattleEvent : MonoBehaviour
 
     public void SendEvent()
     {
-        UIManager.Instance().GetUI().SendEvent(uIEvent);
+        BattleManager.Instance.BattleUI.SendEvent(uIEvent);
     }
 }

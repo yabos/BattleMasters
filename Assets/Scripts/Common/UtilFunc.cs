@@ -16,14 +16,14 @@ public class UtilFunc
         goHero.transform.name = uid.ToString();
         
         TB_Hero tbHero;
-        if (TBManager.Instance().cont_Hero.TryGetValue(iHeroNo, out tbHero))
+        if (TBManager.Instance.cont_Hero.TryGetValue(iHeroNo, out tbHero))
         {
             hero.HeroUid = uid;
             hero.HeroNo = iHeroNo;
-            hero.HP = tbHero.mHP + Mathf.CeilToInt(((float)(iLv - 1) * ((float)tbHero.mHP * 0.1f)));
+            hero.HP = tbHero.mHP + Mathf.CeilToInt(((iLv - 1) * (tbHero.mHP * 0.1f)));
             hero.MaxHP = hero.HP;
-            hero.Atk = tbHero.mAtk + Mathf.CeilToInt(((float)(iLv - 1) * ((float)tbHero.mAtk * 0.1f)));
-            hero.Def = tbHero.mDef + Mathf.CeilToInt(((float)(iLv - 1) * ((float)tbHero.mDef * 0.1f)));
+            hero.Atk = tbHero.mAtk + Mathf.CeilToInt(((iLv - 1) * (tbHero.mAtk * 0.1f)));
+            hero.Def = tbHero.mDef + Mathf.CeilToInt(((iLv - 1) * (tbHero.mDef * 0.1f)));
             hero.Speed = tbHero.mSpeed;
             hero.StResPath = tbHero.stResPath;
             hero.MyTeam = bMyTeam;
@@ -53,10 +53,9 @@ public class UtilFunc
             }
 
             // create hero hp
-			BattleUI_Control bcUI = UIManager.Instance().GetUI() as BattleUI_Control;
-            if (bcUI != null)
+            if (BattleManager.Instance.BattleUI != null)
             {
-                bcUI.CreateHeroHp(uid, bMyTeam);
+                BattleManager.Instance.BattleUI.CreateHeroHp(uid, bMyTeam);
             }
         }
 

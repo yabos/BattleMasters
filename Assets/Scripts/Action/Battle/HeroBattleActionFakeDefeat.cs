@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class HeroBattleActionFakeDefeat : HeroBattleAction
 {
-    protected float m_fTimeElapsed;
-
     public override void Initialize(Hero_Control owner, HeroBattleActionManager action_manager)
     {
         base.Initialize(owner, action_manager);
@@ -15,33 +13,26 @@ public class HeroBattleActionFakeDefeat : HeroBattleAction
     {
         base.DoStart(data);
 
-        m_Owner.PlayAnimation(Actor.AnimationActor.ANI_FAKE);
+        UtilFunc.ChangeLayersRecursively(m_Owner.transform, "UI");
 
-        m_fTimeElapsed = 0.0f;
+        m_Owner.StartCoroutine(ActionProc());
     }
 
     public override void DoEnd(EHeroBattleAction eNextAction)
     {
         base.DoEnd(eNextAction);
+
+        m_Owner.StopCoroutine(ActionProc());
     }
 
-    public override void Update(float fTimeDelta)
+    public override IEnumerator ActionProc()
     {
-        base.Update(fTimeDelta);
+        yield return AnimationDeley(0.5f, Actor.AniType.ANI_FAKE);
 
-        m_fTimeElapsed += fTimeDelta;
+        yield return AnimationDeley(0.5f, Actor.AniType.ANI_DEFEAT);
 
-        if (m_fTimeElapsed <= 0.5f)
-        {            
-            m_Owner.PlayAnimation(Actor.AnimationActor.ANI_FAKE);
-        }
-        else if (m_fTimeElapsed > 0.5f && m_fTimeElapsed <= 1f)
-        {
-            m_Owner.PlayAnimation(Actor.AnimationActor.ANI_DEFEAT);
-        }
-        else if (m_fTimeElapsed > 1f)
-        {
-            m_Owner.ChangeState(EHeroBattleAction.HeroAction_Idle);
-        }
+        InitHeroState(0.1f);
+
+        m_Owner.ChangeState(EHeroBattleAction.HeroAction_Idle);
     }
 }

@@ -9,14 +9,14 @@ public class BattleUI_Control : BaseUI
     Transform mHeroHp = null;
     Transform mTrunIconRoot;
 
-    public List<TurnIcon> mListTurnIcons = new List<TurnIcon>();
+    List<TurnIcon> mListTurnIcons = new List<TurnIcon>();
 
     BattleProfile[] mProfiles = new BattleProfile[2];
     GameObject mGoTurnTimer;
     TurnTimer mTurnTime;
 
 	// Use this for initialization
-	void Start ()
+	void Awake ()
     {
         mHeroHp = transform.Find("Anchor/HeroHP");
 		mBattleLoading = transform.Find ("Anchor/Loading");
@@ -37,22 +37,6 @@ public class BattleUI_Control : BaseUI
         if (mGoTurnTimer != null)
         {
             mTurnTime = mGoTurnTimer.GetComponent<TurnTimer>();
-        }
-    }
-
-    // Update is called once per frame
-    float ElapsedTime = 0;
-    void Update ()
-    {
-        ElapsedTime += Time.deltaTime;
-
-        if (BattleManager.Instance.ActiveTurnHero == 0)
-        {
-            if (ElapsedTime >= 0.1f)
-            {
-                UpdateTurnCount();
-                ElapsedTime -= 0.1f;
-            }
         }
     }
 
@@ -91,7 +75,7 @@ public class BattleUI_Control : BaseUI
         heroCont = BattleManager.Instance.GetHeroControl(heroNo);
         if (heroCont != null)
         {
-            heroCont.ActionType = EAtionType.ACTION_FAKE;
+            heroCont.ActionType = EAtionType.ACTION_ATK;
             //heroCont.ActionType = (EAtionType)Random.Range(0, (int)EAtionType.ACTION_MAX);
         }
 
@@ -118,7 +102,7 @@ public class BattleUI_Control : BaseUI
 		GameObject goHPRes = VResources.Load<GameObject>("UI/Common/Prefabs/HPGauge");
         if (goHPRes == null) return;
 
-        GameObject goHP = GameObject.Instantiate(goHPRes) as GameObject;
+        GameObject goHP = Instantiate(goHPRes) as GameObject;
         if (goHP != null)
         {
             goHP.transform.parent = mHeroHp.transform;
@@ -194,7 +178,7 @@ public class BattleUI_Control : BaseUI
     {
         for (int i = 0; i < listHero.Count; ++i)
         {
-            GameObject goIcon = GameObject.Instantiate(VResources.Load<GameObject>("UI/Battle/TurnIcon")) as GameObject;
+            GameObject goIcon = Instantiate(VResources.Load<GameObject>("UI/Battle/TurnIcon")) as GameObject;
             if (goIcon != null)
             {
                 goIcon.transform.parent = mTrunIconRoot;
@@ -215,21 +199,18 @@ public class BattleUI_Control : BaseUI
         }
     }
     
-    void UpdateTurnCount()
+    public void UpdateTurnCount()
     {
-        if (BattleManager.Instance.BattleState == eBattleState.eBattle_TurnStart)
+        List<Hero_Control> listTemp = new List<Hero_Control>();
+        listTemp.AddRange(BattleManager.Instance.ListMyHeroes);
+        listTemp.AddRange(BattleManager.Instance.ListEnemyHeroes);
+
+        for (int i = 0; i < listTemp.Count; ++i)
         {
-            List<Hero_Control> listTemp = new List<Hero_Control>();
-            listTemp.AddRange(BattleManager.Instance.ListMyHeroes);
-            listTemp.AddRange(BattleManager.Instance.ListEnemyHeroes);
-
-            for (int i = 0; i < listTemp.Count; ++i)
-            {
-                UpdateTurnIconSpeed(listTemp[i].HeroNo, listTemp[i].Speed);
-            }
-
-            UpdateTurnIconDepth();
+            UpdateTurnIconSpeed(listTemp[i].HeroNo, listTemp[i].Speed);
         }
+
+        UpdateTurnIconDepth();
     }
 
     void UpdateTurnIconSpeed(int heroNo, float speed)

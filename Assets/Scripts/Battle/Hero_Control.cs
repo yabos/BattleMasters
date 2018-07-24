@@ -182,12 +182,11 @@ public class Hero_Control : MonoBehaviour
     {
         if (IsDie) return;
 
-        BattleUI_Control bcUI = UIManager.Instance().GetUI() as BattleUI_Control;
-        if (bcUI == null) return;
-        bcUI.UpdatePosHPGauge(mHeroUid, mEf_HP);
+        if (BattleManager.Instance.BattleUI == null) return;
+        BattleManager.Instance.BattleUI.UpdatePosHPGauge(mHeroUid, mEf_HP);
     }
 
-    public void PlayAnimation(Actor.AnimationActor anim)
+    public void PlayAnimation(Actor.AniType anim)
     {
         if (mActor != null)
         {
@@ -209,11 +208,11 @@ public class Hero_Control : MonoBehaviour
         {
             for (int iAlpha = 10; iAlpha >= 0; --iAlpha)
             {
-                Actor.SR.color = new Color(1f, 1f, 1f, ((float)iAlpha) * 0.1f);
+                Actor.SR.color = new Color(1f, 1f, 1f, (iAlpha) * 0.1f);
                 yield return null;
             }
 
-            float fWaitSeconds = (float)iFadeCount * 0.001f;
+            float fWaitSeconds = iFadeCount * 0.001f;
             yield return new WaitForSeconds(fWaitSeconds);
         }
     }
@@ -223,10 +222,10 @@ public class Hero_Control : MonoBehaviour
         // if(immune) return false
 
         HP -= atthero.Atk;
-		BattleUI_Control bcUI = UIManager.Instance().GetUI() as BattleUI_Control;
+        BattleUI_Control bcUI = BattleManager.Instance.BattleUI;
         if (bcUI == null) return false;
 
-        float amount =  (float)HP / (float)MaxHP;
+        float amount =  HP / MaxHP;
         bcUI.UpdateHPGauge(mHeroUid, amount);
 
         GameObject goEfc = EffectManager.Instance().GetEffect(EffectManager.eEffectType.EFFECT_BATTLE_HIT); 
@@ -280,13 +279,15 @@ public class Hero_Control : MonoBehaviour
 
     public void ClearActionMode()
     {
-        //transform.position = mInitPos;
-        transform.localScale = Vector3.one;
-
-        UtilFunc.ChangeLayersRecursively(transform, "Default");
-
         // BattleState 넣기 전까지 임시로 블러해제 넣는다. 나중에 빼야함
         BattleManager.Instance.ActiveBlur(false);
+    }
+
+    public void SetActionMode(EHeroBattleAction heroAction, Vector3 vPos)
+    {
+        SetPosition(vPos);
+        SetScale(new Vector3(Define.BATTLE_MOD_SCALE, Define.BATTLE_MOD_SCALE, Define.BATTLE_MOD_SCALE));
+        ChangeState(heroAction);
     }
 
     public void SetPosition(Vector3 vPos)
@@ -297,5 +298,39 @@ public class Hero_Control : MonoBehaviour
     public void SetScale(Vector3 vScale)
     {
         transform.localScale = vScale;
+    }
+
+    public void InitHeroTweenPosition(float duration, float delay = 0)
+    {
+        var tp = gameObject.AddComponent<TweenPosition>();
+        if (tp != null)
+        {
+            tp.style = UITweener.Style.Once;
+            tp.duration = duration;
+            tp.delay = delay;
+            tp.from = transform.position;
+            tp.to = InitPos;
+            tp.animationCurve = Actor.BackStepCurve;
+            tp.PlayForward();
+
+            Destroy(tp, tp.duration);
+        }
+    }
+
+    public void InitHeroTweenScale(float duration, float delay = 0)
+    {
+        var ts = gameObject.AddComponent<TweenScale>();
+        if (ts != null)
+        {
+            ts.style = UITweener.Style.Once;
+            ts.duration = duration;
+            ts.delay = delay;
+            ts.from = transform.localScale;
+            ts.to = Vector3.one;
+            ts.animationCurve = Actor.BackStepCurve;
+            ts.PlayForward();
+
+            Destroy(ts, ts.duration);
+        }
     }
 }

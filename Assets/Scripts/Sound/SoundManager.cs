@@ -4,17 +4,23 @@ using System.Collections.Generic;
 
 public class SoundManager : MonoBehaviour
 {
-    private static SoundManager instance;
-    private static GameObject container;
-    public static SoundManager Instance()
+    private static SoundManager _instance;
+    public static SoundManager Instance
     {
-        if (!instance)
+        get
         {
-            container = new GameObject();
-            container.name = "SoundManager";
-            instance = container.AddComponent(typeof(SoundManager)) as SoundManager;
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType(typeof(SoundManager)) as SoundManager;
+                if (_instance == null)
+                {
+                    GameObject dataManaer = new GameObject("SoundManager", typeof(SoundManager));
+                    _instance = dataManaer.GetComponent<SoundManager>();
+                }
+            }
+
+            return _instance;
         }
-        return instance;
     }
 
     public enum eBGMType
@@ -57,15 +63,6 @@ public class SoundManager : MonoBehaviour
 
     void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Debug.LogError("Duplicate GameMain");
-        }
-
         al = GetComponent<AudioListener>();
         audioClips = new Dictionary<string, AudioClip>();
         foreach (AudioClip a in audioSources)
@@ -124,7 +121,7 @@ public class SoundManager : MonoBehaviour
             return;
         }
         GameObject go = GameObject.Instantiate(audioPrefab) as GameObject;
-        go.transform.parent = instance.transform;
+        go.transform.parent = this.transform;
         Audio a = go.GetComponent<Audio>();
         a.PlaySoundOnce(audioClips[name]);        
     }

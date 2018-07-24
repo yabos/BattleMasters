@@ -13,8 +13,10 @@ public class HeroBattleActionIdle : HeroBattleAction
     {
         base.DoStart(data);
 
-        m_Owner.PlayAnimation(Actor.AnimationActor.ANI_IDLE);
+        m_Owner.PlayAnimation(Actor.AniType.ANI_IDLE);
         m_Owner.ClearActionMode();
+
+        UtilFunc.ChangeLayersRecursively(m_Owner.transform, "Default");
     }
 
     public override void DoEnd(EHeroBattleAction eNextAction)
