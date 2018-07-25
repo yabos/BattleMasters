@@ -13,12 +13,16 @@ public class BattleStateReady : BattleState
 
     public override void DoStart(byte[] data = null)
     {
+        m_Owner.TurnUI.TurnPause = false;
+
         m_fTimeElapsed = 0;
     }
 
     public override void DoEnd()
     {
         base.DoEnd();
+
+        // 스테이터스 UI 켜진거 꺼줘야 함
     }
 
     public override void Update(float fTimeDelta)
@@ -26,7 +30,7 @@ public class BattleStateReady : BattleState
         base.Update(fTimeDelta);
         m_fTimeElapsed += fTimeDelta;
 
-        if (Input.GetMouseButtonDown(0) && m_Owner.ActiveTurnHero > 0)
+        if (Input.GetMouseButtonDown(0))
         {
             Vector2 wp = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Ray2D ray = new Ray2D(wp, Vector2.zero);
@@ -35,23 +39,13 @@ public class BattleStateReady : BattleState
             foreach (var hit in hits)
             {
                 var heroCont = hit.collider.GetComponentInParent<Hero_Control>();
-                if (heroCont == null) continue;
-                if (heroCont.MyTeam) continue;
+                if (heroCont == null) continue;               
                 if (BeforeHeroNo.Equals(heroCont.HeroNo)) continue;
 
                 m_Owner.SetEnemyOutline(heroCont.HeroNo);
-                m_Owner.BattleUI.SetActiveTurnHeroUI(heroCont.HeroNo);
-                m_Owner.ActiveTargetHero = heroCont.HeroNo;
+                // 스테이터스 UI 만 나오게 나중에 수정해야함
+                //m_Owner.BattleUI.SetProfileUI(heroCont.HeroNo);              
                 BeforeHeroNo = heroCont.HeroNo;
-            }
-        }
-
-        if (BattleManager.Instance.ActiveTurnHero == 0)
-        {
-            if (m_fTimeElapsed >= 0.1f)
-            {
-                m_Owner.BattleUI.UpdateTurnCount();
-                m_fTimeElapsed -= 0.1f;
             }
         }
     }

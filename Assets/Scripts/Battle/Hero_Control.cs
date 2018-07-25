@@ -14,135 +14,27 @@ public enum EAtionType
 public class Hero_Control : MonoBehaviour
 {
     HeroBattleActionManager mActionManager;
+    
+    public Guid HeroUid { get; set; }
+    public int HeroNo { get; set; } 
+    public int HP { get; set; }
+    public int MaxHP { get; set; }
+    public int Atk { get; set; }
+    public int Def { get; set; }
+    public float Speed { get; set; }
+    public string StResPath { get; set; }   
+    public bool MyTeam { get; set; }  
+    public bool IsDie { get; set; }
+    public bool MyTurn { get; set; }
 
-    Actor mActor = null;
-    Outline mOutline = null;
-
-    EHeroBattleAction mHeroState = EHeroBattleAction.HeroAction_Idle;
-    EAtionType mActionType = EAtionType.ACTION_MAX;
-
-    Guid mHeroUid = new Guid();
-    int mHeroNo = 0;
-    int mHP = 0;
-    int mMaxHP = 0;
-    int mAtk = 0;
-    int mDef = 0;
-    float mSpeed = 0;
-    string mStResPath = null;
-
-    bool mMyTeam = false;
-    bool mIsDie = false;
-    bool mMyTurn = false;
-   
-    Transform mEf_HP = null;
-    Hero_Control mTarget = null;
-    GameObject mHeroObj = null;
-    public Vector3 InitPos
-    {
-        get; set;
-    }
-
-    public Guid HeroUid
-    {
-        set { mHeroUid = value; }
-        get { return mHeroUid; }
-    }
-
-    public int HeroNo
-    {
-        set { mHeroNo = value; }
-        get { return mHeroNo; }
-    }
-
-    public int HP
-    {
-        set { mHP = value; }
-        get { return mHP; }
-    }
-
-    public int MaxHP
-    {
-        set { mMaxHP = value; }
-        get { return mMaxHP; }
-    }
-
-    public int Atk
-    {
-        set { mAtk = value; }
-        get { return mAtk; }
-    }
-
-    public int Def
-    {
-        set { mDef = value; }
-        get { return mDef; }
-    }
-
-    public float Speed
-    {
-        set { mSpeed = value; }
-        get { return mSpeed; }
-    }
-
-    public string StResPath
-    {
-        set { mStResPath = value; }
-        get { return mStResPath; }
-    }
-
-    public EAtionType ActionType
-    {
-        set { mActionType = value; }
-        get { return mActionType; }
-    }
-
-    public Hero_Control Target
-    {
-        set { mTarget = value; }
-        get { return mTarget; }
-    }
-
-    public bool MyTeam
-    {
-        set { mMyTeam = value; }
-        get { return mMyTeam; }
-    }
-
-    public GameObject HeroObj
-    {
-        set { mHeroObj = value; }
-        get { return mHeroObj; }
-    }
-
-    public EHeroBattleAction HeroState
-    {
-        set { mHeroState = value; }
-        get { return mHeroState; }
-    }
-
-    public bool IsDie
-    {
-        set { mIsDie = value; }
-        get { return mIsDie; }
-    }
-
-    public bool MyTurn
-    {
-        set { mMyTurn = value; }
-        get { return mMyTurn; }
-    }
-
-    public Actor Actor
-    {
-        set { mActor = value; }
-        get { return mActor; }
-    }
-
-    public Outline Outline
-    {
-        set { mOutline = value; }
-        get { return mOutline; }
-    }
+    public EHeroBattleAction HeroState { get; set; }
+    public EAtionType ActionType { get; set; }
+    public Hero_Control Target { get; set; }
+    public GameObject HeroObj { get; set; }
+    public Actor Actor { get; set; }
+    public Outline Outline { get; set; }
+    public Transform Ef_HP { get; set; }
+    public Vector3 InitPos { get; set; }
 
     public void InitHero(int sortingOrder)
     {
@@ -154,12 +46,12 @@ public class Hero_Control : MonoBehaviour
         Transform tObj = transform.Find("Obj");
         if (tObj != null)
         {
-            mActor = tObj.GetComponent<Actor>();
-            mActor.SR.sortingOrder = sortingOrder;
-            mOutline = tObj.GetComponent<Outline>();
+            Actor = tObj.GetComponent<Actor>();
+            Actor.SR.sortingOrder = sortingOrder;
+            Outline = tObj.GetComponent<Outline>();
 
-            mEf_HP = tObj.Find("ef_HP");
-            if (mEf_HP == null)
+            Ef_HP = tObj.Find("ef_HP");
+            if (Ef_HP == null)
             {
                 Debug.LogError("Not Find ef_HP!");
             }
@@ -183,14 +75,14 @@ public class Hero_Control : MonoBehaviour
         if (IsDie) return;
 
         if (BattleManager.Instance.BattleUI == null) return;
-        BattleManager.Instance.BattleUI.UpdatePosHPGauge(mHeroUid, mEf_HP);
+        BattleManager.Instance.BattleUI.UpdatePosHPGauge(HeroUid, Ef_HP);
     }
 
     public void PlayAnimation(Actor.AniType anim)
     {
-        if (mActor != null)
+        if (Actor != null)
         {
-            mActor.PlayAnimation(anim);
+            Actor.PlayAnimation(anim);
         }
     }
 
@@ -226,7 +118,7 @@ public class Hero_Control : MonoBehaviour
         if (bcUI == null) return false;
 
         float amount =  HP / MaxHP;
-        bcUI.UpdateHPGauge(mHeroUid, amount);
+        bcUI.UpdateHPGauge(HeroUid, amount);
 
         GameObject goEfc = EffectManager.Instance().GetEffect(EffectManager.eEffectType.EFFECT_BATTLE_HIT); 
         if (goEfc != null)
@@ -277,13 +169,7 @@ public class Hero_Control : MonoBehaviour
         Actor.SR.color = Color.white;
     }
 
-    public void ClearActionMode()
-    {
-        // BattleState 넣기 전까지 임시로 블러해제 넣는다. 나중에 빼야함
-        BattleManager.Instance.ActiveBlur(false);
-    }
-
-    public void SetActionMode(EHeroBattleAction heroAction, Vector3 vPos)
+    public void ExcuteAction(EHeroBattleAction heroAction, Vector3 vPos)
     {
         SetPosition(vPos);
         SetScale(new Vector3(Define.BATTLE_MOD_SCALE, Define.BATTLE_MOD_SCALE, Define.BATTLE_MOD_SCALE));

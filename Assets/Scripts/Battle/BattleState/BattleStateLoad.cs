@@ -24,7 +24,7 @@ public class BattleStateLoad : BattleState
             vCurOutline.Initialise();
         }
         m_Owner.BattleUI.ActiveLoadingIMG(false);
-        m_Owner.BattleUI.CreateTurnIcon();
+        m_Owner.TurnUI.CreateTurnIcon();
         SoundManager.Instance.PlayBattleBGM(SoundManager.eBattleBGM.eBattleBGM_Normal);
 
         m_StateManager.ChangeState(EBattleState.BattleState_Ready);
@@ -49,7 +49,9 @@ public class BattleStateLoad : BattleState
                 uiRoot.transform.position = Vector3.zero;
                 uiRoot.transform.rotation = Quaternion.identity;
                 uiRoot.transform.localScale = Vector3.one;
+
                 m_Owner.BattleUI = uiRoot.GetComponent<BattleUI_Control>();
+                m_Owner.TurnUI = uiRoot.GetComponentInChildren<TurnUI_Control>();
             }
         }
     }

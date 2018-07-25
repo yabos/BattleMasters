@@ -23,10 +23,8 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    EBattleState mBattleState = EBattleState.BattleState_Load;
-
-    List<Hero_Control> mListMyHeroes = new List<Hero_Control>();
-    List<Hero_Control> mListEnemyHeroes = new List<Hero_Control>();
+    readonly List<Hero_Control> mListMyHeroes = new List<Hero_Control>();
+    readonly List<Hero_Control> mListEnemyHeroes = new List<Hero_Control>();
 
     public GameObject BattleRoot;
 
@@ -41,6 +39,11 @@ public class BattleManager : MonoBehaviour
     }
 
     public BattleUI_Control BattleUI
+    {
+        get; set;
+    }
+
+    public TurnUI_Control TurnUI
     {
         get; set;
     }
@@ -76,10 +79,7 @@ public class BattleManager : MonoBehaviour
             BattleStateManager = new BattleStateManager();
             BattleStateManager.Initialize(this);
         }
-
-        mBattleState = EBattleState.BattleState_Load;
     }
-
     
     void Update()
     {
@@ -91,19 +91,13 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void SetBattleStateSelActionType()
-    {
-        BattleUI.ActiveSelActionType(true);
-        BattleUI.SetTurnTimer(Define.SELECT_ACTIONTYPE_LIMITTIME, ETurnTimeType.TURNTIME_SEL_ACTIONTYPE);
-    }
-
     public void SetBattleStateActionStart()
     {
         ActiveBlur(true);
         BattleUI.ActiveBattleProfile(false);
         BattleUI.ActiveHUDUI(false);        
         EnemyOutlineOff();
-        HeroAction();
+        ExcuteHeroAction();
     }
 
     public void SetBattleStateActionEnd()
@@ -113,7 +107,7 @@ public class BattleManager : MonoBehaviour
         ActiveTargetHero = 0;
     }
 
-    void HeroAction()
+    void ExcuteHeroAction()
     {
         var MyTeamHero = GetHeroControl(ActiveTurnHero);
         if (MyTeamHero != null)
@@ -129,15 +123,13 @@ public class BattleManager : MonoBehaviour
 
         EHeroBattleAction myHeroAction = ResultBattleAction(MyTeamHero, EnemyHero);
         Vector3 vPos = Battleground.GetTeamPos(myHeroAction, MyTeamHero.MyTeam);
-        MyTeamHero.SetActionMode(myHeroAction, vPos);        
+        MyTeamHero.ExcuteAction(myHeroAction, vPos);        
 
         EHeroBattleAction enemyHeroAction = ResultBattleAction(EnemyHero, MyTeamHero);
         vPos = Battleground.GetTeamPos(enemyHeroAction, EnemyHero.MyTeam);
-        EnemyHero.SetActionMode(enemyHeroAction, vPos);
+        EnemyHero.ExcuteAction(enemyHeroAction, vPos);
     }
     
-    
-
     EHeroBattleAction ResultBattleAction(Hero_Control mine, Hero_Control yours)
     {
         // Win
@@ -183,13 +175,14 @@ public class BattleManager : MonoBehaviour
     public void SetActiveTurnHero(int heroNo)
     {
         ActiveTurnHero = heroNo;
+
         var hero = GetHeroControl(heroNo);
         if (hero != null)
         {
             hero.MyTurn = true;
         }
 
-        BattleUI.SetActiveTurnHeroUI(heroNo);
+        BattleUI.SetProfileUI(heroNo);
         BattleUI.SetTurnTimer(Define.SELECT_TARGET_LIMITTIME, ETurnTimeType.TURNTIME_SEL_TARGET);
     }
 

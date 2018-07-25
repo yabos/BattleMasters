@@ -27,9 +27,9 @@ public class HeroBattleAction
 
     public virtual void DoEnd(EHeroBattleAction eNextAction)
     {
-
+        
     }
-   
+
     public virtual void Update(float fTimeDelta)
     {
     }
@@ -37,6 +37,23 @@ public class HeroBattleAction
     public virtual IEnumerator ActionProc()
     {
         yield break;
+    }
+
+    protected bool IsMovingAction(EHeroBattleAction action)
+    {
+        if (action == EHeroBattleAction.HeroAction_AtkWin ||
+            action == EHeroBattleAction.HeroAction_CntWin ||
+            action == EHeroBattleAction.HeroAction_FakeWin ||
+            action == EHeroBattleAction.HeroAction_AtkDefeat ||
+            action == EHeroBattleAction.HeroAction_CntDefeat ||
+            action == EHeroBattleAction.HeroAction_FakeDefeat ||
+            action == EHeroBattleAction.HeroAction_DrawAtkDefeat ||
+            action == EHeroBattleAction.HeroAction_DrawDefeatAtk)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     //public virtual void OnCollisionActor(Actor target_actor)

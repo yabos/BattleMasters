@@ -6,10 +6,7 @@ using System.Linq;
 public class BattleUI_Control : BaseUI
 {
 	Transform mBattleLoading = null;
-    Transform mHeroHp = null;
-    Transform mTrunIconRoot;
-
-    List<TurnIcon> mListTurnIcons = new List<TurnIcon>();
+    Transform mHeroHp = null;    
 
     BattleProfile[] mProfiles = new BattleProfile[2];
     GameObject mGoTurnTimer;
@@ -19,8 +16,7 @@ public class BattleUI_Control : BaseUI
 	void Awake ()
     {
         mHeroHp = transform.Find("Anchor/HeroHP");
-		mBattleLoading = transform.Find ("Anchor/Loading");
-        mTrunIconRoot = transform.Find("Anchor/Turn");
+		mBattleLoading = transform.Find ("Anchor/Loading");        
         var Tran = transform.Find("Anchor_BL/Profile");
         if (Tran != null)
         {
@@ -60,6 +56,17 @@ public class BattleUI_Control : BaseUI
         }
     }
 
+    public void SetBattleSelActionType()
+    {
+        var profile = GetProfile(BattleManager.Instance.ActiveTargetHero);
+        if (profile != null)
+        {
+            profile.TweenPosSpriteProfile(true);
+            ActiveSelActionType(true);
+            SetTurnTimer(Define.SELECT_ACTIONTYPE_LIMITTIME, ETurnTimeType.TURNTIME_SEL_ACTIONTYPE);
+        }
+    }
+
     void SetHeroActionType(EAtionType eAtionType)
     {
         int heroNo = BattleManager.Instance.ActiveTurnHero;
@@ -79,17 +86,7 @@ public class BattleUI_Control : BaseUI
             //heroCont.ActionType = (EAtionType)Random.Range(0, (int)EAtionType.ACTION_MAX);
         }
 
-        BattleManager.Instance.SetBattleStateActionStart();
-    }
-
-    public void SetBattleSelActionType()
-    {
-        var profile = GetProfile(BattleManager.Instance.ActiveTargetHero);
-        if (profile != null)
-        {
-            profile.TweenPosSpriteProfile(true);
-            BattleManager.Instance.SetBattleStateSelActionType();
-        }
+        BattleManager.Instance.BattleStateManager.ChangeState(EBattleState.BattleState_Action);        
     }
 
 	public void ActiveLoadingIMG(bool bActive)
@@ -168,98 +165,6 @@ public class BattleUI_Control : BaseUI
         }
     }
 
-    public void CreateTurnIcon()
-    {
-        CreateTurnIcon(BattleManager.Instance.ListMyHeroes);
-        CreateTurnIcon(BattleManager.Instance.ListEnemyHeroes);
-    }
-
-    void CreateTurnIcon(List<Hero_Control> listHero)
-    {
-        for (int i = 0; i < listHero.Count; ++i)
-        {
-            GameObject goIcon = Instantiate(VResources.Load<GameObject>("UI/Battle/TurnIcon")) as GameObject;
-            if (goIcon != null)
-            {
-                goIcon.transform.parent = mTrunIconRoot;
-                goIcon.name = listHero[i].HeroNo.ToString();
-
-                goIcon.transform.localPosition = new Vector3(Define.TURNICON_START_POS_X, 0, 0); 
-                goIcon.transform.localRotation = Quaternion.identity;
-                goIcon.transform.localScale = new Vector3(6, 6, 0);
-
-                var icon = goIcon.GetComponent<TurnIcon>();
-                if (icon != null)
-                {
-                    icon.SetTurnIcon(listHero[i].HeroNo);
-
-                    mListTurnIcons.Add(icon);
-                }
-            }
-        }
-    }
-    
-    public void UpdateTurnCount()
-    {
-        List<Hero_Control> listTemp = new List<Hero_Control>();
-        listTemp.AddRange(BattleManager.Instance.ListMyHeroes);
-        listTemp.AddRange(BattleManager.Instance.ListEnemyHeroes);
-
-        for (int i = 0; i < listTemp.Count; ++i)
-        {
-            UpdateTurnIconSpeed(listTemp[i].HeroNo, listTemp[i].Speed);
-        }
-
-        UpdateTurnIconDepth();
-    }
-
-    void UpdateTurnIconSpeed(int heroNo, float speed)
-    {
-        if (mListTurnIcons == null || mListTurnIcons.Count == 0) return;
-
-        for (int i = 0; i < mListTurnIcons.Count; ++i)
-        {
-            if (mListTurnIcons[i].name.Equals(heroNo.ToString()))
-            {
-                mListTurnIcons[i].AddMoveSpeed(speed);
-            }
-        }
-    }
-
-    void UpdateTurnIconDepth()
-    {
-        if (mListTurnIcons == null || mListTurnIcons.Count == 0) return;
-
-        mListTurnIcons.Sort(ComparerDepth);
-
-        for (int i = 0; i < mListTurnIcons.Count; ++i)
-        {
-            mListTurnIcons[i].SetDepth((mListTurnIcons.Count - i) + 1); // depth 가 최소 1 이상으로 하기 위해서 1 더함
-        }
-    }
-
-    int ComparerDepth(TurnIcon lhs, TurnIcon rhs)
-    {
-        int now = rhs.MoveSpeedCount.CompareTo(lhs.MoveSpeedCount);
-        if (now == 0)
-            return rhs.name.CompareTo(lhs.name);
-        else
-            return now;
-    }
-
-    public void SetActiveTurnHeroUI(int heroNo)
-    {
-        var bp = GetProfile(heroNo);
-        if (bp != null)
-        {
-            var heroCont = BattleManager.Instance.GetHeroControl(heroNo);
-            if (heroCont != null)
-            {
-                bp.SetProfile(heroCont);
-            }
-        }
-    }
-
     BattleProfile GetProfile(int heroNo)
     {
         var heroCont = BattleManager.Instance.GetHeroControl(heroNo);
@@ -297,17 +202,24 @@ public class BattleUI_Control : BaseUI
         ActiveTurnTimer(true);
     }
 
-
     public void ActiveHUDUI(bool active)
     {
-        ActiveTurnUI(active);
+        BattleManager.Instance.TurnUI.ActiveTurnUI(active);
         ActiveHPUI(active);
         ActiveTurnTimer(active);        
     }
 
-    void ActiveTurnUI(bool active)
+    public void SetProfileUI(int heroNo)
     {
-        mTrunIconRoot.gameObject.SetActive(active);
+        var bp = GetProfile(heroNo);
+        if (bp != null)
+        {
+            var heroCont = BattleManager.Instance.GetHeroControl(heroNo);
+            if (heroCont != null)
+            {
+                bp.SetProfile(heroCont);
+            }
+        }
     }
 
     void ActiveHPUI(bool active)
