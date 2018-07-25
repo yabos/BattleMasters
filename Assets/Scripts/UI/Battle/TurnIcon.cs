@@ -29,7 +29,6 @@ public class TurnIcon : MonoBehaviour
 
     public void InitTurn()
     {
-        HeroNo = 0;
         MoveSpeedCount = 0;
         NotifyActiveTurn = false;
         SetStartPos();

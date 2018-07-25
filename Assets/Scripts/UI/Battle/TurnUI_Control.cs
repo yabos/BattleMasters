@@ -23,6 +23,7 @@ public class TurnUI_Control : MonoBehaviour
             if (m_fTimeElapsed >= 0.1f)
             {
                 UpdateTurnSpeed();
+
                 int heroNo = CheckActiveTurnHero();
                 if (heroNo > 0)
                 {
@@ -34,7 +35,7 @@ public class TurnUI_Control : MonoBehaviour
                     TurnPause = true;
                 }
 
-                m_fTimeElapsed -= 0.1f;
+                m_fTimeElapsed = 0;
             }
         }
     }

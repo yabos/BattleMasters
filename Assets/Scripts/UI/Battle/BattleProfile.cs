@@ -17,19 +17,18 @@ public class BattleProfile : MonoBehaviour
         mSpriteProfile.spriteName = heroCont.HeroNo.ToString();
 
         mStatus.InitStatus(heroCont);
-        if (heroCont.MyTeam == false)
+        if (heroCont.IsMyTeam == false)
         {
-            //mStatus.SetPos(heroCont.transform.position);
-
             mTargetBtn.position = heroCont.transform.position;
         }
 
-        ActiveProfile(true, heroCont.MyTeam);
+        SetActiveProfile(true, heroCont.IsMyTeam);
     }
 
-    void ActiveProfile(bool active, bool myTeam)
+    void SetActiveProfile(bool active, bool myTeam)
     {
-        mProfile.SetActive(active);
+        ActiveProfile(active);
+        ActiveTargetBtn(active);
 
         if (myTeam == true)
         {
@@ -40,22 +39,16 @@ public class BattleProfile : MonoBehaviour
             mSpriteProfile.gameObject.SetActive(false);
         }
 
-        TweenPosProfile(true);
+        TweenPosProfile();
     }
 
-    public void TweenPosProfile(bool isPlay)
+    public void TweenPosProfile()
     {
         var tp = mProfile.GetComponentInChildren<TweenPosition>();
         if (tp != null)
         {
-            if (isPlay)
-            {
-                tp.PlayForward();
-            }
-            else
-            {
-                tp.ResetToBeginning();
-            }
+            tp.enabled = true;
+            tp.ResetToBeginning();            
         }
     }
 
@@ -66,20 +59,27 @@ public class BattleProfile : MonoBehaviour
         var tp = mSpriteProfile.GetComponent<TweenPosition>();
         if (tp != null)
         {
-            if (isPlay)
-            {
-                tp.PlayForward();
-            }
-            else
-            {
-                tp.ResetToBeginning();
-            }
+            tp.enabled = true;
+            tp.ResetToBeginning();
         }
     }
 
     public void OnTweenPosSpriteProfileFinish()
     {
-        mTargetBtn.gameObject.SetActive(false);
+        ActiveTargetBtn(false);
+    }
+
+    public void ActiveProfile(bool active)
+    {
+        mProfile.SetActive(active);
+    }
+
+    void ActiveTargetBtn(bool active)
+    {
+        if (mTargetBtn != null)
+        {
+            mTargetBtn.gameObject.SetActive(active);
+        }
     }
 
     public void ActiveSpriteProfile(bool active)

@@ -70,6 +70,11 @@ public class BattleManager : MonoBehaviour
         get { return mListEnemyHeroes; }
     }
 
+    public bool OnlyActionInput
+    {
+        get; set;
+    }
+
     void Awake()
     {
         TBManager.Instance.LoadTableAll();
@@ -91,20 +96,36 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void SetBattleStateActionStart()
+    public void SetBattleStateActionStart(bool isTurnOut)
     {
-        ActiveBlur(true);
-        BattleUI.ActiveBattleProfile(false);
-        BattleUI.ActiveHUDUI(false);        
-        EnemyOutlineOff();
-        ExcuteHeroAction();
+        ActiveBlur(!isTurnOut);
+        ActiveOutline(false);
+
+        BattleUI.ActiveAllBattleProfile(false);
+        BattleUI.ActiveHUDUI(isTurnOut);
+        BattleUI.ActiveTurnTimer(false);        
+
+        if (isTurnOut == false)
+        {
+            ExcuteHeroAction();
+        }
     }
 
     public void SetBattleStateActionEnd()
     {
+        var hero = GetHeroControl(ActiveTurnHero);
+        if (hero != null)
+        {
+            hero.IsMyTurn = false;
+            TurnUI.InitActiveTurnMember(ActiveTurnHero);
+            BattleUI.ActiveSelActionType(false);
+        }
+
         ActiveBlur(false);
         ActiveTurnHero = 0;
         ActiveTargetHero = 0;
+        
+        BattleUI.ActiveHUDUI(true);        
     }
 
     void ExcuteHeroAction()
@@ -122,11 +143,11 @@ public class BattleManager : MonoBehaviour
         }
 
         EHeroBattleAction myHeroAction = ResultBattleAction(MyTeamHero, EnemyHero);
-        Vector3 vPos = Battleground.GetTeamPos(myHeroAction, MyTeamHero.MyTeam);
+        Vector3 vPos = Battleground.GetTeamPos(myHeroAction, MyTeamHero.IsMyTeam);
         MyTeamHero.ExcuteAction(myHeroAction, vPos);        
 
         EHeroBattleAction enemyHeroAction = ResultBattleAction(EnemyHero, MyTeamHero);
-        vPos = Battleground.GetTeamPos(enemyHeroAction, EnemyHero.MyTeam);
+        vPos = Battleground.GetTeamPos(enemyHeroAction, EnemyHero.IsMyTeam);
         EnemyHero.ExcuteAction(enemyHeroAction, vPos);
     }
     
@@ -161,7 +182,7 @@ public class BattleManager : MonoBehaviour
         else
         {
             // draw
-            if (mine.MyTurn)
+            if (mine.IsMyTurn)
             {
                 return EHeroBattleAction.HeroAction_DrawAtkDefeat;
             }
@@ -179,9 +200,10 @@ public class BattleManager : MonoBehaviour
         var hero = GetHeroControl(heroNo);
         if (hero != null)
         {
-            hero.MyTurn = true;
+            hero.IsMyTurn = true;
         }
 
+        BattleUI.ActiveBattleProfile(true, true);
         BattleUI.SetProfileUI(heroNo);
         BattleUI.SetTurnTimer(Define.SELECT_TARGET_LIMITTIME, ETurnTimeType.TURNTIME_SEL_TARGET);
     }
@@ -203,24 +225,59 @@ public class BattleManager : MonoBehaviour
         return null;
     }
 
-    public void SetEnemyOutline(int heroNo)
+    public void SetOutlineHero(int heroNo)
     {
+        foreach (var elem in mListMyHeroes)
+        {
+            elem.Outline.eraseRenderer = !elem.HeroNo.Equals(heroNo);
+        }
+
         foreach (var elem in mListEnemyHeroes)
         {
             elem.Outline.eraseRenderer = !elem.HeroNo.Equals(heroNo);
         }
     }
 
-    void EnemyOutlineOff()
+    void ActiveOutline(bool active)
     {
+        foreach (var elem in mListMyHeroes)
+        {
+            elem.Outline.eraseRenderer = !active;
+        }
+
         foreach (var elem in mListEnemyHeroes)
         {
-            elem.Outline.eraseRenderer = true;
+            elem.Outline.eraseRenderer = !active;
         }
     }
 
     public void ActiveBlur(bool active)
     {
         Blur.SetActive(active);
+    }
+
+    public bool CheckActiveMoving()
+    {
+        foreach (var elem in mListMyHeroes)
+        {
+            if (elem.IsDie) continue;
+
+            if (elem.IsActiveMoving)
+            {
+                return true;
+            }
+        }
+
+        foreach (var elem in mListEnemyHeroes)
+        {
+            if (elem.IsDie) continue;
+
+            if (elem.IsActiveMoving)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

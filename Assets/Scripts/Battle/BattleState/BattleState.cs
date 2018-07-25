@@ -6,7 +6,7 @@ public class BattleState
 {
     protected BattleManager m_Owner;
     protected BattleStateManager m_StateManager;
-    protected float m_fTimeElapsed;
+    protected float TimeElapsed;
 
     public virtual void Initialize(BattleManager owner, BattleStateManager state_manager)
     {
@@ -16,7 +16,7 @@ public class BattleState
 
     public virtual void DoStart(byte[] data = null)
     {
-        m_fTimeElapsed = 0.0f;
+        TimeElapsed = 0.0f;
     }
 
     public virtual void DoEnd()

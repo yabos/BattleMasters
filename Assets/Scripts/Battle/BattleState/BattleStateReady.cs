@@ -15,7 +15,7 @@ public class BattleStateReady : BattleState
     {
         m_Owner.TurnUI.TurnPause = false;
 
-        m_fTimeElapsed = 0;
+        TimeElapsed = 0;
     }
 
     public override void DoEnd()
@@ -28,7 +28,7 @@ public class BattleStateReady : BattleState
     public override void Update(float fTimeDelta)
     {
         base.Update(fTimeDelta);
-        m_fTimeElapsed += fTimeDelta;
+        TimeElapsed += fTimeDelta;
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -42,7 +42,7 @@ public class BattleStateReady : BattleState
                 if (heroCont == null) continue;               
                 if (BeforeHeroNo.Equals(heroCont.HeroNo)) continue;
 
-                m_Owner.SetEnemyOutline(heroCont.HeroNo);
+                m_Owner.SetOutlineHero(heroCont.HeroNo);
                 // 스테이터스 UI 만 나오게 나중에 수정해야함
                 //m_Owner.BattleUI.SetProfileUI(heroCont.HeroNo);              
                 BeforeHeroNo = heroCont.HeroNo;

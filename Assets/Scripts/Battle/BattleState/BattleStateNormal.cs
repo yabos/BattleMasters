@@ -18,22 +18,21 @@ public class BattleStateNormal : BattleState
         int heroNo = System.BitConverter.ToInt32(data, place);
         m_Owner.SetActiveTurnHero(heroNo);
 
-        m_fTimeElapsed = 0;
+        TimeElapsed = 0;
+        BeforeHeroNo = 0;
     }
 
     public override void DoEnd()
     {
         base.DoEnd();
-
-        m_Owner.ActiveBlur(false);
     }
 
     public override void Update(float fTimeDelta)
     {
         base.Update(fTimeDelta);
-        m_fTimeElapsed += fTimeDelta;
+        TimeElapsed += fTimeDelta;
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && m_Owner.OnlyActionInput == false)
         {
             Vector2 wp = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Ray2D ray = new Ray2D(wp, Vector2.zero);
@@ -43,12 +42,14 @@ public class BattleStateNormal : BattleState
             {
                 var heroCont = hit.collider.GetComponentInParent<Hero_Control>();
                 if (heroCont == null) continue;
-                if (heroCont.MyTeam) continue;
+                if (heroCont.IsMyTeam) continue;
                 if (BeforeHeroNo.Equals(heroCont.HeroNo)) continue;
 
-                m_Owner.SetEnemyOutline(heroCont.HeroNo);
-                m_Owner.BattleUI.SetProfileUI(heroCont.HeroNo);
                 m_Owner.ActiveTargetHero = heroCont.HeroNo;
+                m_Owner.SetOutlineHero(heroCont.HeroNo);
+                m_Owner.BattleUI.SetProfileUI(heroCont.HeroNo);
+                m_Owner.BattleUI.ActiveBattleProfile(true, false);
+
                 BeforeHeroNo = heroCont.HeroNo;
             }
         }

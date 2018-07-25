@@ -9,39 +9,36 @@ public enum ETurnTimeType
 }
 
 public class TurnTimer : MonoBehaviour
-{
-    
-    public UILabel mLavelTurnTimer;
+{    
+    public UILabel LabelTurnTimer;
 
-    float mTime = 0;
-
-    ETurnTimeType mType;
+    float Time = 0;
+    float TimeElapsed;
+    ETurnTimeType Type;
 
     public void SetTimer(float time, ETurnTimeType type)
     {
-        mType = type;
-        mTime = time;
+        Type = type;
+        Time = time;
+        TimeElapsed = 0;
 
-        mLavelTurnTimer.text = time.ToString() + " Sec";
+        LabelTurnTimer.text = time.ToString() + " Sec";
         gameObject.SetActive(true);
     }
-
-    float fElapsedTime;
+    
 	void Update ()
     {
-        fElapsedTime += Time.deltaTime;
-        if (fElapsedTime >= 1f)
+        TimeElapsed += UnityEngine.Time.deltaTime;
+        if (TimeElapsed >= 1f)
         {
-            mTime -= fElapsedTime;            
-            mLavelTurnTimer.text = string.Format("{0:N0} Sec", mTime);
-            fElapsedTime -= 1f;
+            Time -= TimeElapsed;            
+            LabelTurnTimer.text = string.Format("{0:N0} Sec", Time);
+            TimeElapsed -= 1f;
 
-            int iTime = Mathf.CeilToInt(mTime);
+            int iTime = Mathf.CeilToInt(Time);
             if (iTime == 0)
             {
-                gameObject.SetActive(false);
-
-                if (mType == ETurnTimeType.TURNTIME_SEL_TARGET)
+                if (Type == ETurnTimeType.TURNTIME_SEL_TARGET)
                 {
                     if (BattleManager.Instance.ActiveTargetHero > 0)
                     {
@@ -50,11 +47,20 @@ public class TurnTimer : MonoBehaviour
                     else
                     {
                         // turn out
+                        int place = 0;
+                        byte[] data = new byte[128];
+                        System.Buffer.BlockCopy(System.BitConverter.GetBytes(true), 0, data, place, sizeof(bool));
+                        BattleManager.Instance.BattleStateManager.ChangeState(EBattleState.BattleState_Action, data);
                     }
                 }
                 else
                 {
                     // random att type
+                    if (BattleManager.Instance.ActiveTargetHero > 0)
+                    {
+                        EAtionType actionType = (EAtionType)Random.Range(0, (int)EAtionType.ACTION_MAX);
+                        BattleManager.Instance.BattleUI.SetHeroActionType(actionType);
+                    }
                 }
             }
         }

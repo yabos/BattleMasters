@@ -5,34 +5,34 @@ using System.Linq;
 
 public class BattleUI_Control : BaseUI
 {
-	Transform mBattleLoading = null;
-    Transform mHeroHp = null;    
+	Transform BattleLoading = null;
+    Transform HeroHp = null;    
 
-    BattleProfile[] mProfiles = new BattleProfile[2];
-    GameObject mGoTurnTimer;
-    TurnTimer mTurnTime;
+    BattleProfile[] Profiles = new BattleProfile[2];
+    GameObject GoTurnTimer;
+    TurnTimer TurnTime;
 
 	// Use this for initialization
 	void Awake ()
     {
-        mHeroHp = transform.Find("Anchor/HeroHP");
-		mBattleLoading = transform.Find ("Anchor/Loading");        
+        HeroHp = transform.Find("Anchor/HeroHP");
+		BattleLoading = transform.Find ("Anchor/Loading");        
         var Tran = transform.Find("Anchor_BL/Profile");
         if (Tran != null)
         {
-            mProfiles[0] = Tran.GetComponent<BattleProfile>();
+            Profiles[0] = Tran.GetComponent<BattleProfile>();
         }
         
         Tran = transform.Find("Anchor_BR/Profile");
         if (Tran != null)
         {
-            mProfiles[1] = Tran.GetComponent<BattleProfile>();
+            Profiles[1] = Tran.GetComponent<BattleProfile>();
         }
 
-        mGoTurnTimer = transform.Find("Anchor/Timer").gameObject;
-        if (mGoTurnTimer != null)
+        GoTurnTimer = transform.Find("Anchor/Timer").gameObject;
+        if (GoTurnTimer != null)
         {
-            mTurnTime = mGoTurnTimer.GetComponent<TurnTimer>();
+            TurnTime = GoTurnTimer.GetComponent<TurnTimer>();
         }
     }
 
@@ -61,13 +61,15 @@ public class BattleUI_Control : BaseUI
         var profile = GetProfile(BattleManager.Instance.ActiveTargetHero);
         if (profile != null)
         {
-            profile.TweenPosSpriteProfile(true);
+            profile.TweenPosSpriteProfile(true);            
             ActiveSelActionType(true);
             SetTurnTimer(Define.SELECT_ACTIONTYPE_LIMITTIME, ETurnTimeType.TURNTIME_SEL_ACTIONTYPE);
+
+            BattleManager.Instance.OnlyActionInput = true;
         }
     }
 
-    void SetHeroActionType(EAtionType eAtionType)
+    public void SetHeroActionType(EAtionType eAtionType)
     {
         int heroNo = BattleManager.Instance.ActiveTurnHero;
         var heroCont = BattleManager.Instance.GetHeroControl(heroNo);
@@ -86,12 +88,13 @@ public class BattleUI_Control : BaseUI
             //heroCont.ActionType = (EAtionType)Random.Range(0, (int)EAtionType.ACTION_MAX);
         }
 
-        BattleManager.Instance.BattleStateManager.ChangeState(EBattleState.BattleState_Action);        
+        BattleManager.Instance.BattleStateManager.ChangeState(EBattleState.BattleState_Action);
+        BattleManager.Instance.OnlyActionInput = false;
     }
 
 	public void ActiveLoadingIMG(bool bActive)
 	{
-		mBattleLoading.gameObject.SetActive (bActive);
+		BattleLoading.gameObject.SetActive (bActive);
 	}
 
     public void CreateHeroHp(System.Guid uid, bool bMyTeam)
@@ -102,7 +105,7 @@ public class BattleUI_Control : BaseUI
         GameObject goHP = Instantiate(goHPRes) as GameObject;
         if (goHP != null)
         {
-            goHP.transform.parent = mHeroHp.transform;
+            goHP.transform.parent = HeroHp.transform;
             goHP.transform.name = uid.ToString();
 
             goHP.transform.position = Vector3.zero;
@@ -115,11 +118,11 @@ public class BattleUI_Control : BaseUI
 
     public void UpdateHPGauge(System.Guid uid, float fFillAmountHp)
     {
-        if (mHeroHp == null) return;
+        if (HeroHp == null) return;
 
-        for (int i = 0; i < mHeroHp.childCount; ++i)
+        for (int i = 0; i < HeroHp.childCount; ++i)
         {
-            Transform tChild = mHeroHp.GetChild(i);
+            Transform tChild = HeroHp.GetChild(i);
             if (tChild == null) continue;
 
             if (tChild.name.Equals(uid.ToString()))
@@ -135,11 +138,11 @@ public class BattleUI_Control : BaseUI
 
     public void UpdatePosHPGauge(System.Guid uid, Transform tEf_HP)
     {
-        if (mHeroHp == null) return;
+        if (HeroHp == null) return;
 
-        for (int i = 0; i < mHeroHp.childCount; ++i)
+        for (int i = 0; i < HeroHp.childCount; ++i)
         {
-            Transform tChild = mHeroHp.GetChild(i);
+            Transform tChild = HeroHp.GetChild(i);
             if (tChild == null) continue;
 
             if (tChild.name.Equals(uid.ToString()))
@@ -151,11 +154,11 @@ public class BattleUI_Control : BaseUI
 
     public void DestroyHPGauge(System.Guid uid)
     {
-        if (mHeroHp == null) return;
+        if (HeroHp == null) return;
 
-        for (int i = 0; i < mHeroHp.childCount; ++i)
+        for (int i = 0; i < HeroHp.childCount; ++i)
         {
-            Transform tChild = mHeroHp.GetChild(i);
+            Transform tChild = HeroHp.GetChild(i);
             if (tChild == null) continue;
 
             if (tChild.name.Equals(uid.ToString()))
@@ -171,14 +174,14 @@ public class BattleUI_Control : BaseUI
         if (heroCont != null)
         {
             BattleProfile bp = null;
-            if (heroCont.MyTeam)
+            if (heroCont.IsMyTeam)
             {
-                bp = mProfiles[0];
+                bp = Profiles[0];
 
             }
             else
             {
-                bp = mProfiles[1];
+                bp = Profiles[1];
             }
 
             return bp;
@@ -198,7 +201,7 @@ public class BattleUI_Control : BaseUI
 
     public void SetTurnTimer(float fTime, ETurnTimeType type)
     {
-        mTurnTime.SetTimer(fTime, type);
+        TurnTime.SetTimer(fTime, type);
         ActiveTurnTimer(true);
     }
 
@@ -206,7 +209,6 @@ public class BattleUI_Control : BaseUI
     {
         BattleManager.Instance.TurnUI.ActiveTurnUI(active);
         ActiveHPUI(active);
-        ActiveTurnTimer(active);        
     }
 
     public void SetProfileUI(int heroNo)
@@ -224,17 +226,29 @@ public class BattleUI_Control : BaseUI
 
     void ActiveHPUI(bool active)
     {
-        mHeroHp.gameObject.SetActive(active);
+        HeroHp.gameObject.SetActive(active);
     }
 
-    void ActiveTurnTimer(bool active)
+    public void ActiveTurnTimer(bool active)
     {
-        mGoTurnTimer.SetActive(active);
+        GoTurnTimer.SetActive(active);
     }
 
-    public void ActiveBattleProfile(bool active)
+    public void ActiveAllBattleProfile(bool active)
     {
-        mProfiles[0].gameObject.SetActive(active);
-        mProfiles[1].gameObject.SetActive(active);
+        Profiles[0].ActiveProfile(active);
+        Profiles[1].ActiveProfile(active);
+    }
+
+    public void ActiveBattleProfile(bool active, bool myTeam)
+    {
+        if (myTeam)
+        {
+            Profiles[0].gameObject.SetActive(active);
+        }
+        else
+        {
+            Profiles[1].gameObject.SetActive(active);
+        }
     }
 }

@@ -23,9 +23,11 @@ public class Hero_Control : MonoBehaviour
     public int Def { get; set; }
     public float Speed { get; set; }
     public string StResPath { get; set; }   
-    public bool MyTeam { get; set; }  
+
+    public bool IsMyTeam { get; set; }      
+    public bool IsMyTurn { get; set; }
+    public bool IsActiveMoving { get; set; }   //  현재 치고받는 엑션을 하고있는지 여부
     public bool IsDie { get; set; }
-    public bool MyTurn { get; set; }
 
     public EHeroBattleAction HeroState { get; set; }
     public EAtionType ActionType { get; set; }

@@ -26,7 +26,7 @@ public class UtilFunc
             hero.Def = tbHero.mDef + Mathf.CeilToInt(((iLv - 1) * (tbHero.mDef * 0.1f)));
             hero.Speed = tbHero.mSpeed;
             hero.StResPath = tbHero.stResPath;
-            hero.MyTeam = bMyTeam;
+            hero.IsMyTeam = bMyTeam;
 
 			GameObject goRes = VResources.Load<GameObject> (hero.StResPath);
             if (goRes == null) return null;

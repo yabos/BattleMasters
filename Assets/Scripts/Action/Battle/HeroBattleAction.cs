@@ -13,7 +13,6 @@ public class HeroBattleAction
     {
         m_Owner = owner;
         m_ActionManager = action_manager;
-
     }
 
     public virtual void Release()
@@ -23,11 +22,18 @@ public class HeroBattleAction
 
     public virtual void DoStart(byte[] data = null)
     {
+        if (IsMovingAction(m_ActionManager.GetCurrentAction()))
+        {
+            m_Owner.IsActiveMoving = true;
+        }
     }
 
     public virtual void DoEnd(EHeroBattleAction eNextAction)
     {
-        
+        if (IsMovingAction(m_ActionManager.GetCurrentAction()))
+        {
+            m_Owner.IsActiveMoving = false;
+        }
     }
 
     public virtual void Update(float fTimeDelta)
@@ -95,7 +101,7 @@ public class HeroBattleAction
             traceTime += Time.deltaTime;
 
             Vector3 vPos = m_Owner.transform.position;
-            vPos.x += m_Owner.MyTeam ? speed : (-1 * speed);
+            vPos.x += m_Owner.IsMyTeam ? speed : (-1 * speed);
             m_Owner.transform.position = vPos;
 
             m_Owner.PlayAnimation(aniType);
