@@ -23,18 +23,6 @@ public class TurnUI_Control : MonoBehaviour
             if (m_fTimeElapsed >= 0.1f)
             {
                 UpdateTurnSpeed();
-
-                int heroNo = CheckActiveTurnHero();
-                if (heroNo > 0)
-                {
-                    int place = 0;
-                    byte[] data = new byte[128];
-                    System.Buffer.BlockCopy(System.BitConverter.GetBytes(heroNo), 0, data, place, sizeof(int));
-                    BattleManager.Instance.BattleStateManager.ChangeState(EBattleState.BattleState_Normal, data);
-
-                    TurnPause = true;
-                }
-
                 m_fTimeElapsed = 0;
             }
         }
@@ -63,25 +51,12 @@ public class TurnUI_Control : MonoBehaviour
                 var icon = goIcon.GetComponent<TurnIcon>();
                 if (icon != null)
                 {
-                    icon.SetTurnIcon(listHero[i].HeroNo);
+                    icon.InitTurn(this, listHero[i].HeroNo);
 
                     ListTurnIcons.Add(icon);
                 }
             }
         }
-    }
-
-    int CheckActiveTurnHero()
-    {
-        for (int i = 0; i < listTurnIcons.Count; ++i)
-        {
-            if (listTurnIcons[i].NotifyActiveTurn == true)
-            {
-                return listTurnIcons[i].HeroNo;
-            }
-        }
-
-        return 0;
     }
         
     public void UpdateTurnSpeed()
@@ -142,7 +117,15 @@ public class TurnUI_Control : MonoBehaviour
         var turnicon = ListTurnIcons.Find(x => x.HeroNo.Equals(heroNo));
         if (turnicon != null)
         {
-            turnicon.InitTurn();
+            turnicon.InitTurn(this, heroNo);
         }
+    }
+
+    public void NotifyActiveTurn(int heroNo)
+    {
+        int place = 0;
+        byte[] data = new byte[128];
+        System.Buffer.BlockCopy(System.BitConverter.GetBytes(heroNo), 0, data, place, sizeof(int));
+        BattleManager.Instance.BattleStateManager.ChangeState(EBattleState.BattleState_Normal, data);
     }
 }

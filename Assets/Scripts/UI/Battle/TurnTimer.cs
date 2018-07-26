@@ -40,7 +40,7 @@ public class TurnTimer : MonoBehaviour
             {
                 if (Type == ETurnTimeType.TURNTIME_SEL_TARGET)
                 {
-                    if (BattleManager.Instance.ActiveTargetHero > 0)
+                    if (BattleManager.Instance.ActiveTargetHeroNo > 0)
                     {
                         BattleManager.Instance.BattleUI.SetBattleSelActionType();
                     }
@@ -56,7 +56,7 @@ public class TurnTimer : MonoBehaviour
                 else
                 {
                     // random att type
-                    if (BattleManager.Instance.ActiveTargetHero > 0)
+                    if (BattleManager.Instance.ActiveTargetHeroNo > 0)
                     {
                         EAtionType actionType = (EAtionType)Random.Range(0, (int)EAtionType.ACTION_MAX);
                         BattleManager.Instance.BattleUI.SetHeroActionType(actionType);

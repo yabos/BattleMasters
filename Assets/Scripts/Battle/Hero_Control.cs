@@ -30,8 +30,7 @@ public class Hero_Control : MonoBehaviour
     public bool IsDie { get; set; }
 
     public EHeroBattleAction HeroState { get; set; }
-    public EAtionType ActionType { get; set; }
-    public Hero_Control Target { get; set; }
+    public EAtionType ActionType { get; set; }    
     public GameObject HeroObj { get; set; }
     public Actor Actor { get; set; }
     public Outline Outline { get; set; }

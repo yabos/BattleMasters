@@ -58,7 +58,7 @@ public class BattleUI_Control : BaseUI
 
     public void SetBattleSelActionType()
     {
-        var profile = GetProfile(BattleManager.Instance.ActiveTargetHero);
+        var profile = GetProfile(BattleManager.Instance.ActiveTargetHeroNo);
         if (profile != null)
         {
             profile.TweenPosSpriteProfile(true);            
@@ -71,7 +71,7 @@ public class BattleUI_Control : BaseUI
 
     public void SetHeroActionType(EAtionType eAtionType)
     {
-        int heroNo = BattleManager.Instance.ActiveTurnHero;
+        int heroNo = BattleManager.Instance.ActiveTurnHeroNo;
         var heroCont = BattleManager.Instance.GetHeroControl(heroNo);
         if (heroCont != null)
         {
@@ -80,13 +80,8 @@ public class BattleUI_Control : BaseUI
 
         // 원래는 상대방의 입력 정보를 알아와야되는데
         // 지금은 AI로 대체 . 랜덤으로 타입을 정해준다.
-        heroNo = BattleManager.Instance.ActiveTargetHero;
-        heroCont = BattleManager.Instance.GetHeroControl(heroNo);
-        if (heroCont != null)
-        {
-            heroCont.ActionType = EAtionType.ACTION_ATK;
-            //heroCont.ActionType = (EAtionType)Random.Range(0, (int)EAtionType.ACTION_MAX);
-        }
+        heroNo = BattleManager.Instance.ActiveTargetHeroNo;
+        BattleManager.Instance.SetRandomActionType(heroNo);
 
         BattleManager.Instance.BattleStateManager.ChangeState(EBattleState.BattleState_Action);
         BattleManager.Instance.OnlyActionInput = false;
@@ -190,13 +185,10 @@ public class BattleUI_Control : BaseUI
         return null;
     }
 
+    // 실제 공격 타입을 선택하는 UI 
     public void ActiveSelActionType(bool active)
     {
-        var profile = GetProfile(BattleManager.Instance.ActiveTurnHero);
-        if (profile != null)
-        {
-            profile.ActiveSelActionType(active);
-        }
+        Profiles[0].ActiveSelActionType(active);
     }
 
     public void SetTurnTimer(float fTime, ETurnTimeType type)
@@ -211,7 +203,7 @@ public class BattleUI_Control : BaseUI
         ActiveHPUI(active);
     }
 
-    public void SetProfileUI(int heroNo)
+    public void SetProfileUI(int heroNo, bool isActiveHero)
     {
         var bp = GetProfile(heroNo);
         if (bp != null)
@@ -219,7 +211,7 @@ public class BattleUI_Control : BaseUI
             var heroCont = BattleManager.Instance.GetHeroControl(heroNo);
             if (heroCont != null)
             {
-                bp.SetProfile(heroCont);
+                bp.SetProfile(heroCont, isActiveHero);
             }
         }
     }

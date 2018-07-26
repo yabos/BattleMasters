@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 
 public class TurnIcon : MonoBehaviour
-{    
-    UISprite mSprite;
+{
+    TurnUI_Control Owner;
+    UISprite Sprite;
 
     public int HeroNo
     {
@@ -14,35 +15,29 @@ public class TurnIcon : MonoBehaviour
         get; set;
     }
     
-    public bool NotifyActiveTurn
-    {
-        get; set;
-    }
-
     // Use this for initialization
     void Awake ()
     {
-        mSprite = GetComponent<UISprite>();
-
-        InitTurn();
+        Sprite = GetComponent<UISprite>();
     }
 
-    public void InitTurn()
+    public void InitTurn(TurnUI_Control turnUI, int heroNo)
     {
+        Owner = turnUI;
         MoveSpeedCount = 0;
-        NotifyActiveTurn = false;
         SetStartPos();
+        SetTurnIcon(heroNo);
     }
 
-    public void SetTurnIcon(int heroNo)
+    void SetTurnIcon(int heroNo)
     {
-        mSprite.spriteName = heroNo.ToString();
+        Sprite.spriteName = heroNo.ToString();
         HeroNo = heroNo;
     }
 
     public void SetDepth(int depth)
     {
-        mSprite.depth = depth;
+        Sprite.depth = depth;
     }
 
     public void AddMoveSpeed(float speed)
@@ -67,8 +62,7 @@ public class TurnIcon : MonoBehaviour
                 pos.x = Define.TURNICON_END_POS_X;
 
                 //notify
-                NotifyActiveTurn = true;
-
+                Owner.NotifyActiveTurn(HeroNo);
             }
 
             transform.localPosition = pos;

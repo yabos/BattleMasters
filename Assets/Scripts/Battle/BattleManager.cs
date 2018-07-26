@@ -50,12 +50,12 @@ public class BattleManager : MonoBehaviour
 
     public GameObject Blur;
 
-    public int ActiveTurnHero
+    public int ActiveTurnHeroNo
     {
         get; set;
     }
 
-    public int ActiveTargetHero
+    public int ActiveTargetHeroNo
     {
         get; set;
     }
@@ -113,30 +113,30 @@ public class BattleManager : MonoBehaviour
 
     public void SetBattleStateActionEnd()
     {
-        var hero = GetHeroControl(ActiveTurnHero);
+        var hero = GetHeroControl(ActiveTurnHeroNo);
         if (hero != null)
         {
             hero.IsMyTurn = false;
-            TurnUI.InitActiveTurnMember(ActiveTurnHero);
+            TurnUI.InitActiveTurnMember(ActiveTurnHeroNo);
             BattleUI.ActiveSelActionType(false);
         }
 
         ActiveBlur(false);
-        ActiveTurnHero = 0;
-        ActiveTargetHero = 0;
+        ActiveTurnHeroNo = 0;
+        ActiveTargetHeroNo = 0;
         
         BattleUI.ActiveHUDUI(true);        
     }
 
     void ExcuteHeroAction()
     {
-        var MyTeamHero = GetHeroControl(ActiveTurnHero);
+        var MyTeamHero = GetHeroControl(ActiveTurnHeroNo);
         if (MyTeamHero != null)
         {
             Debug.Log("Player : " + MyTeamHero.ActionType);
         }
 
-        var EnemyHero = GetHeroControl(ActiveTargetHero);
+        var EnemyHero = GetHeroControl(ActiveTargetHeroNo);
         if (EnemyHero != null)
         {
             Debug.Log("Enemy : " + EnemyHero.ActionType);
@@ -195,7 +195,7 @@ public class BattleManager : MonoBehaviour
     
     public void SetActiveTurnHero(int heroNo)
     {
-        ActiveTurnHero = heroNo;
+        ActiveTurnHeroNo = heroNo;
 
         var hero = GetHeroControl(heroNo);
         if (hero != null)
@@ -203,8 +203,8 @@ public class BattleManager : MonoBehaviour
             hero.IsMyTurn = true;
         }
 
-        BattleUI.ActiveBattleProfile(true, true);
-        BattleUI.SetProfileUI(heroNo);
+        BattleUI.ActiveBattleProfile(true, hero.IsMyTeam);
+        BattleUI.SetProfileUI(heroNo, true);
         BattleUI.SetTurnTimer(Define.SELECT_TARGET_LIMITTIME, ETurnTimeType.TURNTIME_SEL_TARGET);
     }
 
@@ -279,5 +279,44 @@ public class BattleManager : MonoBehaviour
         }
 
         return false;
+    }
+
+    public bool GetActiveHeroTeam()
+    {
+        var hero = GetHeroControl(ActiveTurnHeroNo);
+        if (hero != null)
+        {
+            return hero.IsMyTeam;
+        }
+
+        return false;
+    }
+
+    // AI 용도. 상대팀 살아있는 한명 랜덤으로 넘겨줌
+    // 나중에 조건을 검색해서 넘겨줄수도 있음
+    public int GetRandomHeroTeam()
+    {
+        int Idx = Random.Range(0, mListMyHeroes.Count);
+        Hero_Control randomHero = mListMyHeroes[Idx];
+        while (randomHero.IsDie)
+        {
+            Idx = Random.Range(0, mListMyHeroes.Count);
+            if(mListMyHeroes[Idx].IsDie == false)
+            {
+                randomHero = mListMyHeroes[Idx];
+            }
+        }
+
+        return randomHero.HeroNo;
+    }
+
+    // AI
+    public void SetRandomActionType(int heroNo)
+    {
+        var heroCont = BattleManager.Instance.GetHeroControl(heroNo);
+        if (heroCont != null)
+        {
+            heroCont.ActionType = (EAtionType)Random.Range(0, (int)EAtionType.ACTION_MAX);
+        }
     }
 }

@@ -23,6 +23,7 @@ public class HeroStatus : MonoBehaviour
         var tw = GetComponent<TweenPosition>();
         if (tw != null)
         {
+            tw.enabled = true;
             tw.ResetToBeginning();
         }
     }

@@ -12,31 +12,30 @@ public class BattleProfile : MonoBehaviour
     public Transform mTargetBtn;
     public Transform mSelectActionType;
 
-    public void SetProfile(Hero_Control heroCont)
+    public void SetProfile(Hero_Control heroCont, bool isActiveHero)
     {
         mSpriteProfile.spriteName = heroCont.HeroNo.ToString();
-
-        mStatus.InitStatus(heroCont);
-        if (heroCont.IsMyTeam == false)
+        mStatus.InitStatus(heroCont);        
+        SetActiveProfile(heroCont.IsMyTeam, isActiveHero);
+        if (heroCont.IsMyTeam == false && isActiveHero == false)
         {
+            //mStatus.SetPos(heroCont.transform.position);
             mTargetBtn.position = heroCont.transform.position;
         }
-
-        SetActiveProfile(true, heroCont.IsMyTeam);
     }
 
-    void SetActiveProfile(bool active, bool myTeam)
+    void SetActiveProfile(bool myTeam, bool isActiveHero)
     {
-        ActiveProfile(active);
-        ActiveTargetBtn(active);
+        ActiveProfile(true);
+        ActiveTargetBtn(myTeam == false);
 
-        if (myTeam == true)
+        if (myTeam)
         {
-            mSpriteProfile.gameObject.SetActive(active);            
+            ActiveSpriteProfile(true);
         }
         else
         {
-            mSpriteProfile.gameObject.SetActive(false);
+            ActiveSpriteProfile(isActiveHero);
         }
 
         TweenPosProfile();
@@ -89,6 +88,9 @@ public class BattleProfile : MonoBehaviour
 
     public void ActiveSelActionType(bool active)
     {
-        mSelectActionType.gameObject.SetActive(active);
+        if (mSelectActionType != null)
+        {
+            mSelectActionType.gameObject.SetActive(active);
+        }
     }
 }
