@@ -38,6 +38,11 @@ public class BattleManager : MonoBehaviour
         get; set;
     }
 
+    public BattleAIManager BattleAIManager
+    {
+        get; set;
+    }
+
     public BattleUI_Control BattleUI
     {
         get; set;
@@ -84,6 +89,12 @@ public class BattleManager : MonoBehaviour
             BattleStateManager = new BattleStateManager();
             BattleStateManager.Initialize(this);
         }
+
+        if (BattleAIManager == null)
+        {
+            BattleAIManager = new BattleAIManager();
+            BattleAIManager.Initialize(this);
+        }
     }
     
     void Update()
@@ -93,6 +104,11 @@ public class BattleManager : MonoBehaviour
         if (BattleStateManager != null)
         {
             BattleStateManager.Update(fDeltaTime);
+        }
+
+        if (BattleAIManager != null)
+        {
+            BattleAIManager.Update(fDeltaTime);
         }
     }
 
@@ -205,7 +221,7 @@ public class BattleManager : MonoBehaviour
 
         BattleUI.ActiveBattleProfile(true, hero.IsMyTeam);
         BattleUI.SetProfileUI(heroNo, true);
-        BattleUI.SetTurnTimer(Define.SELECT_TARGET_LIMITTIME, ETurnTimeType.TURNTIME_SEL_TARGET);
+        BattleUI.SetTurnTimer(Define.SELECT_TARGET_LIMITTIME, ETurnTimeType.TURNTIME_SEL_TARGET);        
     }
 
     public Hero_Control GetHeroControl(int heroNo)
@@ -227,18 +243,26 @@ public class BattleManager : MonoBehaviour
 
     public void SetOutlineHero(int heroNo)
     {
-        foreach (var elem in mListMyHeroes)
-        {
-            elem.Outline.eraseRenderer = !elem.HeroNo.Equals(heroNo);
-        }
+        var heroCont = GetHeroControl(heroNo);
+        if (heroCont == null) return;
 
-        foreach (var elem in mListEnemyHeroes)
+        if (heroCont.IsMyTeam)
         {
-            elem.Outline.eraseRenderer = !elem.HeroNo.Equals(heroNo);
+            foreach (var elem in mListMyHeroes)
+            {
+                elem.Outline.eraseRenderer = !elem.HeroNo.Equals(heroNo);
+            }
+        }
+        else
+        {
+            foreach (var elem in mListEnemyHeroes)
+            {
+                elem.Outline.eraseRenderer = !elem.HeroNo.Equals(heroNo);
+            }
         }
     }
 
-    void ActiveOutline(bool active)
+    public void ActiveOutline(bool active)
     {
         foreach (var elem in mListMyHeroes)
         {

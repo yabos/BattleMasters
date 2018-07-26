@@ -62,7 +62,7 @@ public class BattleUI_Control : BaseUI
         if (profile != null)
         {
             profile.TweenPosSpriteProfile(true);            
-            ActiveSelActionType(true);
+            ActiveSelActionType(true, true);
             SetTurnTimer(Define.SELECT_ACTIONTYPE_LIMITTIME, ETurnTimeType.TURNTIME_SEL_ACTIONTYPE);
 
             BattleManager.Instance.OnlyActionInput = true;
@@ -186,9 +186,9 @@ public class BattleUI_Control : BaseUI
     }
 
     // 실제 공격 타입을 선택하는 UI 
-    public void ActiveSelActionType(bool active)
+    public void ActiveSelActionType(bool active, bool myTurn = false)
     {
-        Profiles[0].ActiveSelActionType(active);
+        Profiles[0].ActiveSelActionType(active, myTurn);
     }
 
     public void SetTurnTimer(float fTime, ETurnTimeType type)
@@ -213,6 +213,15 @@ public class BattleUI_Control : BaseUI
             {
                 bp.SetProfile(heroCont, isActiveHero);
             }
+        }
+    }
+
+    public void SetReadyStateProfileUI(Hero_Control heroCont)
+    {
+        var bp = GetProfile(heroCont.HeroNo);
+        if (bp != null)
+        {
+            bp.BattleStateReadyOnlyProfile(heroCont);
         }
     }
 

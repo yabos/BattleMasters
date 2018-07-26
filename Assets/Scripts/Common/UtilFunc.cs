@@ -41,10 +41,12 @@ public class UtilFunc
                 if (bMyTeam)
                 {
                     go.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+                    go.GetComponent<Outline>().color = 2;
                 }
                 else
                 {
                     go.transform.rotation = Quaternion.identity;
+                    go.GetComponent<Outline>().color = 0;
                 }
 
                 go.transform.localScale = Vector3.one;

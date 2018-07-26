@@ -9,7 +9,8 @@ public enum ETurnTimeType
 }
 
 public class TurnTimer : MonoBehaviour
-{    
+{
+    public UISprite SpriteBackImage;
     public UILabel LabelTurnTimer;
 
     float Time = 0;
@@ -23,6 +24,14 @@ public class TurnTimer : MonoBehaviour
         TimeElapsed = 0;
 
         LabelTurnTimer.text = time.ToString() + " Sec";
+        if (type == ETurnTimeType.TURNTIME_SEL_ACTIONTYPE)
+        {
+            SpriteBackImage.spriteName = "stayToAttack";
+        }
+        else
+        {
+            SpriteBackImage.spriteName = "stayToTarget";
+        }
         gameObject.SetActive(true);
     }
     

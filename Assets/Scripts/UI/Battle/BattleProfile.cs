@@ -10,7 +10,8 @@ public class BattleProfile : MonoBehaviour
 
     public HeroStatus mStatus;
     public Transform mTargetBtn;
-    public Transform mSelectActionType;
+    public Transform mSelectActionTypeMyTurn;
+    public Transform mSelectActionTypeEnemyTurn;
 
     public void SetProfile(Hero_Control heroCont, bool isActiveHero)
     {
@@ -24,10 +25,23 @@ public class BattleProfile : MonoBehaviour
         }
     }
 
+    // BattleStateReady 상태에서 클릭으로 스테이터스 볼 때 사용
+    public void BattleStateReadyOnlyProfile(Hero_Control heroCont)
+    {
+        ActiveProfile(true);
+        ActiveTargetBtn(false);
+        ActiveSpriteProfile(false);
+        ActiveSelActionType(false, false);
+        mStatus.InitStatus(heroCont);
+    }
+
     void SetActiveProfile(bool myTeam, bool isActiveHero)
     {
         ActiveProfile(true);
-        ActiveTargetBtn(myTeam == false);
+
+        // 적 액티브 턴에는 꺼야된다.
+        // 아군 엑티브만 켜야 됨
+        ActiveTargetBtn(myTeam == false && isActiveHero == false);
 
         if (myTeam)
         {
@@ -86,11 +100,31 @@ public class BattleProfile : MonoBehaviour
         mSpriteProfile.gameObject.SetActive(active);
     }
 
-    public void ActiveSelActionType(bool active)
+    public void ActiveSelActionType(bool active, bool myTurn)
     {
-        if (mSelectActionType != null)
+        if (active == false)
         {
-            mSelectActionType.gameObject.SetActive(active);
+            if (mSelectActionTypeMyTurn != null)
+            {
+                mSelectActionTypeMyTurn.gameObject.SetActive(false);
+            }
+
+            if (mSelectActionTypeEnemyTurn != null)
+            {
+                mSelectActionTypeEnemyTurn.gameObject.SetActive(false);
+            }
+        }
+        else
+        {            
+            if (mSelectActionTypeMyTurn != null)
+            {
+                mSelectActionTypeMyTurn.gameObject.SetActive(myTurn);
+            }
+
+            if (mSelectActionTypeEnemyTurn != null)
+            {
+                mSelectActionTypeEnemyTurn.gameObject.SetActive(!myTurn);
+            }
         }
     }
 }

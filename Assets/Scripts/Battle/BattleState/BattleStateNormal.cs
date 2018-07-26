@@ -16,11 +16,18 @@ public class BattleStateNormal : BattleState
         int place = 0;
 
         int heroNo = System.BitConverter.ToInt32(data, place);
+        m_Owner.ActiveOutline(false);
+        m_Owner.SetOutlineHero(heroNo);
         m_Owner.SetActiveTurnHero(heroNo);
-        m_Owner.TurnUI.TurnPause = true;
+        m_Owner.TurnUI.TurnPause = true;        
 
         TimeElapsed = 0;
         BeforeHeroNo = 0;
+
+        if (BattleManager.Instance.GetActiveHeroTeam() == false)
+        {
+            m_Owner.BattleAIManager.ProceserAI();
+        }
     }
 
     public override void DoEnd()
@@ -56,33 +63,6 @@ public class BattleStateNormal : BattleState
                     BeforeHeroNo = heroCont.HeroNo;
                 }
             }
-        }
-        else
-        {
-            ///// 적이 사용하는 임시 AI 패턴///////
-            if (BeforeHeroNo == 0)
-            {
-                // 살아있는 상대방 적 1인 랜덤으로 선택 해줌.
-                int targetHeroNo = m_Owner.GetRandomHeroTeam();
-                m_Owner.ActiveTargetHeroNo = targetHeroNo;
-                m_Owner.SetOutlineHero(targetHeroNo);
-                m_Owner.BattleUI.SetProfileUI(targetHeroNo, false);
-                m_Owner.BattleUI.ActiveBattleProfile(true, true);
-
-                // 한가지 공격 타입을 설정
-                m_Owner.SetRandomActionType(m_Owner.ActiveTurnHeroNo);
-
-                BeforeHeroNo = targetHeroNo;
-
-                // 우리팀 방어측 선택 UI 색을 바꾼 파랑 ui를 띄워주게 작업하자!!
-                m_Owner.BattleUI.ActiveSelActionType(true);
-            }
-
-            // 느낌 주기 위해서 3초 이후 엑션을 실행한다.
-            if (TimeElapsed >= 3)
-            {
-                BattleManager.Instance.BattleStateManager.ChangeState(EBattleState.BattleState_Action);
-            }
-        }
+        }       
     }
 }

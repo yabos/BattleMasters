@@ -26,7 +26,7 @@ public class Define
     public static readonly float TURNICON_POS_X_LENGTH = 2000;
 
     // 적 선택까지 제한시간
-    public static readonly float SELECT_TARGET_LIMITTIME = 3;
+    public static readonly float SELECT_TARGET_LIMITTIME = 10;
     // 공격 타입 선택까지 제한시간
     public static readonly float SELECT_ACTIONTYPE_LIMITTIME = 5;
 

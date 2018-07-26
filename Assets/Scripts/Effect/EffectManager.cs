@@ -51,7 +51,7 @@ public class EffectManager : MonoBehaviour
     {
         if (mDicEffectPool.ContainsKey(eType))
         {
-            return GameObject.Instantiate(mDicEffectPool[eType]);
+            return Instantiate(mDicEffectPool[eType]);
         }
 
         return null;
