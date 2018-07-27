@@ -14,8 +14,8 @@ public class BattleManager : MonoBehaviour
                 _instance = FindObjectOfType(typeof(BattleManager)) as BattleManager;
                 if (_instance == null)
                 {
-                    GameObject dataManaer = new GameObject("BattleManager", typeof(BattleManager));
-                    _instance = dataManaer.GetComponent<BattleManager>();
+                    GameObject manaer = new GameObject("BattleManager", typeof(BattleManager));
+                    _instance = manaer.GetComponent<BattleManager>();
                 }
             }
 

@@ -121,33 +121,6 @@ public class Hero_Control : MonoBehaviour
         float amount =  HP / MaxHP;
         bcUI.UpdateHPGauge(HeroUid, amount);
 
-        GameObject goEfc = EffectManager.Instance().GetEffect(EffectManager.eEffectType.EFFECT_BATTLE_HIT); 
-        if (goEfc != null)
-        {
-            Transform tCen = HeroObj.transform.Find("ef_Center");
-            if( tCen != null )
-            {
-                Transform tEffect = BattleManager.Instance.transform.Find("Effect");
-                
-                goEfc.transform.parent = tEffect; 
-                goEfc.transform.position = tCen.position;
-                
-                ParticleSystem [] pcs = goEfc.GetComponentsInChildren<ParticleSystem>();
-                if (pcs != null)
-                {
-                    for (int i = 0; i < pcs.Length; ++i)
-                    {
-                        Renderer render = pcs[i].GetComponent<Renderer>();
-                        if (render != null)
-                        { 
-                            render.sortingOrder = 1000;
-                            render.sortingLayerName = "Hero";
-                        }
-                    }
-                }
-            }
-        }
-
         if (HP <= 0)
         {
             //mHeroState = eHeroState.HEROSTATE_DIE;

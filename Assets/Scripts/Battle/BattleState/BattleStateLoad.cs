@@ -132,6 +132,6 @@ public class BattleStateLoad : BattleState
 
     protected void LoadEffects()
     {
-        EffectManager.Instance().EffectLoad();
+        EffectManager.Instance.PreLoadEffect();
     }
 }
