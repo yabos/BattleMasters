@@ -31,8 +31,6 @@ public class HeroBattleActionDrawDefeatAtk : HeroBattleAction
 
         yield return AnimationDeley(0.5f, Actor.AniType.ANI_ATK);
 
-        InitHeroState(0.1f);
-
         m_Owner.ChangeState(EHeroBattleAction.HeroAction_Idle);
     }
 }

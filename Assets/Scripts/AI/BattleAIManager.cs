@@ -58,7 +58,7 @@ public class BattleAIManager
                         Owner.BattleUI.ActiveBattleProfile(true, true);
 
                         // 한가지 공격 타입을 설정
-                        Owner.SetRandomActionType(Owner.ActiveTurnHeroNo);
+                        SetRandomActionType(Owner.ActiveTurnHeroNo);
 
                         // 상대방 턴일 경우에는 엑션 유형 선택은 파란색 ui 
                         Owner.BattleUI.ActiveSelActionType(true, false);
@@ -75,6 +75,20 @@ public class BattleAIManager
                  
                 }
                 break;
+        }
+    }
+
+    // Enemy AI
+    public void SetRandomActionType(int heroNo)
+    {
+        var heroCont = Owner.GetHeroControl(heroNo);
+        if (heroCont != null)
+        {
+            // 상대방이 특정 행동만 하게 하려면 여기를 주석 걸고,
+            heroCont.ActionType = (EAtionType)Random.Range(0, (int)EAtionType.ACTION_MAX);
+
+            // 이곳의 주석을 풀고 해당 EAtionType 을 직접 넣어주면 된다.
+            // heroCont.ActionType = EAtionType.ACTION_ATK;
         }
     }
 }

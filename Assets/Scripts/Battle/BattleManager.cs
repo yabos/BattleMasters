@@ -96,7 +96,7 @@ public class BattleManager : MonoBehaviour
             BattleAIManager.Initialize(this);
         }
     }
-    
+
     void Update()
     {
         float fDeltaTime = Time.deltaTime;
@@ -119,7 +119,7 @@ public class BattleManager : MonoBehaviour
 
         BattleUI.ActiveAllBattleProfile(false);
         BattleUI.ActiveHUDUI(isTurnOut);
-        BattleUI.ActiveTurnTimer(false);        
+        BattleUI.ActiveTurnTimer(false);
 
         if (isTurnOut == false)
         {
@@ -129,19 +129,35 @@ public class BattleManager : MonoBehaviour
 
     public void SetBattleStateActionEnd()
     {
-        var hero = GetHeroControl(ActiveTurnHeroNo);
-        if (hero != null)
-        {
-            hero.IsMyTurn = false;
-            TurnUI.InitActiveTurnMember(ActiveTurnHeroNo);
-            BattleUI.ActiveSelActionType(false);
-        }
+        InitHeroTween();
+        TurnUI.InitActiveTurnMember(ActiveTurnHeroNo);
+
+        BattleUI.ActiveSelActionType(false);
+        BattleUI.ActiveHUDUI(true);
 
         ActiveBlur(false);
         ActiveTurnHeroNo = 0;
         ActiveTargetHeroNo = 0;
-        
-        BattleUI.ActiveHUDUI(true);        
+    }
+
+    public void InitHeroTween()
+    {
+        var hero = GetHeroControl(ActiveTurnHeroNo);
+        if (hero != null)
+        {
+            hero.InitHeroTween();
+            hero.IsMyTurn = false;
+
+            UtilFunc.ChangeLayersRecursively(hero.transform, "Default");
+        }
+
+        hero = GetHeroControl(ActiveTargetHeroNo);
+        if (hero != null)
+        {
+            hero.InitHeroTween();
+
+            UtilFunc.ChangeLayersRecursively(hero.transform, "Default");
+        }
     }
 
     void ExcuteHeroAction()
@@ -149,13 +165,13 @@ public class BattleManager : MonoBehaviour
         var MyTeamHero = GetHeroControl(ActiveTurnHeroNo);
         if (MyTeamHero != null)
         {
-            Debug.Log("Player : " + MyTeamHero.ActionType);
+            Debug.Log("ActiveHero Action : " + MyTeamHero.ActionType);
         }
 
         var EnemyHero = GetHeroControl(ActiveTargetHeroNo);
         if (EnemyHero != null)
         {
-            Debug.Log("Enemy : " + EnemyHero.ActionType);
+            Debug.Log("TargetHero Action : " + EnemyHero.ActionType);
         }
 
         EHeroBattleAction myHeroAction = ResultBattleAction(MyTeamHero, EnemyHero);
@@ -282,27 +298,29 @@ public class BattleManager : MonoBehaviour
 
     public bool CheckActiveMoving()
     {
+        bool myHeroMoving = false;
         foreach (var elem in mListMyHeroes)
         {
             if (elem.IsDie) continue;
 
             if (elem.IsActiveMoving)
             {
-                return true;
+                myHeroMoving = true;
             }
         }
 
+        bool enemyHeroMoving = false;
         foreach (var elem in mListEnemyHeroes)
         {
             if (elem.IsDie) continue;
 
             if (elem.IsActiveMoving)
             {
-                return true;
+                enemyHeroMoving = true;
             }
         }
 
-        return false;
+        return myHeroMoving || enemyHeroMoving;
     }
 
     public bool GetActiveHeroTeam()
@@ -332,15 +350,5 @@ public class BattleManager : MonoBehaviour
         }
 
         return randomHero.HeroNo;
-    }
-
-    // AI
-    public void SetRandomActionType(int heroNo)
-    {
-        var heroCont = BattleManager.Instance.GetHeroControl(heroNo);
-        if (heroCont != null)
-        {
-            heroCont.ActionType = (EAtionType)Random.Range(0, (int)EAtionType.ACTION_MAX);
-        }
-    }
+    }   
 }

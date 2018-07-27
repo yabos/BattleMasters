@@ -72,6 +72,11 @@ public class BattleUI_Control : BaseUI
     public void SetHeroActionType(EAtionType eAtionType)
     {
         int heroNo = BattleManager.Instance.ActiveTurnHeroNo;
+        if (BattleManager.Instance.GetActiveHeroTeam() == false)
+        {
+            heroNo = BattleManager.Instance.ActiveTargetHeroNo;
+        }
+        
         var heroCont = BattleManager.Instance.GetHeroControl(heroNo);
         if (heroCont != null)
         {
@@ -81,7 +86,11 @@ public class BattleUI_Control : BaseUI
         // 원래는 상대방의 입력 정보를 알아와야되는데
         // 지금은 AI로 대체 . 랜덤으로 타입을 정해준다.
         heroNo = BattleManager.Instance.ActiveTargetHeroNo;
-        BattleManager.Instance.SetRandomActionType(heroNo);
+        if (BattleManager.Instance.GetActiveHeroTeam() == false)
+        {
+            heroNo = BattleManager.Instance.ActiveTurnHeroNo;
+        }
+        BattleManager.Instance.BattleAIManager.SetRandomActionType(heroNo);
 
         BattleManager.Instance.BattleStateManager.ChangeState(EBattleState.BattleState_Action);
         BattleManager.Instance.OnlyActionInput = false;

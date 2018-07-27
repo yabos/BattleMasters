@@ -146,7 +146,7 @@ public class Hero_Control : MonoBehaviour
     public void ExcuteAction(EHeroBattleAction heroAction, Vector3 vPos)
     {
         SetPosition(vPos);
-        SetScale(new Vector3(Define.BATTLE_MOD_SCALE, Define.BATTLE_MOD_SCALE, Define.BATTLE_MOD_SCALE));
+        SetScale(new Vector3(Define.ACTION_START_SCALE, Define.ACTION_START_SCALE, Define.ACTION_START_SCALE));
         ChangeState(heroAction);
     }
 
@@ -192,5 +192,11 @@ public class Hero_Control : MonoBehaviour
 
             Destroy(ts, ts.duration);
         }
+    }
+
+    public void InitHeroTween()
+    {
+        InitHeroTweenPosition(Define.ACTION_INIT_TIME);
+        InitHeroTweenScale(Define.ACTION_INIT_TIME);
     }
 }

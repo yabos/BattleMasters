@@ -95,10 +95,10 @@ public class HeroBattleAction
 
     protected IEnumerator MoveForward(float duration, float speed, Actor.AniType aniType)
     {
-        float traceTime = 0;
-        while (traceTime < duration)
+        float ElapsedTime = 0;
+        while (ElapsedTime < duration)
         {
-            traceTime += Time.deltaTime;
+            ElapsedTime += Time.deltaTime;
 
             Vector3 vPos = m_Owner.transform.position;
             vPos.x += m_Owner.IsMyTeam ? speed : (-1 * speed);
@@ -109,9 +109,19 @@ public class HeroBattleAction
         }
     }
 
-    protected void InitHeroState(float duration, float delay = 0)
+    protected IEnumerator MoveBackward(float duration, float speed, Actor.AniType aniType)
     {
-        m_Owner.InitHeroTweenPosition(duration, delay);
-        m_Owner.InitHeroTweenScale(duration, delay);
+        float ElapsedTime = 0;
+        while (ElapsedTime < duration)
+        {
+            ElapsedTime += Time.deltaTime;
+
+            Vector3 vPos = m_Owner.transform.position;
+            vPos.x += m_Owner.IsMyTeam ? (-1 * speed) : speed;
+            m_Owner.transform.position = vPos;
+
+            m_Owner.PlayAnimation(aniType);
+            yield return new WaitForEndOfFrame();
+        }
     }
 }

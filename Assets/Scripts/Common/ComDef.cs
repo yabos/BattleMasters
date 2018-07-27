@@ -33,8 +33,11 @@ public class Define
     // 트레이스시에 가는 거리 정도 (이 값만큼 더해짐)
     public static readonly float MOVE_TRACE_SPEED_X = 0.15f;
 
-    // 전투모드시에 캐릭터 확대 정도.
-    public static readonly float BATTLE_MOD_SCALE = 1.3f;
+    // Action Start 시에 캐릭터 확대 정도.
+    public static readonly float ACTION_START_SCALE = 1.3f;
+
+    // Action End 되고 캐릭터가 제자리로 찾아가는 시간
+    public static readonly float ACTION_INIT_TIME = 0.1f;
 }
 
 public class ResourcePath

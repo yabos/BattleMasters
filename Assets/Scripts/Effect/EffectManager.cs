@@ -42,6 +42,7 @@ public class EffectManager : MonoBehaviour
             GameObject goEfc = Instantiate(efc);
             if (goEfc != null)
             {
+                goEfc.SetActive(false);
                 mDicEffectPool.Add(name, goEfc);
             }
         }
