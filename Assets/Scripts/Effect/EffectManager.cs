@@ -54,35 +54,11 @@ public class EffectManager : MonoBehaviour
         {
             return mDicEffectPool[name];
         }
+        else
+        {
+            Debug.LogError("Do not Regist Effect : " + name);
+        }
 
         return null;
-    }
-
-    void SetEfc(string name)
-    {
-        var goEfc = GetEffect(name);
-
-        //Transform tCen = HeroObj.transform.Find("ef_Center");
-        //if(tCen != null )
-        //{
-        //    Transform tEffect = BattleManager.Instance.transform.Find("Effect");
-
-        //    goEfc.transform.parent = tEffect; 
-        //    goEfc.transform.position = tCen.position;
-                
-        //    ParticleSystem[] pcs = goEfc.GetComponentsInChildren<ParticleSystem>();
-        //    if (pcs != null)
-        //    {
-        //        for (int i = 0; i<pcs.Length; ++i)
-        //        {
-        //            Renderer render = pcs[i].GetComponent<Renderer>();
-        //            if (render != null)
-        //            { 
-        //                render.sortingOrder = 1000;
-        //                render.sortingLayerName = "Hero";
-        //            }
-        //        }
-        //    }
-        //}
-    }
+    }    
 }
