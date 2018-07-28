@@ -27,9 +27,9 @@ public class HeroBattleActionCntDefeat : HeroBattleAction
 
     public override IEnumerator ActionProc()
     {
-        yield return AnimationDeley(0.5f, Actor.AniType.ANI_CNT);
+        yield return MoveForward(2.0f, Define.MOVE_CNT_SPEED_X, Actor.AniType.ANI_CNT);
 
-        yield return AnimationDeley(0.5f, Actor.AniType.ANI_DEFEAT);
+        yield return MoveBackward(2.0f, Define.MOVE_BACK_DEFEAT_SPEED_X, Actor.AniType.ANI_DEFEAT);
 
         m_Owner.ChangeState(EHeroBattleAction.HeroAction_Idle);
     }

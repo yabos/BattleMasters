@@ -27,9 +27,9 @@ public class HeroBattleActionDrawDefeatAtk : HeroBattleAction
 
     public override IEnumerator ActionProc()
     {
-        yield return AnimationDeley(0.5f, Actor.AniType.ANI_DEFEAT);
+        yield return MoveBackward(2.0f, Define.MOVE_BACK_DEFEAT_SPEED_X, Actor.AniType.ANI_DEFEAT);
 
-        yield return AnimationDeley(0.5f, Actor.AniType.ANI_ATK);
+        yield return MoveForward(2.0f, Define.MOVE_ATK_SPEED_X, Actor.AniType.ANI_ATK);
 
         m_Owner.ChangeState(EHeroBattleAction.HeroAction_Idle);
     }

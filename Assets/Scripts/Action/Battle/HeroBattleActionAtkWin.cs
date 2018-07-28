@@ -27,9 +27,9 @@ public class HeroBattleActionAtkWin : HeroBattleAction
 
     public override IEnumerator ActionProc()
     {
-        yield return MoveForward(0.5f, Define.MOVE_TRACE_SPEED_X, Actor.AniType.ANI_TRACE);
+        yield return MoveForward(2.0f, Define.MOVE_TRACE_SPEED_X, Actor.AniType.ANI_TRACE);
 
-        yield return AnimationDeley(0.5f, Actor.AniType.ANI_ATK);
+        yield return MoveForward(2.0f, Define.MOVE_ATK_SPEED_X, Actor.AniType.ANI_ATK);
 
         m_Owner.ChangeState(EHeroBattleAction.HeroAction_Idle);
     }
