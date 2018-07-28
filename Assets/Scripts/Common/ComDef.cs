@@ -31,15 +31,15 @@ public class Define
     public static readonly float SELECT_ACTIONTYPE_LIMITTIME = 5;
 
     // 트레이스시에 가는 거리 정도 (이 값만큼 더해짐)
-    public static readonly float MOVE_TRACE_SPEED_X = 0.15f;
-    public static readonly float MOVE_CNT_SPEED_X = 0.15f;
-    public static readonly float MOVE_ATK_SPEED_X = 0.15f;
+    public static readonly float MOVE_TRACE_SPEED_X = 0.05f;
+    public static readonly float MOVE_CNT_SPEED_X = 0.03f;
+    public static readonly float MOVE_ATK_SPEED_X = 0.06f;
 
     // 거리 변수 추가
-    public static readonly float MOVE_BACK_BREAK_SPEED_X = 0.15f;
-    public static readonly float MOVE_BACK_DODGE_SPEED_X = 0.15f;
-    public static readonly float MOVE_BACK_DEFEAT_SPEED_X = 0.15f;
-    public static readonly float MOVE_BACK_FAKE_SPEED_X = 0.15f;
+    public static readonly float MOVE_BACK_BREAK_SPEED_X = 0.1f;
+    public static readonly float MOVE_BACK_DODGE_SPEED_X = 0.05f;
+    public static readonly float MOVE_BACK_DEFEAT_SPEED_X = 0.3f;
+    public static readonly float MOVE_BACK_FAKE_SPEED_X = 0.05f;
 
 
     // Action Start 시에 캐릭터 확대 정도.
