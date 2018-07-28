@@ -32,6 +32,15 @@ public class Define
 
     // 트레이스시에 가는 거리 정도 (이 값만큼 더해짐)
     public static readonly float MOVE_TRACE_SPEED_X = 0.15f;
+    public static readonly float MOVE_CNT_SPEED_X = 0.15f;
+    public static readonly float MOVE_ATK_SPEED_X = 0.15f;
+
+    // 거리 변수 추가
+    public static readonly float MOVE_BACK_BREAK_SPEED_X = 0.15f;
+    public static readonly float MOVE_BACK_DODGE_SPEED_X = 0.15f;
+    public static readonly float MOVE_BACK_DEFEAT_SPEED_X = 0.15f;
+    public static readonly float MOVE_BACK_FAKE_SPEED_X = 0.15f;
+
 
     // Action Start 시에 캐릭터 확대 정도.
     public static readonly float ACTION_START_SCALE = 1.3f;
