@@ -22,11 +22,8 @@ public class AnimationTestEnemy : MonoBehaviour
 
     public IEnumerator ActionProc()
     {
-        // 튕겨내지는 모션
-        yield return MoveBackward(0.3f, Define.MOVE_BACK_BREAK_SPEED_X, Actor.AniType.ANI_FAKE);
-
-        // 처맞는 모션
-        yield return AnimationDeley(1.0f, Actor.AniType.ANI_DEFEAT);
+        yield return AnimationDeley(100.0f, Actor.AniType.ANI_FAKE);
+        
 
         Actor.PlayAnimation(Actor.AniType.ANI_IDLE);
     }

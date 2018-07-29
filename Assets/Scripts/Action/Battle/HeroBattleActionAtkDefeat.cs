@@ -28,11 +28,11 @@ public class HeroBattleActionAtkDefeat : HeroBattleAction
     public override IEnumerator ActionProc()
     {
         // 튕겨내지는 모션
-        yield return AnimationDeley(0.1f, Actor.AniType.ANI_BREAK);
-        yield return MoveBackward(0.4f, Define.MOVE_BACK_BREAK_SPEED_X, Actor.AniType.ANI_BREAK);
+        //yield return AnimationDeley(0.1f, Actor.AniType.ANI_BREAK);
+        yield return MoveBackwardDistance(0.1f, 5, Actor.AniType.ANI_BREAK);
 
         // 처맞는 모션
-        yield return MoveBackward(0.5f, Define.MOVE_BACK_DEFEAT_SPEED_X, Actor.AniType.ANI_DEFEAT);
+        //yield return MoveBackward(0.5f, Define.MOVE_BACK_DEFEAT_SPEED_X, Actor.AniType.ANI_DEFEAT);
 
         m_Owner.ChangeState(EHeroBattleAction.HeroAction_Idle);
     }

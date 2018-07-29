@@ -63,8 +63,11 @@ public class Actor : MonoBehaviour
     }
 
     public void PlayAnimation(AniType eActiveAni)
-    {        
+    {
+        if (AniState == eActiveAni) return;
+
         Anim.Play(ClipName[(int)eActiveAni], 0, 0f);
+        AniState = eActiveAni;
     }
 
     public void SetAnimationSpeed(AniType eActiveAni, float fSeepd = 1.0f)

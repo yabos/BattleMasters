@@ -85,10 +85,10 @@ public class BattleAIManager
         if (heroCont != null)
         {
             // 상대방이 특정 행동만 하게 하려면 여기를 주석 걸고,
-            heroCont.ActionType = (EAtionType)Random.Range(0, (int)EAtionType.ACTION_MAX);
+            //heroCont.ActionType = (EAtionType)Random.Range(0, (int)EAtionType.ACTION_MAX);
 
             // 이곳의 주석을 풀고 해당 EAtionType 을 직접 넣어주면 된다.
-            // heroCont.ActionType = EAtionType.ACTION_ATK;
+             heroCont.ActionType = EAtionType.ACTION_COUNT;
         }
     }
 }

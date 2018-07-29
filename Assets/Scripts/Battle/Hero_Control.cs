@@ -29,7 +29,6 @@ public class Hero_Control : MonoBehaviour
     public bool IsActiveMoving { get; set; }   //  현재 치고받는 엑션을 하고있는지 여부
     public bool IsDie { get; set; }
 
-    public EHeroBattleAction HeroState { get; set; }
     public EAtionType ActionType { get; set; }    
     public GameObject HeroObj { get; set; }
     public Actor Actor { get; set; }
@@ -93,54 +92,22 @@ public class Hero_Control : MonoBehaviour
         {
             mActionManager.ChangeAction(eAction, data, bRefresh);
         }
-    }
+    }    
 
-    IEnumerator HeroDeathAlphaFade()
+    void DamagedHero(Hero_Control atthero)
     {
-        for (int iFadeCount = 7; iFadeCount >= 0; --iFadeCount)
-        {
-            for (int iAlpha = 10; iAlpha >= 0; --iAlpha)
-            {
-                Actor.SR.color = new Color(1f, 1f, 1f, (iAlpha) * 0.1f);
-                yield return null;
-            }
-
-            float fWaitSeconds = iFadeCount * 0.001f;
-            yield return new WaitForSeconds(fWaitSeconds);
-        }
-    }
-
-    bool DamagedHero(Hero_Control atthero, int iSkillNo)
-    {
-        // if(immune) return false
-
         HP -= atthero.Atk;
         BattleUI_Control bcUI = BattleManager.Instance.BattleUI;
-        if (bcUI == null) return false;
-
-        float amount =  HP / MaxHP;
-        bcUI.UpdateHPGauge(HeroUid, amount);
-
-        if (HP <= 0)
+        if (bcUI != null)
         {
-            //mHeroState = eHeroState.HEROSTATE_DIE;
-            return false;
+            float amount = HP / MaxHP;
+            bcUI.UpdateHPGauge(HeroUid, amount);
+
+            if (HP <= 0)
+            {
+                ChangeState(EHeroBattleAction.HeroAction_BattleDie);
+            }
         }
-        else
-        {
-            
-        }
-
-        return true;
-    }
-
-    IEnumerator DamagedHeroColor(float fDelay)
-    {
-        Actor.SR.color = new Color(1f, 142f/255f, 54f/255f);
-
-        yield return new WaitForSeconds(fDelay);
-
-        Actor.SR.color = Color.white;
     }
 
     public void ExcuteAction(EHeroBattleAction heroAction, Vector3 vPos)

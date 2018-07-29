@@ -39,12 +39,7 @@ public class EffectManager : MonoBehaviour
         GameObject efc = VResources.Load<GameObject>(path + name);
         if (efc != null)
         {
-            GameObject goEfc = Instantiate(efc);
-            if (goEfc != null)
-            {
-                goEfc.SetActive(false);
-                mDicEffectPool.Add(name, goEfc);
-            }
+            mDicEffectPool.Add(name, efc);
         }
     }
 

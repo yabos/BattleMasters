@@ -96,7 +96,7 @@ public class HeroBattleAction
     protected IEnumerator MoveForward(float duration, float speed, Actor.AniType aniType)
     {
         float ElapsedTime = 0;
-        while (ElapsedTime < duration)
+        while (ElapsedTime <= duration)
         {
             ElapsedTime += Time.deltaTime;
 
@@ -112,12 +112,17 @@ public class HeroBattleAction
     protected IEnumerator MoveForwardDistance(float duration, float dist,  Actor.AniType aniType)
     {
         float ElapsedTime = 0;
-        while (ElapsedTime < duration)
+        while (ElapsedTime <= duration)
         {
             ElapsedTime += Time.deltaTime;
 
             Vector3 vPos = m_Owner.transform.position;
-            float posX = m_Owner.IsMyTeam ? ((ElapsedTime / duration) * dist) : (-1 * (ElapsedTime / duration) * dist);
+            float posX = (ElapsedTime / duration) * dist;
+            if (posX >= dist)
+            {
+                posX = dist;
+            }
+
             vPos.x = posX;
             m_Owner.transform.position = vPos;
 
@@ -129,7 +134,7 @@ public class HeroBattleAction
     protected IEnumerator MoveBackward(float duration, float speed, Actor.AniType aniType)
     {
         float ElapsedTime = 0;
-        while (ElapsedTime < duration)
+        while (ElapsedTime <= duration)
         {
             ElapsedTime += Time.deltaTime;
 
@@ -145,12 +150,22 @@ public class HeroBattleAction
     protected IEnumerator MoveBackwardDistance(float duration, float dist, Actor.AniType aniType)
     {
         float ElapsedTime = 0;
-        while (ElapsedTime < duration)
+        while (ElapsedTime <= duration)
         {
             ElapsedTime += Time.deltaTime;
 
             Vector3 vPos = m_Owner.transform.position;
-            float posX = m_Owner.IsMyTeam ? (-1 * (ElapsedTime / duration) * dist) : ((ElapsedTime / duration) * dist);
+            float posX = (ElapsedTime / duration) * dist;
+            if (posX >= dist)
+            {
+                posX = dist;
+            }
+
+            if (m_Owner.IsMyTeam)
+            {
+                posX *= -1;
+            }
+
             vPos.x = posX;
             m_Owner.transform.position = vPos;
 
