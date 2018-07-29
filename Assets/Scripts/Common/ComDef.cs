@@ -32,8 +32,8 @@ public class Define
 
     // 트레이스시에 가는 거리 정도 (이 값만큼 더해짐)
     public static readonly float MOVE_TRACE_SPEED_X = 0.05f;
-    public static readonly float MOVE_CNT_SPEED_X = 0.03f;
-    public static readonly float MOVE_ATK_SPEED_X = 0.03f;
+    public static readonly float MOVE_CNT_SPEED_X = 0.06f;
+    public static readonly float MOVE_ATK_SPEED_X = 0.09f;
 
     // 거리 변수 추가
     public static readonly float MOVE_BACK_BREAK_SPEED_X = 0.05f;
