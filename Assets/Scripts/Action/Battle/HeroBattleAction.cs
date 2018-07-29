@@ -109,6 +109,23 @@ public class HeroBattleAction
         }
     }
 
+    protected IEnumerator MoveForwardDistance(float duration, float dist,  Actor.AniType aniType)
+    {
+        float ElapsedTime = 0;
+        while (ElapsedTime < duration)
+        {
+            ElapsedTime += Time.deltaTime;
+
+            Vector3 vPos = m_Owner.transform.position;
+            float posX = m_Owner.IsMyTeam ? ((ElapsedTime / duration) * dist) : (-1 * (ElapsedTime / duration) * dist);
+            vPos.x = posX;
+            m_Owner.transform.position = vPos;
+
+            m_Owner.PlayAnimation(aniType);
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
     protected IEnumerator MoveBackward(float duration, float speed, Actor.AniType aniType)
     {
         float ElapsedTime = 0;
@@ -118,6 +135,23 @@ public class HeroBattleAction
 
             Vector3 vPos = m_Owner.transform.position;
             vPos.x += m_Owner.IsMyTeam ? (-1 * speed) : speed;
+            m_Owner.transform.position = vPos;
+
+            m_Owner.PlayAnimation(aniType);
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    protected IEnumerator MoveBackwardDistance(float duration, float dist, Actor.AniType aniType)
+    {
+        float ElapsedTime = 0;
+        while (ElapsedTime < duration)
+        {
+            ElapsedTime += Time.deltaTime;
+
+            Vector3 vPos = m_Owner.transform.position;
+            float posX = m_Owner.IsMyTeam ? (-1 * (ElapsedTime / duration) * dist) : ((ElapsedTime / duration) * dist);
+            vPos.x = posX;
             m_Owner.transform.position = vPos;
 
             m_Owner.PlayAnimation(aniType);
