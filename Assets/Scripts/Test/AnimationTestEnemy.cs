@@ -2,31 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnimationTest : MonoBehaviour
+public class AnimationTestEnemy : MonoBehaviour
 {
     public bool IsMyTeam;
 
     Actor Actor;
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         //var render = GetComponentInChildren<SpriteRenderer>();
         //render.flipX = IsMyTeam;
 
         Actor = GetComponentInChildren<Actor>();
         if (Actor != null)
-        {            
+        {
             StartCoroutine(ActionProc());
         }
-	}
-	
+    }
+
     public IEnumerator ActionProc()
     {
         // 튕겨내지는 모션
-        yield return MoveBackward(0.3f, Define.MOVE_BACK_BREAK_SPEED_X, Actor.AniType.ANI_BREAK);
+        yield return MoveBackward(0.3f, Define.MOVE_BACK_BREAK_SPEED_X, Actor.AniType.ANI_FAKE);
 
         // 처맞는 모션
-        yield return MoveBackward(1.0f, Define.MOVE_BACK_DEFEAT_SPEED_X, Actor.AniType.ANI_DEFEAT);
+        yield return AnimationDeley(1.0f, Actor.AniType.ANI_DEFEAT);
 
         Actor.PlayAnimation(Actor.AniType.ANI_IDLE);
     }
