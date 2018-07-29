@@ -29,7 +29,7 @@ public class HeroBattleActionFakeDefeat : HeroBattleAction
     {
         yield return MoveBackward(0.5f, Define.MOVE_BACK_FAKE_SPEED_X, Actor.AniType.ANI_FAKE);
 
-        yield return MoveBackward(1.0f, Define.MOVE_BACK_DEFEAT_SPEED_X, Actor.AniType.ANI_DEFEAT);
+        yield return MoveBackward(0.5f, Define.MOVE_BACK_DEFEAT_SPEED_X, Actor.AniType.ANI_DEFEAT);
 
         m_Owner.ChangeState(EHeroBattleAction.HeroAction_Idle);
     }

@@ -27,10 +27,11 @@ public class HeroBattleActionCntWin : HeroBattleAction
 
     public override IEnumerator ActionProc()
     {
-        yield return MoveForward(0.2f, Define.MOVE_CNT_SPEED_X, Actor.AniType.ANI_CNT);
-        yield return AnimationDeley(0.6f, Actor.AniType.ANI_CNT);
+        yield return MoveForward(0.1f, Define.MOVE_CNT_SPEED_X, Actor.AniType.ANI_CNT);
+        yield return AnimationDeley(0.4f, Actor.AniType.ANI_CNT);
 
-        yield return MoveForward(1.0f, Define.MOVE_ATK_SPEED_X, Actor.AniType.ANI_ATK);
+        yield return MoveForward(0.1f, Define.MOVE_ATK_SPEED_X, Actor.AniType.ANI_ATK);
+        yield return AnimationDeley(0.4f, Actor.AniType.ANI_ATK);
 
         m_Owner.ChangeState(EHeroBattleAction.HeroAction_Idle);
     }    
