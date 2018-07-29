@@ -10,8 +10,8 @@ public class AnimationTest : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        var render = GetComponentInChildren<SpriteRenderer>();
-        render.flipX = IsMyTeam;
+        //var render = GetComponentInChildren<SpriteRenderer>();
+        //render.flipX = IsMyTeam;
 
         Actor = GetComponentInChildren<Actor>();
         if (Actor != null)
