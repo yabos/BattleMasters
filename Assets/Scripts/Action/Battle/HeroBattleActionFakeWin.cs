@@ -27,7 +27,7 @@ public class HeroBattleActionFakeWin : HeroBattleAction
 
     public override IEnumerator ActionProc()
     {
-        yield return MoveBackward(0.5f, Define.MOVE_BACK_FAKE_SPEED_X, Actor.AniType.ANI_FAKE);
+        yield return MoveBackward(0.8f, Define.MOVE_BACK_FAKE_SPEED_X, Actor.AniType.ANI_FAKE);
 
         yield return MoveForward(1.0f, Define.MOVE_ATK_SPEED_X, Actor.AniType.ANI_ATK);
 
