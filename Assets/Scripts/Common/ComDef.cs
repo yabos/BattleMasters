@@ -37,9 +37,8 @@ public class Define
 
     // 거리 변수 추가
     public static readonly float MOVE_BACK_BREAK_SPEED_X = 0.05f;
-    public static readonly float MOVE_BACK_DODGE_SPEED_X = 0.05f;
     public static readonly float MOVE_BACK_DEFEAT_SPEED_X = 0.03f;
-    public static readonly float MOVE_BACK_FAKE_SPEED_X = 0.05f;
+    public static readonly float MOVE_BACK_FAKE_SPEED_X = 0.03f;
 
 
     // Action Start 시에 캐릭터 확대 정도.
