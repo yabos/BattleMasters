@@ -9,7 +9,7 @@ public class EffectListener : MonoBehaviour
         string name = myEvent.stringParameter;
         float delay = myEvent.floatParameter;
         
-        StartCoroutine(PlayEffect(name, delay));
+        //StartCoroutine(PlayEffect(name, delay));
     }
 
     IEnumerator PlayEffect(string name, float delay)

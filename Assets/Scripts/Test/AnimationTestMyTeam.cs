@@ -8,10 +8,13 @@ public class AnimationTestMyTeam : MonoBehaviour
 
     Actor Actor;
     // Use this for initialization
-    void Start ()
+    IEnumerator Start ()
     {
         //var render = GetComponentInChildren<SpriteRenderer>();
         //render.flipX = IsMyTeam;
+        transform.localScale = new Vector3(Define.ACTION_START_SCALE, Define.ACTION_START_SCALE, Define.ACTION_START_SCALE);
+
+        yield return new WaitForSeconds(1);
 
         Actor = GetComponentInChildren<Actor>();
         if (Actor != null)
@@ -19,11 +22,14 @@ public class AnimationTestMyTeam : MonoBehaviour
             StartCoroutine(ActionProc());
         }
 	}
-	
+
+    
     public IEnumerator ActionProc()
     {
-        // 튕겨내지는 모션
-        yield return AnimationDeley(100f, Actor.AniType.ANI_ATK);
+        yield return MoveForward(0.4f, 3, Actor.AniType.ANI_TRACE);
+        //yield return AnimationDeley(0.1f, Actor.AniType.ANI_ATK);      
+        yield return MoveBackward(0.2f, 1, Actor.AniType.ANI_BREAK);
+        yield return MoveBackward(0.5f, 1, Actor.AniType.ANI_DEFEAT);
 
         Actor.PlayAnimation(Actor.AniType.ANI_IDLE);
     }
@@ -35,15 +41,27 @@ public class AnimationTestMyTeam : MonoBehaviour
         yield return new WaitForSeconds(delay);
     }
 
-    protected IEnumerator MoveForward(float duration, float speed, Actor.AniType aniType)
+    protected IEnumerator MoveForward(float duration, float dist, Actor.AniType aniType)
     {
         float ElapsedTime = 0;
+        float SumX = 0;
         while (ElapsedTime < duration)
         {
             ElapsedTime += Time.deltaTime;
-
             Vector3 vPos = transform.position;
-            vPos.x += IsMyTeam ? speed : (-1 * speed);
+            float tickX = (Time.deltaTime / duration) * dist;
+            SumX += tickX;
+            if (SumX >= dist)
+            {
+                tickX = 0;
+            }
+
+            if (IsMyTeam == false)
+            {
+                tickX *= -1;
+            }
+
+            vPos.x += tickX;
             transform.position = vPos;
 
             Actor.PlayAnimation(aniType);
@@ -51,49 +69,27 @@ public class AnimationTestMyTeam : MonoBehaviour
         }
     }
 
-    protected IEnumerator MoveForwardDistance(float duration, float dist, Actor.AniType aniType)
+    protected IEnumerator MoveBackward(float duration, float dist, Actor.AniType aniType)
     {
         float ElapsedTime = 0;
+        float SumX = 0;
         while (ElapsedTime < duration)
         {
             ElapsedTime += Time.deltaTime;
-
             Vector3 vPos = transform.position;
-            float posX = IsMyTeam ? ((ElapsedTime / duration) * dist) : (-1 * (ElapsedTime / duration) * dist);
-            vPos.x = posX;
-            transform.position = vPos;
+            float tickX = (Time.deltaTime / duration) * dist;
+            SumX += tickX;
+            if (SumX >= dist)
+            {
+                tickX = 0;
+            }
 
-            Actor.PlayAnimation(aniType);
-            yield return new WaitForEndOfFrame();
-        }
-    }
+            if (IsMyTeam)
+            {
+                tickX *= -1;
+            }
 
-    protected IEnumerator MoveBackward(float duration, float speed, Actor.AniType aniType)
-    {
-        float ElapsedTime = 0;
-        while (ElapsedTime < duration)
-        {
-            ElapsedTime += Time.deltaTime;
-
-            Vector3 vPos = transform.position;
-            vPos.x += IsMyTeam ? (-1 * speed) : speed;
-            transform.position = vPos;
-
-            Actor.PlayAnimation(aniType);
-            yield return new WaitForEndOfFrame();
-        }
-    }
-
-    protected IEnumerator MoveBackwardDistance(float duration, float dist, Actor.AniType aniType)
-    {
-        float ElapsedTime = 0;
-        while (ElapsedTime < duration)
-        {
-            ElapsedTime += Time.deltaTime;
-
-            Vector3 vPos = transform.position;
-            float posX = IsMyTeam ? (-1 * (ElapsedTime / duration) * dist) : ((ElapsedTime / duration) * dist);
-            vPos.x = posX;
+            vPos.x += tickX;
             transform.position = vPos;
 
             Actor.PlayAnimation(aniType);
