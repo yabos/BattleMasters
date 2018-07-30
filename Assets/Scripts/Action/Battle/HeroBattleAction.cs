@@ -107,7 +107,7 @@ public class HeroBattleAction
             {
                 tickX = 0;
             }
-            Debug.LogError(SumX);
+
             if (m_Owner.IsMyTeam == false)
             {
                 tickX *= -1;
@@ -119,6 +119,21 @@ public class HeroBattleAction
             m_Owner.PlayAnimation(aniType);
             yield return new WaitForEndOfFrame();
         }
+    }
+
+    protected IEnumerator MoveForwardMoment(float dist, Actor.AniType aniType)
+    {
+        if (m_Owner.IsMyTeam == false)
+        {
+            dist *= -1;
+        }
+
+        Vector3 vPos = m_Owner.transform.position;
+        vPos.x += dist;
+        m_Owner.transform.position = vPos;
+
+        m_Owner.PlayAnimation(aniType);
+        yield return new WaitForEndOfFrame();
     }
 
     protected IEnumerator MoveBackward(float duration, float dist, Actor.AniType aniType)
@@ -147,5 +162,20 @@ public class HeroBattleAction
             m_Owner.PlayAnimation(aniType);
             yield return new WaitForEndOfFrame();
         }
+    }
+
+    protected IEnumerator MoveBackwardMoment(float dist, Actor.AniType aniType)
+    {
+        if (m_Owner.IsMyTeam)
+        {
+            dist *= -1;
+        }
+
+        Vector3 vPos = m_Owner.transform.position;
+        vPos.x += dist;
+        m_Owner.transform.position = vPos;
+
+        m_Owner.PlayAnimation(aniType);
+        yield return new WaitForEndOfFrame();
     }
 }

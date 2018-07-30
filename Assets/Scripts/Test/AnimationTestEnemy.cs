@@ -26,7 +26,7 @@ public class AnimationTestEnemy : MonoBehaviour
     public IEnumerator ActionProc()
     {
         yield return AnimationDeley(0.3f, Actor.AniType.ANI_IDLE);      
-        yield return MoveForwardMoment(2, Actor.AniType.ANI_CNT);
+        yield return MoveForwardMoment(1.5f, Actor.AniType.ANI_CNT);
         yield return AnimationDeley(0.2f, Actor.AniType.ANI_CNT);
         yield return MoveForwardMoment(2, Actor.AniType.ANI_ATK);
         yield return AnimationDeley(0.5f, Actor.AniType.ANI_ATK);
@@ -111,5 +111,20 @@ public class AnimationTestEnemy : MonoBehaviour
             Actor.PlayAnimation(aniType);
             yield return new WaitForEndOfFrame();
         }
+    }
+
+    protected IEnumerator MoveBackwardMoment(float dist, Actor.AniType aniType)
+    {
+        if (IsMyTeam)
+        {
+            dist *= -1;
+        }
+
+        Vector3 vPos = transform.position;
+        vPos.x += dist;
+        transform.position = vPos;
+
+        Actor.PlayAnimation(aniType);
+        yield return new WaitForEndOfFrame();
     }
 }
