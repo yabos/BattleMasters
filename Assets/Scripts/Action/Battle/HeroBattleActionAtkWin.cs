@@ -27,7 +27,9 @@ public class HeroBattleActionAtkWin : HeroBattleAction
 
     public override IEnumerator ActionProc()
     {
-        yield return MoveForward(0.2f, 2, Actor.AniType.ANI_TRACE);
+        //yield return MoveForward(0.2f, 2, Actor.AniType.ANI_TRACE);
+
+        yield return CommendExcutor.Instance.Excute("AnimationDelay", 0.2f, Actor.AniType.ANI_TRACE);
 
         //yield return MoveForward(0.1f, 1, Actor.AniType.ANI_ATK);
         //yield return AnimationDeley(0.4f, Actor.AniType.ANI_ATK);

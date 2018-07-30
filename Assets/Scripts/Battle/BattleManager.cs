@@ -350,5 +350,105 @@ public class BattleManager : MonoBehaviour
         }
 
         return randomHero.HeroNo;
-    }   
+    }
+
+    //public IEnumerator AnimationDeley(float delay, Actor.AniType aniType)
+    //{
+    //    m_Owner.PlayAnimation(aniType);
+
+    //    yield return new WaitForSeconds(delay);
+    //}
+
+    //public IEnumerator AnimationDeley(params object[] list)
+    //{
+    //    m_Owner.PlayAnimation(aniType);
+
+    //    yield return new WaitForSeconds(delay);
+    //}
+
+    //protected IEnumerator MoveForward(float duration, float dist, Actor.AniType aniType)
+    //{
+    //    float ElapsedTime = 0;
+    //    float SumX = 0;
+    //    while (ElapsedTime < duration)
+    //    {
+    //        ElapsedTime += Time.deltaTime;
+    //        Vector3 vPos = m_Owner.transform.position;
+    //        float tickX = (Time.deltaTime / duration) * dist;
+    //        SumX += tickX;
+    //        if (SumX >= dist)
+    //        {
+    //            tickX = 0;
+    //        }
+
+    //        if (m_Owner.IsMyTeam == false)
+    //        {
+    //            tickX *= -1;
+    //        }
+
+    //        vPos.x += tickX;
+    //        m_Owner.transform.position = vPos;
+
+    //        m_Owner.PlayAnimation(aniType);
+    //        yield return new WaitForEndOfFrame();
+    //    }
+    //}
+
+    //protected IEnumerator MoveForwardMoment(float dist, Actor.AniType aniType)
+    //{
+    //    if (m_Owner.IsMyTeam == false)
+    //    {
+    //        dist *= -1;
+    //    }
+
+    //    Vector3 vPos = m_Owner.transform.position;
+    //    vPos.x += dist;
+    //    m_Owner.transform.position = vPos;
+
+    //    m_Owner.PlayAnimation(aniType);
+    //    yield return new WaitForEndOfFrame();
+    //}
+
+    //protected IEnumerator MoveBackward(float duration, float dist, Actor.AniType aniType)
+    //{
+    //    float ElapsedTime = 0;
+    //    float SumX = 0;
+    //    while (ElapsedTime < duration)
+    //    {
+    //        ElapsedTime += Time.deltaTime;
+    //        Vector3 vPos = m_Owner.transform.position;
+    //        float tickX = (Time.deltaTime / duration) * dist;
+    //        SumX += tickX;
+    //        if (SumX >= dist)
+    //        {
+    //            tickX = 0;
+    //        }
+
+    //        if (m_Owner.IsMyTeam)
+    //        {
+    //            tickX *= -1;
+    //        }
+
+    //        vPos.x += tickX;
+    //        m_Owner.transform.position = vPos;
+
+    //        m_Owner.PlayAnimation(aniType);
+    //        yield return new WaitForEndOfFrame();
+    //    }
+    //}
+
+    //protected IEnumerator MoveBackwardMoment(float dist, Actor.AniType aniType)
+    //{
+    //    if (m_Owner.IsMyTeam)
+    //    {
+    //        dist *= -1;
+    //    }
+
+    //    Vector3 vPos = m_Owner.transform.position;
+    //    vPos.x += dist;
+    //    m_Owner.transform.position = vPos;
+
+    //    m_Owner.PlayAnimation(aniType);
+    //    yield return new WaitForEndOfFrame();
+    //}
 }
