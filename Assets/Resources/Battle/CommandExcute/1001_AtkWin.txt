@@ -1,5 +1,0 @@
-AnimationDeley, 1, Idle,
-MoveForward, 0.2, 3, Atk,
-MoveForwardMoment, 0.2, 3, Atk,
-MoveBackward, 0.2, 3, Atk,
-MoveBackwardMoment, 0.2, 3, Atk,
