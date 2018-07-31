@@ -6,13 +6,14 @@ public class HeroBattleAction
 {
     protected Hero_Control m_Owner;
     protected HeroBattleActionManager m_ActionManager;
-
+    protected List<string> m_Commends;
     protected Vector3 m_veOriginalPos;
 
     public virtual void Initialize(Hero_Control owner, HeroBattleActionManager action_manager)
     {
         m_Owner = owner;
         m_ActionManager = action_manager;
+        m_Commends = new List<string>();
     }
 
     public virtual void Release()
@@ -38,11 +39,6 @@ public class HeroBattleAction
 
     public virtual void Update(float fTimeDelta)
     {
-    }
-
-    public virtual IEnumerator ActionProc()
-    {
-        yield break;
     }
 
     protected bool IsMovingAction(EHeroBattleAction action)
@@ -86,96 +82,36 @@ public class HeroBattleAction
     {
     }
 
-    protected IEnumerator AnimationDeley(float delay, Actor.AniType aniType)
+    protected void ReadCommend(EActionCommend actionCommend)
     {
-        m_Owner.PlayAnimation(aniType);
-
-        yield return new WaitForSeconds(delay);
-    }
-
-    protected IEnumerator MoveForward(float duration, float dist, Actor.AniType aniType)
-    {
-        float ElapsedTime = 0;
-        float SumX = 0;
-        while (ElapsedTime < duration)
+        var textAsset = m_Owner.GetActionCommend(actionCommend);
+        if (textAsset != null)
         {
-            ElapsedTime += Time.deltaTime;
-            Vector3 vPos = m_Owner.transform.position;
-            float tickX = (Time.deltaTime / duration) * dist;
-            SumX += tickX;
-            if (SumX >= dist)
+            string[] lines = textAsset.text.Split("\r\n".ToCharArray());
+            for (int i = 0; i < lines.Length; ++i)
             {
-                tickX = 0;
+                if (string.IsNullOrEmpty(lines[i])) { continue; }
+
+                m_Commends.Add(lines[i]);
             }
-
-            if (m_Owner.IsMyTeam == false)
-            {
-                tickX *= -1;
-            }
-
-            vPos.x += tickX;
-            m_Owner.transform.position = vPos;
-
-            m_Owner.PlayAnimation(aniType);
-            yield return new WaitForEndOfFrame();
         }
     }
 
-    protected IEnumerator MoveForwardMoment(float dist, Actor.AniType aniType)
+    protected IEnumerator ActionProc()
     {
-        if (m_Owner.IsMyTeam == false)
+        for( int i = 0; i < m_Commends.Count; ++i)
         {
-            dist *= -1;
-        }
-
-        Vector3 vPos = m_Owner.transform.position;
-        vPos.x += dist;
-        m_Owner.transform.position = vPos;
-
-        m_Owner.PlayAnimation(aniType);
-        yield return new WaitForEndOfFrame();
-    }
-
-    protected IEnumerator MoveBackward(float duration, float dist, Actor.AniType aniType)
-    {
-        float ElapsedTime = 0;
-        float SumX = 0;
-        while (ElapsedTime < duration)
-        {
-            ElapsedTime += Time.deltaTime;
-            Vector3 vPos = m_Owner.transform.position;
-            float tickX = (Time.deltaTime / duration) * dist;
-            SumX += tickX;
-            if (SumX >= dist)
+            string commend = m_Commends[i];
+            string[] prams = commend.Split(",".ToCharArray());
+            object[] list = new object[prams.Length - 1];
+            for (int j = 1; j < prams.Length; ++j)
             {
-                tickX = 0;
+                list[j - 1] = prams[j].Trim();
             }
 
-            if (m_Owner.IsMyTeam)
-            {
-                tickX *= -1;
-            }
-
-            vPos.x += tickX;
-            m_Owner.transform.position = vPos;
-
-            m_Owner.PlayAnimation(aniType);
-            yield return new WaitForEndOfFrame();
-        }
-    }
-
-    protected IEnumerator MoveBackwardMoment(float dist, Actor.AniType aniType)
-    {
-        if (m_Owner.IsMyTeam)
-        {
-            dist *= -1;
+            yield return m_Owner.BattleActionCommendExcution(prams[0], list);
         }
 
-        Vector3 vPos = m_Owner.transform.position;
-        vPos.x += dist;
-        m_Owner.transform.position = vPos;
-
-        m_Owner.PlayAnimation(aniType);
-        yield return new WaitForEndOfFrame();
-    }
+        m_Owner.ChangeState(EHeroBattleAction.HeroAction_Idle);
+    }    
 }

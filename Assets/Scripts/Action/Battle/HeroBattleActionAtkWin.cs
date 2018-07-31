@@ -7,6 +7,7 @@ public class HeroBattleActionAtkWin : HeroBattleAction
     public override void Initialize(Hero_Control owner, HeroBattleActionManager action_manager)
     {
         base.Initialize(owner, action_manager);
+        ReadCommend(EActionCommend.COMMEND_ATK_WIN);
     }
 
     public override void DoStart(byte[] data = null)
@@ -23,17 +24,5 @@ public class HeroBattleActionAtkWin : HeroBattleAction
         base.DoEnd(eNextAction);
 
         m_Owner.StopCoroutine(ActionProc());
-    }
-
-    public override IEnumerator ActionProc()
-    {
-        //yield return MoveForward(0.2f, 2, Actor.AniType.ANI_TRACE);
-
-        yield return CommendExcutor.Instance.Excute("AnimationDelay", 0.2f, Actor.AniType.ANI_TRACE);
-
-        //yield return MoveForward(0.1f, 1, Actor.AniType.ANI_ATK);
-        //yield return AnimationDeley(0.4f, Actor.AniType.ANI_ATK);
-
-        m_Owner.ChangeState(EHeroBattleAction.HeroAction_Idle);
-    }
+    }    
 }

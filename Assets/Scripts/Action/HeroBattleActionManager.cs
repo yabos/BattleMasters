@@ -114,4 +114,119 @@ public class HeroBattleActionManager
     {
         return m_Actions[(int)eAction];
     }
+    
+    public IEnumerator AnimationDelay(params object [] list)
+    {
+        float delay = System.Convert.ToSingle(list[0]);
+        string aniType = System.Convert.ToString(list[1]);
+
+        Actor.AniType eAniType = m_Owner.Actor.GetAniType(aniType);
+        m_Owner.PlayAnimation(eAniType);
+
+        yield return new WaitForSeconds(delay);
+    }
+
+    public IEnumerator MoveForward(params object[] list)
+    {
+        float duration = System.Convert.ToSingle(list[0]);
+        float dist = System.Convert.ToSingle(list[1]);
+        string aniType = System.Convert.ToString(list[2]);
+        Actor.AniType eAniType = m_Owner.Actor.GetAniType(aniType);
+
+        float ElapsedTime = 0;
+        float SumX = 0;
+        while (ElapsedTime < duration)
+        {
+            ElapsedTime += Time.deltaTime;
+            Vector3 vPos = m_Owner.transform.position;
+            float tickX = (Time.deltaTime / duration) * dist;
+            SumX += tickX;
+            if (SumX >= dist)
+            {
+                tickX = 0;
+            }
+
+            if (m_Owner.IsMyTeam == false)
+            {
+                tickX *= -1;
+            }
+
+            vPos.x += tickX;
+            m_Owner.transform.position = vPos;
+
+            m_Owner.PlayAnimation(eAniType);
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    public IEnumerator MoveForwardMoment(params object[] list)
+    {
+        float dist = System.Convert.ToSingle(list[0]);
+        string aniType = System.Convert.ToString(list[1]);
+        Actor.AniType eAniType = m_Owner.Actor.GetAniType(aniType);
+
+        if (m_Owner.IsMyTeam == false)
+        {
+            dist *= -1;
+        }
+
+        Vector3 vPos = m_Owner.transform.position;
+        vPos.x += dist;
+        m_Owner.transform.position = vPos;
+
+        m_Owner.PlayAnimation(eAniType);
+        yield return new WaitForEndOfFrame();
+    }
+
+    public IEnumerator MoveBackward(params object[] list)
+    {
+        float duration = System.Convert.ToSingle(list[0]);
+        float dist = System.Convert.ToSingle(list[1]);
+        string aniType = System.Convert.ToString(list[2]);
+        Actor.AniType eAniType = m_Owner.Actor.GetAniType(aniType);
+
+        float ElapsedTime = 0;
+        float SumX = 0;
+        while (ElapsedTime < duration)
+        {
+            ElapsedTime += Time.deltaTime;
+            Vector3 vPos = m_Owner.transform.position;
+            float tickX = (Time.deltaTime / duration) * dist;
+            SumX += tickX;
+            if (SumX >= dist)
+            {
+                tickX = 0;
+            }
+
+            if (m_Owner.IsMyTeam)
+            {
+                tickX *= -1;
+            }
+
+            vPos.x += tickX;
+            m_Owner.transform.position = vPos;
+
+            m_Owner.PlayAnimation(eAniType);
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    public IEnumerator MoveBackwardMoment(params object[] list)
+    {
+        float dist = System.Convert.ToSingle(list[0]);
+        string aniType = System.Convert.ToString(list[1]);
+        Actor.AniType eAniType = m_Owner.Actor.GetAniType(aniType);
+
+        if (m_Owner.IsMyTeam)
+        {
+            dist *= -1;
+        }
+
+        Vector3 vPos = m_Owner.transform.position;
+        vPos.x += dist;
+        m_Owner.transform.position = vPos;
+
+        m_Owner.PlayAnimation(eAniType);
+        yield return new WaitForEndOfFrame();
+    }
 }

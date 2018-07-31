@@ -28,7 +28,9 @@ public class UtilFunc
             hero.StResPath = tbHero.stResPath;
             hero.IsMyTeam = bMyTeam;
 
-			GameObject goRes = VResources.Load<GameObject> (hero.StResPath);
+            hero.SetActionCommend();
+
+            GameObject goRes = VResources.Load<GameObject> (hero.StResPath);
             if (goRes == null) return null;
 
             GameObject go = GameObject.Instantiate(goRes) as GameObject;

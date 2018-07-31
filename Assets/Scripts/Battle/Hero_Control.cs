@@ -11,10 +11,37 @@ public enum EAtionType
     ACTION_MAX
 }
 
+public enum EActionCommend
+{
+    COMMEND_ATK_WIN,
+    COMMEND_ATK_DEFEAT,
+    COMMEND_CNT_WIN,
+    COMMEND_CNT_DEFEAT,
+    COMMEND_FAKE_WIN,
+    COMMEND_FAKE_DEFEAT,
+    COMMEND_DRAW_ATK_DEFEAT,
+    COMMEND_DRAW_DEFEAT_ATK,
+    COMMEND_MAX,
+}
+
 public class Hero_Control : MonoBehaviour
 {
+    public string[] _ActionCommend = new string[] 
+    {
+        "_AtkWin",
+        "_AtkDefeat",
+        "_CntWin",
+        "_CntDefeat",
+        "_FakeWin",
+        "_FakeDefeat",
+        "_DrawAtkDefeat",
+        "_DrawDefeatAtk",
+    };
+
     HeroBattleActionManager mActionManager;
-    
+    HeroBattleActionCommendExcutor mActionCommendExcutor;
+    Dictionary<EActionCommend, TextAsset> mActionCommend = new Dictionary<EActionCommend, TextAsset>();
+
     public Guid HeroUid { get; set; }
     public int HeroNo { get; set; } 
     public int HP { get; set; }
@@ -42,6 +69,9 @@ public class Hero_Control : MonoBehaviour
 
         mActionManager = new HeroBattleActionManager();
         mActionManager.Initialize(this);
+
+        mActionCommendExcutor = new HeroBattleActionCommendExcutor();
+        mActionCommendExcutor.Initialize(mActionManager);
 
         Transform tObj = transform.Find("Obj");
         if (tObj != null)
@@ -110,11 +140,45 @@ public class Hero_Control : MonoBehaviour
         }
     }
 
+    // 실제 전투 행동
     public void ExcuteAction(EHeroBattleAction heroAction, Vector3 vPos)
     {
         SetPosition(vPos);
         SetScale(new Vector3(Define.ACTION_START_SCALE, Define.ACTION_START_SCALE, Define.ACTION_START_SCALE));
         ChangeState(heroAction);
+    }
+
+    // 전투 애니메이션 읽어와서 실행
+    public IEnumerator BattleActionCommendExcution(string key, params object [] list)
+    {
+        yield return mActionCommendExcutor.Excute(key, list);
+    }
+
+    public void SetActionCommend()
+    {
+        for (int i = 0; i < _ActionCommend.Length; ++i)
+        {
+            string resPath = ResourcePath.CommendPath + HeroNo + "/" + HeroNo + _ActionCommend[i];
+            var excution = VResources.Load<TextAsset>(resPath);
+            if (excution != null)
+            {
+                mActionCommend.Add((EActionCommend)i, excution);                
+            }
+            else
+            {
+                Debug.LogError("Load Fail ActionTxt : " + HeroNo + _ActionCommend[i]);
+            }
+        }
+    }
+
+    public TextAsset GetActionCommend(EActionCommend actionCommend)
+    {
+        if (mActionCommend.ContainsKey(actionCommend))
+        {
+            return mActionCommend[actionCommend];
+        }
+
+        return null;
     }
 
     public void SetPosition(Vector3 vPos)

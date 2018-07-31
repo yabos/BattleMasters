@@ -7,6 +7,7 @@ public class HeroBattleActionAtkDefeat : HeroBattleAction
     public override void Initialize(Hero_Control owner, HeroBattleActionManager action_manager)
     {
         base.Initialize(owner, action_manager);
+        ReadCommend(EActionCommend.COMMEND_ATK_DEFEAT);
     }
 
     public override void DoStart(byte[] data = null)
@@ -23,17 +24,5 @@ public class HeroBattleActionAtkDefeat : HeroBattleAction
         base.DoEnd(eNextAction);
 
         m_Owner.StopCoroutine(ActionProc());
-    }
-
-    public override IEnumerator ActionProc()
-    {
-        // 튕겨내지는 모션
-        yield return AnimationDeley(0.1f, Actor.AniType.ANI_BREAK);
-        yield return MoveBackward(0.4f, Define.MOVE_BACK_BREAK_SPEED_X, Actor.AniType.ANI_BREAK);
-
-        // 처맞는 모션
-        yield return MoveBackward(0.5f, Define.MOVE_BACK_DEFEAT_SPEED_X, Actor.AniType.ANI_DEFEAT);
-
-        m_Owner.ChangeState(EHeroBattleAction.HeroAction_Idle);
     }
 }

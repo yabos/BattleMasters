@@ -52,4 +52,5 @@ public class ResourcePath
 {
     public static readonly string BattleRootPath = "Battle/Prefabs/Battle_Root";
     public static readonly string MapLoadPath = "Map/";
+    public static readonly string CommendPath = "Battle/CommendExcute/";
 }

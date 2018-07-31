@@ -1,5 +1,5 @@
 HeroNo,	HP,		Atk,	Speed,	ResPath
-1001,	500,	1000,	500,	Heroes/Prefabs/Yu
+1001,	500,	1000,	800,	Heroes/Prefabs/Yu
 1002,	550,	12,		600,	Heroes/Prefabs/La
 1003,	550,	12,		700,	Heroes/Prefabs/Mi
 1004,	550,	12,		400,	Heroes/Prefabs/Ce

@@ -7,6 +7,7 @@ public class HeroBattleActionFakeWin : HeroBattleAction
     public override void Initialize(Hero_Control owner, HeroBattleActionManager action_manager)
     {
         base.Initialize(owner, action_manager);
+        ReadCommend(EActionCommend.COMMEND_FAKE_WIN);
     }
 
     public override void DoStart(byte[] data = null)
@@ -23,15 +24,5 @@ public class HeroBattleActionFakeWin : HeroBattleAction
         base.DoEnd(eNextAction);
 
         m_Owner.StopCoroutine(ActionProc());
-    }
-
-    public override IEnumerator ActionProc()
-    {
-        yield return MoveBackward(0.8f, Define.MOVE_BACK_FAKE_SPEED_X, Actor.AniType.ANI_FAKE);
-
-        yield return MoveForward(0.1f, Define.MOVE_ATK_SPEED_X, Actor.AniType.ANI_ATK);
-        yield return AnimationDeley(0.4f, Actor.AniType.ANI_ATK);
-
-        m_Owner.ChangeState(EHeroBattleAction.HeroAction_Idle);
     }
 }

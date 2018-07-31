@@ -74,4 +74,18 @@ public class Actor : MonoBehaviour
     {
         Anim.speed = fSeepd;
     }
+
+    public AniType GetAniType(string aniType)
+    {
+        for (int i = 0; i < ClipName.Length; ++i)
+        {
+            if (ClipName[i].Equals(aniType))
+            {
+                return (AniType)i;
+            }
+        }
+
+        Debug.LogError("Return Failed AniType!!");
+        return AniType.ANI_MAX;
+    }
 }
