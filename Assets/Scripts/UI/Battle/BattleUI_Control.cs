@@ -6,7 +6,8 @@ using System.Linq;
 public class BattleUI_Control : BaseUI
 {
 	Transform BattleLoading = null;
-    Transform HeroHp = null;    
+    Transform HeroHp = null;
+    Transform DamageRoot = null;
 
     BattleProfile[] Profiles = new BattleProfile[2];
     GameObject GoTurnTimer;
@@ -16,7 +17,9 @@ public class BattleUI_Control : BaseUI
 	void Awake ()
     {
         HeroHp = transform.Find("Anchor/HeroHP");
-		BattleLoading = transform.Find ("Anchor/Loading");        
+		BattleLoading = transform.Find ("Anchor/Loading");
+        DamageRoot = transform.Find("Anchor/DamageRoot");
+
         var Tran = transform.Find("Anchor_BL/Profile");
         if (Tran != null)
         {
@@ -259,6 +262,28 @@ public class BattleUI_Control : BaseUI
         else
         {
             Profiles[1].gameObject.SetActive(active);
+        }
+    }
+
+    public void CreateDamage(int iDamage, Vector3 vPos, bool bMyTeam)
+    {
+        GameObject goDamageRes = VResources.Load<GameObject>("UI/Common/Prefabs/HeroDamage");
+        if (goDamageRes != null)
+        {
+            GameObject goDamage = Instantiate(goDamageRes) as GameObject;
+            if (goDamage != null)
+            {
+                goDamage.transform.parent = DamageRoot;
+
+                goDamage.transform.position = new Vector3(vPos.x, vPos.y, 0);
+                goDamage.transform.localRotation = Quaternion.identity;
+                goDamage.transform.localScale = Vector3.one;
+                Damage hd = goDamage.GetComponent<Damage>();
+                if (hd != null)
+                {
+                    hd.m_LabelDamage.text = iDamage.ToString();                   
+                }
+            }
         }
     }
 }

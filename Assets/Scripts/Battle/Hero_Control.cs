@@ -53,7 +53,7 @@ public class Hero_Control : MonoBehaviour
 
     public bool IsMyTeam { get; set; }      
     public bool IsMyTurn { get; set; }
-    public bool IsActiveMoving { get; set; }   //  현재 치고받는 엑션을 하고있는지 여부
+    public bool IsAction { get; set; }   //  현재 치고받는 엑션을 하고있는지 여부
     public bool IsDie { get; set; }
 
     public EAtionType ActionType { get; set; }    
@@ -61,7 +61,9 @@ public class Hero_Control : MonoBehaviour
     public Actor Actor { get; set; }
     public Outline Outline { get; set; }
     public Transform Ef_HP { get; set; }
+    public Transform Ef_Effect { get; set; }
     public Vector3 InitPos { get; set; }
+    public Hero_Control TargetHero { get; set; }
 
     public void InitHero(int sortingOrder)
     {
@@ -84,6 +86,12 @@ public class Hero_Control : MonoBehaviour
             if (Ef_HP == null)
             {
                 Debug.LogError("Not Find ef_HP!");
+            }
+
+            Ef_Effect = tObj.Find("ef_Center");
+            if (Ef_Effect == null)
+            {
+                Debug.LogError("Not Find Ef_Effect!");
             }
         }
     }
@@ -124,7 +132,7 @@ public class Hero_Control : MonoBehaviour
         }
     }    
 
-    void DamagedHero(Hero_Control atthero)
+    public void BeHit(Hero_Control atthero)
     {
         // if(immune) return false
 
@@ -132,20 +140,29 @@ public class Hero_Control : MonoBehaviour
         BattleUI_Control bcUI = BattleManager.Instance.BattleUI;
         if (bcUI == null) return;
 
-        float amount = HP / MaxHP;
+        float amount = (float)HP / MaxHP;
         bcUI.UpdateHPGauge(HeroUid, amount);
+        bcUI.CreateDamage(atthero.Atk, Ef_HP.position, IsMyTeam);
 
         // Effect
-        GameObject goEfc = EffectManager.Instance.GetEffect(EffectType.Effect_Blade);
-        if (goEfc != null)
-        {
-            Transform tCen = HeroObj.transform.Find("ef_Center");
-            if (tCen != null)
-            {
-                //Transform tEffect = BattleManager.Instance.transform.Find("Effect");
+        CreateDamageEfc(atthero.HeroNo);
 
+        if (HP <= 0)
+        {
+            IsDie = true;
+        }
+    }
+
+    void CreateDamageEfc(int heroNo)
+    {
+        TB_Hero tbHero;
+        if (TBManager.Instance.cont_Hero.TryGetValue(heroNo, out tbHero))
+        {
+            var goEfc = Instantiate(EffectManager.Instance.GetEffect(tbHero.mBaseAtkEfc)) as GameObject;
+            if (goEfc != null)
+            {
                 //goEfc.transform.parent = tEffect;
-                goEfc.transform.position = tCen.position;
+                goEfc.transform.position = Ef_Effect.position;
 
                 ParticleSystem[] pcs = goEfc.GetComponentsInChildren<ParticleSystem>();
                 if (pcs != null)
@@ -162,20 +179,13 @@ public class Hero_Control : MonoBehaviour
                 }
             }
         }
-
-        if (HP <= 0)
-        {
-            ChangeState(EHeroBattleAction.HeroAction_BattleDie);
-        }
-        else
-        {
-
-        }
     }
 
     // 실제 전투 행동
-    public void ExcuteAction(EHeroBattleAction heroAction, Vector3 vPos)
+    public void ExcuteAction(EHeroBattleAction heroAction, Vector3 vPos, Hero_Control targetHero)
     {
+        this.TargetHero = targetHero;
+
         SetPosition(vPos);
         SetScale(new Vector3(Define.ACTION_START_SCALE, Define.ACTION_START_SCALE, Define.ACTION_START_SCALE));
         ChangeState(heroAction);
@@ -262,5 +272,18 @@ public class Hero_Control : MonoBehaviour
     {
         InitHeroTweenPosition(Define.ACTION_INIT_TIME);
         InitHeroTweenScale(Define.ACTION_INIT_TIME);
+    }
+
+    public void HeroDie()
+    {
+        BattleUI_Control bcUI = BattleManager.Instance.BattleUI;
+        if (bcUI == null) return;
+        {
+            bcUI.DestroyHPGauge(HeroUid);
+            BattleManager.Instance.TurnUI.DestroyTurnIcon(HeroNo);
+            //GameMain.Instance().BattleControl.CheckEndBattle();
+        }
+
+        HeroObj.SetActive(false);        
     }
 }

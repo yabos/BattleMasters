@@ -21,7 +21,7 @@ public class Outline : MonoBehaviour
 	public bool eraseRenderer;
 	public bool ShowOutline = true;
 	public bool OutlineAllChild = true;
-	private bool IsChild = false;
+	//private bool IsChild = false;
 
 	[HideInInspector]
 	public int originalLayer;

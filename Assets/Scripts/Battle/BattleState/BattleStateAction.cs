@@ -39,7 +39,8 @@ public class BattleStateAction : BattleState
     {
         TimeElapsed += fTimeDelta;
 
-        if (BattleManager.Instance.CheckActiveMoving() == false)
+        // 모두 다 행동을 끝냈으면 Ready 상태로 전이
+        if (BattleManager.Instance.CheckAction() == false)
         { 
             m_StateManager.ChangeState(EBattleState.BattleState_Ready);
         }

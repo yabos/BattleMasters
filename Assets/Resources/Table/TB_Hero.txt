@@ -1,9 +1,9 @@
-HeroNo,	HP,		Atk,	Speed,	ResPath
-1001,	500,	1000,	800,	Heroes/Prefabs/Yu
-1002,	550,	12,		600,	Heroes/Prefabs/La
-1003,	550,	12,		700,	Heroes/Prefabs/Mi
-1004,	550,	12,		400,	Heroes/Prefabs/Ce
-2001,	600,	20,		150,	Heroes/Prefabs/Ag
-2002,	600,	20,		250,		Heroes/Prefabs/Ak
-2003,	600,	20,		350,		Heroes/Prefabs/El
-2004,	400,	15,		250,		Heroes/Prefabs/Bc
+HeroNo,	HP,		Atk,	Speed,	BaseAtkEfc,	BaseAtkSound,		ResPath			
+1001,	500,	10,		800,	1,			Blow1,				Heroes/Prefabs/Yu
+1002,	550,	12,		600,	2,			Blow1,				Heroes/Prefabs/La	
+1003,	550,	12,		700,	3,			Blow1,				Heroes/Prefabs/Mi	
+1004,	550,	12,		400,	1,			Blow1,				Heroes/Prefabs/Ce	
+2001,	600,	20,		150,	2,			Blow2,				Heroes/Prefabs/Ag	
+2002,	600,	20,		250,	4,			Blow2,				Heroes/Prefabs/Ak	
+2003,	600,	20,		350,	5,			Blow2,				Heroes/Prefabs/El	
+2004,	400,	15,		250,	1,			Blow2,				Heroes/Prefabs/Bc	

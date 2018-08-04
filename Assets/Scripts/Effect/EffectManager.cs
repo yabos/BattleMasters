@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public enum EffectType
-{
+{    
     Effect_Blade,
     Effect_Blow1,
     Effect_Blow2,

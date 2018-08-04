@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class TurnUI_Control : MonoBehaviour
 {
-    private List<TurnIcon> listTurnIcons = new List<TurnIcon>();
     public List<TurnIcon> ListTurnIcons
     {
-        get { return listTurnIcons; }
+        get;
+        private set;
     }
 
     [System.NonSerialized]
@@ -30,6 +30,8 @@ public class TurnUI_Control : MonoBehaviour
 
     public void CreateTurnIcon()
     {
+        ListTurnIcons = new List<TurnIcon>();
+
         CreateTurnIcon(BattleManager.Instance.ListMyHeroes);
         CreateTurnIcon(BattleManager.Instance.ListEnemyHeroes);
     }
@@ -127,5 +129,15 @@ public class TurnUI_Control : MonoBehaviour
         byte[] data = new byte[128];
         System.Buffer.BlockCopy(System.BitConverter.GetBytes(heroNo), 0, data, place, sizeof(int));
         BattleManager.Instance.BattleStateManager.ChangeState(EBattleState.BattleState_Normal, data);
+    }
+
+    public void DestroyTurnIcon(int heroNo)
+    {
+        var turnIcon = ListTurnIcons.Find(x => x.HeroNo == heroNo);
+        if (turnIcon != null)
+        {
+            NGUITools.Destroy(turnIcon.gameObject);
+            ListTurnIcons.Remove(turnIcon);
+        }        
     }
 }

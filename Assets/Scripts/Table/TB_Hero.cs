@@ -8,6 +8,13 @@ public class TB_Hero
     public int mAtk;
     public int mDef;
     public int mSpeed;
+    public EffectType mBaseAtkEfc;
+    public string mBaseAtkSound;
 
-    public string stResPath;
+    public string mResPath;
+
+    public EffectType GetEffectType(int iType)
+    {
+        return (EffectType)(iType + 1);
+    }
 }

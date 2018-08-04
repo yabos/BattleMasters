@@ -162,25 +162,25 @@ public class BattleManager : MonoBehaviour
 
     void ExcuteHeroAction()
     {
-        var MyTeamHero = GetHeroControl(ActiveTurnHeroNo);
-        if (MyTeamHero != null)
+        var ActiveHero = GetHeroControl(ActiveTurnHeroNo);
+        if (ActiveHero != null)
         {
-            Debug.Log("ActiveHero Action : " + MyTeamHero.ActionType);
+            Debug.Log("ActiveHero Action : " + ActiveHero.ActionType);
         }
 
-        var EnemyHero = GetHeroControl(ActiveTargetHeroNo);
-        if (EnemyHero != null)
+        var TargetHero = GetHeroControl(ActiveTargetHeroNo);
+        if (TargetHero != null)
         {
-            Debug.Log("TargetHero Action : " + EnemyHero.ActionType);
+            Debug.Log("TargetHero Action : " + TargetHero.ActionType);
         }
 
-        EHeroBattleAction myHeroAction = ResultBattleAction(MyTeamHero, EnemyHero);
-        Vector3 vPos = Battleground.GetTeamPos(myHeroAction, MyTeamHero.IsMyTeam);
-        MyTeamHero.ExcuteAction(myHeroAction, vPos);        
+        EHeroBattleAction ActiveAction = ResultBattleAction(ActiveHero, TargetHero);
+        Vector3 vPos = Battleground.GetTeamPos(ActiveAction, ActiveHero.IsMyTeam);
+        ActiveHero.ExcuteAction(ActiveAction, vPos, TargetHero);        
 
-        EHeroBattleAction enemyHeroAction = ResultBattleAction(EnemyHero, MyTeamHero);
-        vPos = Battleground.GetTeamPos(enemyHeroAction, EnemyHero.IsMyTeam);
-        EnemyHero.ExcuteAction(enemyHeroAction, vPos);
+        EHeroBattleAction TargetHeroAction = ResultBattleAction(TargetHero, ActiveHero);
+        vPos = Battleground.GetTeamPos(TargetHeroAction, TargetHero.IsMyTeam);
+        TargetHero.ExcuteAction(TargetHeroAction, vPos, ActiveHero);
     }
     
     EHeroBattleAction ResultBattleAction(Hero_Control mine, Hero_Control yours)
@@ -296,31 +296,31 @@ public class BattleManager : MonoBehaviour
         Blur.SetActive(active);
     }
 
-    public bool CheckActiveMoving()
+    public bool CheckAction()
     {
-        bool myHeroMoving = false;
+        bool myHeroAction = false;
         foreach (var elem in mListMyHeroes)
         {
             if (elem.IsDie) continue;
 
-            if (elem.IsActiveMoving)
+            if (elem.IsAction)
             {
-                myHeroMoving = true;
+                myHeroAction = true;
             }
         }
 
-        bool enemyHeroMoving = false;
+        bool enemyHeroAction = false;
         foreach (var elem in mListEnemyHeroes)
         {
             if (elem.IsDie) continue;
 
-            if (elem.IsActiveMoving)
+            if (elem.IsAction)
             {
-                enemyHeroMoving = true;
+                enemyHeroAction = true;
             }
         }
 
-        return myHeroMoving || enemyHeroMoving;
+        return myHeroAction || enemyHeroAction;
     }
 
     public bool GetActiveHeroTeam()
@@ -350,5 +350,18 @@ public class BattleManager : MonoBehaviour
         }
 
         return randomHero.HeroNo;
-    }    
+    }
+
+    public bool IsMyTeamAllDie()
+    {
+        for (int i = 0; i < mListMyHeroes.Count; ++i)
+        {
+            if (mListMyHeroes[i].IsDie == false)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

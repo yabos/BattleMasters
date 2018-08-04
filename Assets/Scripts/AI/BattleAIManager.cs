@@ -50,6 +50,14 @@ public class BattleAIManager
                     // 느낌 주기 위해서 3초 이후 엑션을 실행한다.
                     if (TimeElapsed >= 3)
                     {
+                        // 우리팀 다 죽었을 경우 AI 안돈다.
+                        if (Owner.IsMyTeamAllDie())
+                        {
+                            CurAI = eAI_Proc.AI_Action;
+                            TimeElapsed = 0;
+                            return;
+                        }
+
                         // 살아있는 상대방 적 1인 랜덤으로 선택 해줌.
                         int targetHeroNo = Owner.GetRandomHeroTeam();
                         Owner.ActiveTargetHeroNo = targetHeroNo;

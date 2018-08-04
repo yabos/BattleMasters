@@ -25,7 +25,7 @@ public class UtilFunc
             hero.Atk = tbHero.mAtk + Mathf.CeilToInt(((iLv - 1) * (tbHero.mAtk * 0.1f)));
             hero.Def = tbHero.mDef + Mathf.CeilToInt(((iLv - 1) * (tbHero.mDef * 0.1f)));
             hero.Speed = tbHero.mSpeed;
-            hero.StResPath = tbHero.stResPath;
+            hero.StResPath = tbHero.mResPath;
             hero.IsMyTeam = bMyTeam;
 
             hero.SetActionCommend();

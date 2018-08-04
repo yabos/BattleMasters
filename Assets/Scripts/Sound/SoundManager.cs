@@ -120,7 +120,7 @@ public class SoundManager : MonoBehaviour
         {
             return;
         }
-        GameObject go = GameObject.Instantiate(audioPrefab) as GameObject;
+        GameObject go = Instantiate(audioPrefab) as GameObject;
         go.transform.parent = this.transform;
         Audio a = go.GetComponent<Audio>();
         a.PlaySoundOnce(audioClips[name]);        

@@ -25,7 +25,7 @@ public class HeroBattleAction
     {
         if (IsMovingAction(m_ActionManager.GetCurrentAction()))
         {
-            m_Owner.IsActiveMoving = true;
+            m_Owner.IsAction = true;
         }
     }
 
@@ -33,7 +33,13 @@ public class HeroBattleAction
     {
         if (IsMovingAction(m_ActionManager.GetCurrentAction()))
         {
-            m_Owner.IsActiveMoving = false;
+            m_Owner.IsAction = false;
+        }
+
+        // idle Action을 제외하고 모든 행동 끝에는 targetHero를 초기화 시킨다.
+        if (m_ActionManager.GetCurrentAction() != EHeroBattleAction.HeroAction_Idle)
+        {
+            m_Owner.TargetHero = null;
         }
     }
 
@@ -112,6 +118,13 @@ public class HeroBattleAction
             yield return m_Owner.BattleActionCommendExcution(prams[0], list);
         }
 
-        m_Owner.ChangeState(EHeroBattleAction.HeroAction_Idle);
+        if (m_Owner.IsDie)
+        {
+            m_Owner.ChangeState(EHeroBattleAction.HeroAction_BattleDie);
+        }
+        else
+        {
+            m_Owner.ChangeState(EHeroBattleAction.HeroAction_Idle);
+        }
     }    
 }
