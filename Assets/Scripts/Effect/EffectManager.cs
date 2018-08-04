@@ -2,6 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 
+public enum EffectType
+{
+    Effect_Blade,
+    Effect_Blow1,
+    Effect_Blow2,
+    Effect_Blow3,
+    Effect_Blow4,
+}
+
 public class EffectManager : MonoBehaviour
 {
     private static EffectManager _instance;
@@ -22,32 +31,42 @@ public class EffectManager : MonoBehaviour
             return _instance;
         }
     }
+    
+    string[] effectName =
+    {
+        "Blade",
+        "Blow1",
+        "Blow2",
+        "Blow3",
+        "Blow4",
+    };
 
-    private Dictionary<string, GameObject> mDicEffectPool = new Dictionary<string, GameObject>();
+    private Dictionary<EffectType, GameObject> mDicEffectPool = new Dictionary<EffectType, GameObject>();
     
     public void PreLoadEffect()
     {
-        AddEffectPool("Effect/Hero/", "Blade");
-        AddEffectPool("Effect/Hero/", "Blow1");
-        AddEffectPool("Effect/Hero/", "Blow2");
-        AddEffectPool("Effect/Hero/", "Blow3");
-        AddEffectPool("Effect/Hero/", "Blow4");
+        AddEffectPool(EffectType.Effect_Blade);
+        AddEffectPool(EffectType.Effect_Blow1);
+        AddEffectPool(EffectType.Effect_Blow2);
+        AddEffectPool(EffectType.Effect_Blow3);
+        AddEffectPool(EffectType.Effect_Blow4);
     }
 
-    void AddEffectPool(string path, string name)
+    void AddEffectPool(EffectType type)
     {
-        GameObject efc = VResources.Load<GameObject>(path + name);
+        string path = "Effect/Hero/";
+        GameObject efc = VResources.Load<GameObject>(path + effectName[(int)type]);
         if (efc != null)
         {
-            mDicEffectPool.Add(name, efc);
+            mDicEffectPool.Add(type, efc);
         }
     }
 
-    public GameObject GetEffect(string name)
+    public GameObject GetEffect(EffectType type)
     {
-        if (mDicEffectPool.ContainsKey(name))
+        if (mDicEffectPool.ContainsKey(type))
         {
-            return mDicEffectPool[name];
+            return mDicEffectPool[type];
         }
         else
         {

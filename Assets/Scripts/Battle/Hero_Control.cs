@@ -126,17 +126,50 @@ public class Hero_Control : MonoBehaviour
 
     void DamagedHero(Hero_Control atthero)
     {
+        // if(immune) return false
+
         HP -= atthero.Atk;
         BattleUI_Control bcUI = BattleManager.Instance.BattleUI;
-        if (bcUI != null)
-        {
-            float amount = HP / MaxHP;
-            bcUI.UpdateHPGauge(HeroUid, amount);
+        if (bcUI == null) return;
 
-            if (HP <= 0)
+        float amount = HP / MaxHP;
+        bcUI.UpdateHPGauge(HeroUid, amount);
+
+        // Effect
+        GameObject goEfc = EffectManager.Instance.GetEffect(EffectType.Effect_Blade);
+        if (goEfc != null)
+        {
+            Transform tCen = HeroObj.transform.Find("ef_Center");
+            if (tCen != null)
             {
-                ChangeState(EHeroBattleAction.HeroAction_BattleDie);
+                //Transform tEffect = BattleManager.Instance.transform.Find("Effect");
+
+                //goEfc.transform.parent = tEffect;
+                goEfc.transform.position = tCen.position;
+
+                ParticleSystem[] pcs = goEfc.GetComponentsInChildren<ParticleSystem>();
+                if (pcs != null)
+                {
+                    for (int i = 0; i < pcs.Length; ++i)
+                    {
+                        Renderer render = pcs[i].GetComponent<Renderer>();
+                        if (render != null)
+                        {
+                            render.sortingOrder = 1000;
+                            render.sortingLayerName = "Hero";
+                        }
+                    }
+                }
             }
+        }
+
+        if (HP <= 0)
+        {
+            ChangeState(EHeroBattleAction.HeroAction_BattleDie);
+        }
+        else
+        {
+
         }
     }
 
