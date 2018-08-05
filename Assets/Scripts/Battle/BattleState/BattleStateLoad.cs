@@ -13,6 +13,8 @@ public class BattleStateLoad : BattleState
 
     public override void DoStart(byte[] data = null)
     {
+        base.DoStart();
+
         LoadBattleHUD();
         LoadBattleground(10101);
         LoadBattleHero();

@@ -13,6 +13,8 @@ public class BattleStateNormal : BattleState
 
     public override void DoStart(byte[] data = null)
     {
+        base.DoStart();
+
         int place = 0;
 
         int heroNo = System.BitConverter.ToInt32(data, place);

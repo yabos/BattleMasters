@@ -80,8 +80,15 @@ public class BattleManager : MonoBehaviour
         get; set;
     }
 
+    public Transform EffectRoot
+    {
+        get; private set;
+    }
+
     void Awake()
     {
+        EffectRoot = BattleRoot.transform.Find("Effect");
+
         TBManager.Instance.LoadTableAll();
 
         if (BattleStateManager == null)
@@ -301,7 +308,7 @@ public class BattleManager : MonoBehaviour
         bool myHeroAction = false;
         foreach (var elem in mListMyHeroes)
         {
-            if (elem.IsDie) continue;
+            //if (elem.IsDie) continue;
 
             if (elem.IsAction)
             {
@@ -312,7 +319,7 @@ public class BattleManager : MonoBehaviour
         bool enemyHeroAction = false;
         foreach (var elem in mListEnemyHeroes)
         {
-            if (elem.IsDie) continue;
+            //if (elem.IsDie) continue;
 
             if (elem.IsAction)
             {
@@ -357,6 +364,19 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < mListMyHeroes.Count; ++i)
         {
             if (mListMyHeroes[i].IsDie == false)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public bool IsEnemyAllDie()
+    {
+        for (int i = 0; i < mListEnemyHeroes.Count; ++i)
+        {
+            if (mListEnemyHeroes[i].IsDie == false)
             {
                 return false;
             }

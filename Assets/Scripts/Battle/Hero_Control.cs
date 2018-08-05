@@ -161,7 +161,7 @@ public class Hero_Control : MonoBehaviour
             var goEfc = Instantiate(EffectManager.Instance.GetEffect(tbHero.mBaseAtkEfc)) as GameObject;
             if (goEfc != null)
             {
-                //goEfc.transform.parent = tEffect;
+                goEfc.transform.parent = BattleManager.Instance.EffectRoot;
                 goEfc.transform.position = Ef_Effect.position;
 
                 ParticleSystem[] pcs = goEfc.GetComponentsInChildren<ParticleSystem>();
@@ -176,6 +176,12 @@ public class Hero_Control : MonoBehaviour
                             render.sortingLayerName = "Hero";
                         }
                     }
+                }
+
+                var efcData = goEfc.GetComponent<EffectData>();
+                if (efcData != null)
+                {
+                    Destroy(goEfc, efcData.LifeTime);
                 }
             }
         }
@@ -281,9 +287,27 @@ public class Hero_Control : MonoBehaviour
         {
             bcUI.DestroyHPGauge(HeroUid);
             BattleManager.Instance.TurnUI.DestroyTurnIcon(HeroNo);
-            //GameMain.Instance().BattleControl.CheckEndBattle();
         }
 
-        HeroObj.SetActive(false);        
+        StartCoroutine(HeroDieAlphaFade(() => 
+        {
+            IsAction = false;
+        }));
+            
+    }
+
+    IEnumerator HeroDieAlphaFade(Action endFade)
+    {
+        float fAlpha = 1f;
+        while (fAlpha >= 0)
+        {
+            Actor.SR.color = new Color(1f, 1f, 1f, fAlpha);
+            fAlpha -= 0.1f;
+
+            yield return new WaitForSeconds(0.05f);
+        }
+
+        Actor.SR.color = new Color(1f, 1f, 1f, 0);
+        endFade();
     }
 }

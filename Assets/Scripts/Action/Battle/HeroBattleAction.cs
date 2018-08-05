@@ -31,7 +31,7 @@ public class HeroBattleAction
 
     public virtual void DoEnd(EHeroBattleAction eNextAction)
     {
-        if (IsMovingAction(m_ActionManager.GetCurrentAction()))
+        if (IsMovingAction(m_ActionManager.GetCurrentAction()) && eNextAction != EHeroBattleAction.HeroAction_BattleDie)
         {
             m_Owner.IsAction = false;
         }

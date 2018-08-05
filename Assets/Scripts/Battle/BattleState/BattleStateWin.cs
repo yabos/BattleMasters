@@ -4,5 +4,21 @@ using UnityEngine;
 
 public class BattleStateWin : BattleState
 {
-    
+    public override void Initialize(BattleManager owner, BattleStateManager state_manager)
+    {
+        base.Initialize(owner, state_manager);
+    }
+
+    public override void DoStart(byte[] data = null)
+    {
+        base.DoStart();
+
+        m_Owner.TurnUI.TurnPause = true;
+        m_Owner.ActiveOutline(false);
+    }
+
+    public override void DoEnd()
+    {
+        base.DoEnd();
+    }
 }

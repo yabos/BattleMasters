@@ -48,7 +48,7 @@ public class TurnUI_Control : MonoBehaviour
 
                 goIcon.transform.localPosition = new Vector3(Define.TURNICON_START_POS_X, 0, 0);
                 goIcon.transform.localRotation = Quaternion.identity;
-                goIcon.transform.localScale = new Vector3(6, 6, 0);
+                goIcon.transform.localScale = Vector3.one;
 
                 var icon = goIcon.GetComponent<TurnIcon>();
                 if (icon != null)

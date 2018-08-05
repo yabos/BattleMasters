@@ -13,6 +13,8 @@ public class BattleStateReady : BattleState
 
     public override void DoStart(byte[] data = null)
     {
+        base.DoStart();
+
         m_Owner.TurnUI.TurnPause = false;
 
         TimeElapsed = 0;

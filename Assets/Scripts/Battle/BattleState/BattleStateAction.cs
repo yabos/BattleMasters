@@ -13,6 +13,8 @@ public class BattleStateAction : BattleState
 
     public override void DoStart(byte[] data = null)
     {
+        base.DoStart();
+
         if (data != null)
         {
             int place = 0;
@@ -39,10 +41,21 @@ public class BattleStateAction : BattleState
     {
         TimeElapsed += fTimeDelta;
 
-        // 모두 다 행동을 끝냈으면 Ready 상태로 전이
+        // 행동중인 영웅이 없는지 체크
         if (BattleManager.Instance.CheckAction() == false)
-        { 
-            m_StateManager.ChangeState(EBattleState.BattleState_Ready);
+        {
+            if (BattleManager.Instance.IsMyTeamAllDie())
+            {
+                m_StateManager.ChangeState(EBattleState.BattleState_Lose);
+            }
+            else if (BattleManager.Instance.IsEnemyAllDie())
+            {
+                m_StateManager.ChangeState(EBattleState.BattleState_Win);
+            }
+            else
+            {
+                m_StateManager.ChangeState(EBattleState.BattleState_Ready);
+            }
         }
     }
 }

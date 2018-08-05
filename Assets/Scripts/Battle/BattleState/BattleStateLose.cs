@@ -4,5 +4,18 @@ using UnityEngine;
 
 public class BattleStateLose : BattleState
 {
+    public override void Initialize(BattleManager owner, BattleStateManager state_manager)
+    {
+        base.Initialize(owner, state_manager);
+    }
 
+    public override void DoStart(byte[] data = null)
+    {
+        base.DoStart();
+    }
+
+    public override void DoEnd()
+    {
+        base.DoEnd();
+    }
 }
