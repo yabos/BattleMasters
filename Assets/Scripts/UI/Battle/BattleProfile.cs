@@ -21,7 +21,8 @@ public class BattleProfile : MonoBehaviour
         if (heroCont.IsMyTeam == false && isActiveHero == false)
         {
             //mStatus.SetPos(heroCont.transform.position);
-            mTargetBtn.position = heroCont.transform.position;
+            Vector3 vScreenPos = Camera.main.WorldToScreenPoint(heroCont.transform.position);
+            mTargetBtn.position = UICamera.currentCamera.ScreenToWorldPoint(new Vector3(vScreenPos.x, vScreenPos.y, 0));
         }
     }
 

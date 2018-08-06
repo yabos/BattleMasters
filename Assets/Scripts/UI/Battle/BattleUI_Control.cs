@@ -117,7 +117,7 @@ public class BattleUI_Control : BaseUI
 
             goHP.transform.position = Vector3.zero;
             goHP.transform.rotation = Quaternion.identity;
-            goHP.transform.localScale = new Vector3(3,3,1);
+            goHP.transform.localScale = new Vector3(0.8f, 0.8f, 1);
 
             goHP.SetActive(true);
         }
@@ -154,7 +154,8 @@ public class BattleUI_Control : BaseUI
 
             if (tChild.name.Equals(uid.ToString()))
             {
-                tChild.position = tEf_HP.position;
+                Vector3 vScreenPos = Camera.main.WorldToScreenPoint(tEf_HP.position);
+                tChild.position = UICamera.currentCamera.ScreenToWorldPoint(new Vector3(vScreenPos.x, vScreenPos.y, 0));
             }
         }
     }
@@ -275,7 +276,9 @@ public class BattleUI_Control : BaseUI
             {
                 goDamage.transform.parent = DamageRoot;
 
-                goDamage.transform.position = new Vector3(vPos.x, vPos.y, 0);
+                Vector2 vScreenPos = Camera.main.WorldToScreenPoint(new Vector2(vPos.x, vPos.y));
+                goDamage.transform.position = UICamera.currentCamera.ScreenToWorldPoint(new Vector2(vScreenPos.x, vScreenPos.y));
+                goDamage.transform.localPosition = new Vector3(goDamage.transform.localPosition.x, goDamage.transform.localPosition.y, 0);
                 goDamage.transform.localRotation = Quaternion.identity;
                 goDamage.transform.localScale = Vector3.one;
                 Damage hd = goDamage.GetComponent<Damage>();

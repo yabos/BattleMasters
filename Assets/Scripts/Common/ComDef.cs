@@ -46,6 +46,9 @@ public class Define
 
     // Action End 되고 캐릭터가 제자리로 찾아가는 시간
     public static readonly float ACTION_INIT_TIME = 0.1f;
+
+    public static readonly string DEFAULT_LAYER = "Default";
+    public static readonly string BATTLE_ACTION_LAYER = "BattleAction";
 }
 
 public class ResourcePath

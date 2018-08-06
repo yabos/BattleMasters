@@ -14,7 +14,7 @@ public class HeroBattleActionFakeDefeat : HeroBattleAction
     {
         base.DoStart(data);
 
-        UtilFunc.ChangeLayersRecursively(m_Owner.transform, "UI");
+        UtilFunc.ChangeLayersRecursively(m_Owner.transform, Define.BATTLE_ACTION_LAYER);
 
         m_Owner.StartCoroutine(ActionProc());
     }

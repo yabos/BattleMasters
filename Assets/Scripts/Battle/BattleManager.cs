@@ -155,7 +155,7 @@ public class BattleManager : MonoBehaviour
             hero.InitHeroTween();
             hero.IsMyTurn = false;
 
-            UtilFunc.ChangeLayersRecursively(hero.transform, "Default");
+            UtilFunc.ChangeLayersRecursively(hero.transform, Define.DEFAULT_LAYER);
         }
 
         hero = GetHeroControl(ActiveTargetHeroNo);
@@ -163,7 +163,7 @@ public class BattleManager : MonoBehaviour
         {
             hero.InitHeroTween();
 
-            UtilFunc.ChangeLayersRecursively(hero.transform, "Default");
+            UtilFunc.ChangeLayersRecursively(hero.transform, Define.DEFAULT_LAYER);
         }
     }
 
