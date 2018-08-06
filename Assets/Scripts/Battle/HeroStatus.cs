@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HeroStatus : MonoBehaviour
 {
+    public UILabel mName;
     public UILabel mHP;
     public UILabel mSpeed;
     public UILabel mAtk;
@@ -15,6 +16,7 @@ public class HeroStatus : MonoBehaviour
 
     public void InitStatus(Hero_Control heroCont)
     {
+        mName.text = heroCont.HeroName;
         mHP.text = heroCont.HP + "/" + heroCont.MaxHP;
         mSpeed.text = heroCont.Speed.ToString();
         mAtk.text = heroCont.Atk.ToString();

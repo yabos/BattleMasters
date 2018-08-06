@@ -4,17 +4,12 @@ using System.Collections;
 public class TB_Hero 
 {
     public int mHeroNo;
+    public string mHeroName;
     public int mHP;
     public int mAtk;
     public int mDef;
     public int mSpeed;
-    public EffectType mBaseAtkEfc;
+    public string mBaseAtkEfc;
     public string mBaseAtkSound;
-
     public string mResPath;
-
-    public EffectType GetEffectType(int iType)
-    {
-        return (EffectType)(iType + 1);
-    }
 }

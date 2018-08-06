@@ -43,7 +43,8 @@ public class Hero_Control : MonoBehaviour
     Dictionary<EActionCommend, TextAsset> mActionCommend = new Dictionary<EActionCommend, TextAsset>();
 
     public Guid HeroUid { get; set; }
-    public int HeroNo { get; set; } 
+    public int HeroNo { get; set; }
+    public string HeroName { get; set; }
     public int HP { get; set; }
     public int MaxHP { get; set; }
     public int Atk { get; set; }
@@ -79,7 +80,11 @@ public class Hero_Control : MonoBehaviour
         if (tObj != null)
         {
             Actor = tObj.GetComponent<Actor>();
-            Actor.SR.sortingOrder = sortingOrder;
+            for (int i = 0; i < Actor.ListSR.Count; ++i)
+            {
+                Actor.ListSR[i].sortingOrder = sortingOrder + i;
+            }
+
             Outline = tObj.GetComponent<Outline>();
 
             Ef_HP = tObj.Find("ef_HP");
@@ -137,7 +142,7 @@ public class Hero_Control : MonoBehaviour
         // if(immune) return false
 
         HP -= atthero.Atk;
-        BattleUI_Control bcUI = BattleManager.Instance.BattleUI;
+        BattleUIManager bcUI = BattleManager.Instance.BattleUI;
         if (bcUI == null) return;
 
         float amount = (float)HP / MaxHP;
@@ -282,7 +287,7 @@ public class Hero_Control : MonoBehaviour
 
     public void HeroDie()
     {
-        BattleUI_Control bcUI = BattleManager.Instance.BattleUI;
+        BattleUIManager bcUI = BattleManager.Instance.BattleUI;
         if (bcUI == null) return;
         {
             bcUI.DestroyHPGauge(HeroUid);
@@ -301,13 +306,21 @@ public class Hero_Control : MonoBehaviour
         float fAlpha = 1f;
         while (fAlpha >= 0)
         {
-            Actor.SR.color = new Color(1f, 1f, 1f, fAlpha);
+            for (int i = 0; i < Actor.ListSR.Count; ++i)
+            {
+                Actor.ListSR[i].color = new Color(1f, 1f, 1f, fAlpha);
+            }
+
             fAlpha -= 0.1f;
 
             yield return new WaitForSeconds(0.05f);
         }
 
-        Actor.SR.color = new Color(1f, 1f, 1f, 0);
+        for (int i = 0; i < Actor.ListSR.Count; ++i)
+        {
+            Actor.ListSR[i].color = new Color(1f, 1f, 1f, 0);
+        }
+
         endFade();
     }
 }

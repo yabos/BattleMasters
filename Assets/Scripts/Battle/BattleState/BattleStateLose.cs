@@ -12,6 +12,10 @@ public class BattleStateLose : BattleState
     public override void DoStart(byte[] data = null)
     {
         base.DoStart();
+
+        m_Owner.TurnUI.TurnPause = true;
+        m_Owner.ActiveOutline(false);
+        m_Owner.BattleUI.ActiveUI(eBattleUI.Lose, true);
     }
 
     public override void DoEnd()

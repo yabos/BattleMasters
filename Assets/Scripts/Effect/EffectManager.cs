@@ -74,5 +74,18 @@ public class EffectManager : MonoBehaviour
         }
 
         return null;
-    }    
+    }
+
+    public GameObject GetEffect(string type)
+    {
+        for (int i = 0; i < effectName.Length; ++i)
+        {
+            if (effectName[i].Equals(type))
+            {
+                return GetEffect((EffectType)i);
+            }
+        }
+
+        return null;
+    }
 }

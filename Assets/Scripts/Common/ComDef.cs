@@ -54,6 +54,10 @@ public class Define
 public class ResourcePath
 {
     public static readonly string BattleRootPath = "Battle/Prefabs/Battle_Root";
+    public static readonly string BattleUIPath = "UI/Battle/Prefabs/BattleUI";
+    public static readonly string BattleUIWinPath = "UI/Battle/Prefabs/BattleWin";
+    public static readonly string BattleUILosePath = "UI/Battle/Prefabs/BattleLose";
     public static readonly string MapLoadPath = "Map/";
     public static readonly string CommendPath = "Battle/CommendExcute/";
+    public static readonly string TurnIconPath = "UI/Battle/Prefabs/TurnIcon";
 }

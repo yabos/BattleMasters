@@ -39,7 +39,7 @@ public class BattleStateLoad : BattleState
 
     public void LoadBattleHUD()
     {
-        GameObject goUI = VResources.Load<GameObject>("UI/Battle/BattleUI");
+        GameObject goUI = VResources.Load<GameObject>(ResourcePath.BattleUIPath);
         if (goUI != null)
         {
             GameObject uiRoot = Object.Instantiate(goUI) as GameObject;
@@ -52,7 +52,7 @@ public class BattleStateLoad : BattleState
                 uiRoot.transform.rotation = Quaternion.identity;
                 uiRoot.transform.localScale = Vector3.one;
 
-                m_Owner.BattleUI = uiRoot.GetComponent<BattleUI_Control>();
+                m_Owner.BattleUI = uiRoot.GetComponent<BattleUIManager>();
                 m_Owner.TurnUI = uiRoot.GetComponentInChildren<TurnUI_Control>();
             }
         }
@@ -100,7 +100,7 @@ public class BattleStateLoad : BattleState
                         hero.transform.localScale = Vector3.one;
                     }
 
-                    hero.InitHero(i + 1);
+                    hero.InitHero((i + 1)* 10);
                     m_Owner.ListMyHeroes.Add(hero);
                 }
             }
@@ -125,7 +125,7 @@ public class BattleStateLoad : BattleState
                         hero.transform.localScale = Vector3.one;
                     }
 
-                    hero.InitHero(i + 1);
+                    hero.InitHero((i + 1)* 10);
                     m_Owner.ListEnemyHeroes.Add(hero);
                 }
             }

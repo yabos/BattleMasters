@@ -20,6 +20,7 @@ public class UtilFunc
         {
             hero.HeroUid = uid;
             hero.HeroNo = iHeroNo;
+            hero.HeroName = tbHero.mHeroName;
             hero.HP = tbHero.mHP + Mathf.CeilToInt(((iLv - 1) * (tbHero.mHP * 0.1f)));
             hero.MaxHP = hero.HP;
             hero.Atk = tbHero.mAtk + Mathf.CeilToInt(((iLv - 1) * (tbHero.mAtk * 0.1f)));

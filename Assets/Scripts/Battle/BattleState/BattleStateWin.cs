@@ -15,6 +15,7 @@ public class BattleStateWin : BattleState
 
         m_Owner.TurnUI.TurnPause = true;
         m_Owner.ActiveOutline(false);
+        m_Owner.BattleUI.ActiveUI(eBattleUI.Win, true);
     }
 
     public override void DoEnd()

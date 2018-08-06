@@ -3,7 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class BattleUI_Control : BaseUI
+public enum eBattleUI
+{
+    Win,
+    Lose,
+    Max
+}
+
+public class BattleUIManager : BaseUIManager
 {
 	Transform BattleLoading = null;
     Transform HeroHp = null;
@@ -12,6 +19,8 @@ public class BattleUI_Control : BaseUI
     BattleProfile[] Profiles = new BattleProfile[2];
     GameObject GoTurnTimer;
     TurnTimer TurnTime;
+
+    Dictionary<eBattleUI, BaseUI> DicBattleUI = new Dictionary<eBattleUI, BaseUI>();
 
 	// Use this for initialization
 	void Awake ()
@@ -36,6 +45,52 @@ public class BattleUI_Control : BaseUI
         if (GoTurnTimer != null)
         {
             TurnTime = GoTurnTimer.GetComponent<TurnTimer>();
+        }
+
+        SetBattleUI();
+    }
+
+    void SetBattleUI()
+    {
+        AddBattleUI(eBattleUI.Win, ResourcePath.BattleUIWinPath);
+        AddBattleUI(eBattleUI.Lose, ResourcePath.BattleUILosePath);
+    }
+
+    void AddBattleUI(eBattleUI type, string Path)
+    {
+        GameObject goUI = VResources.Load<GameObject>(Path);
+        if (goUI != null)
+        {
+            GameObject uiRoot = Instantiate(goUI) as GameObject;
+            if (uiRoot != null)
+            {
+                uiRoot.transform.name = uiRoot.name;
+                uiRoot.transform.parent = GameObject.FindGameObjectWithTag("UICamera").transform;
+
+                uiRoot.transform.localPosition = Vector3.zero;
+                uiRoot.transform.localRotation = Quaternion.identity;
+                uiRoot.transform.localScale = Vector3.one;
+
+                var baseUI = uiRoot.GetComponent<BaseUI>();
+                DicBattleUI.Add(type, baseUI);
+
+                uiRoot.SetActive(false);
+            }
+        }
+    }
+
+    public void ActiveUI(eBattleUI type, bool active)
+    {
+        if (DicBattleUI.ContainsKey(type))
+        {
+            if (DicBattleUI[type].gameObject.activeSelf != active)
+            {
+                DicBattleUI[type].gameObject.SetActive(active);
+            }
+        }
+        else
+        {
+            Debug.LogError("Load Failed UI : " + type.ToString());
         }
     }
 

@@ -49,12 +49,12 @@ public class TBManager : MonoBehaviour
             TB_Hero tbHero = new TB_Hero();
 
             tbHero.mHeroNo = st.GetValueAsInt(x, "HeroNo");
+            tbHero.mHeroName = st.GetValue(x, "Name");
             tbHero.mHP = st.GetValueAsInt(x, "HP");
             tbHero.mAtk = st.GetValueAsInt(x, "Atk");
             tbHero.mSpeed = st.GetValueAsInt(x, "Speed");
             //tbHero.mSpeed = (float)iSpeed * 0.001f;
-            int iEfcType = st.GetValueAsInt(x, "BaseAtkEfc");            
-            tbHero.mBaseAtkEfc = tbHero.GetEffectType(iEfcType);
+            tbHero.mBaseAtkEfc = st.GetValue(x, "BaseAtkEfc");
             tbHero.mBaseAtkSound = st.GetValue(x, "BaseAtkSound");
             tbHero.mResPath = st.GetValue(x, "ResPath");
 

@@ -43,7 +43,7 @@ public class BattleManager : MonoBehaviour
         get; set;
     }
 
-    public BattleUI_Control BattleUI
+    public BattleUIManager BattleUI
     {
         get; set;
     }

@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class Actor : MonoBehaviour 
 {
@@ -30,12 +30,11 @@ public class Actor : MonoBehaviour
     AniType mAniState = AniType.ANI_IDLE;
 
     public AnimationCurve BackStepCurve;
-    SpriteRenderer mSR = new SpriteRenderer();
 
-    public SpriteRenderer SR
+    public List<SpriteRenderer> ListSR
     {
-        set { mSR = value; }
-        get { return mSR; }
+        private set;
+        get;
     }
 
     public AniType AniState
@@ -48,16 +47,14 @@ public class Actor : MonoBehaviour
     void Awake () 
     {
         Anim = transform.GetComponent<Animator>();
+        ListSR = new List<SpriteRenderer>();
 
         SpriteRenderer[] sr = transform.GetComponentsInChildren<SpriteRenderer>();
         if (sr != null && sr.Length > 0)
         {
             for (int i = 0; i < sr.Length; ++i)
             {
-                if (sr[i].name.Equals("Shadow") == false)
-                {
-                    SR = sr[i];
-                }
+                ListSR.Add(sr[i]);
             }
         }
     }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseUI : MonoBehaviour
+public class BattleUI_Win : BaseUI
 {
 
 }
