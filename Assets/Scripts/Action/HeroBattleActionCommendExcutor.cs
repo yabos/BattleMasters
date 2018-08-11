@@ -72,5 +72,41 @@ public class HeroBattleActionCommendExcutor
             Debug.LogError("Do not find commendkey : " + commend);
             Debug.LogError("paramlist : " + paramlist);
         }
-    }   
+    }
+
+    // ActionMaker Tools Only.
+    #region ActionMaker Tool
+    public void Initialize(ActionMaker actionMaker)
+    {
+        for (int i = 0; i < ClipName.Length; ++i)
+        {
+            AddCommend(ClipName[i], actionMaker);
+        }
+    }
+
+    // ActionMaker Tools Only.
+    void AddCommend(string commend, ActionMaker actionManager)
+    {
+        if (commend.Equals(AnimDelay))
+        {
+            DicCommand.Add(commend, new Func(actionManager.AnimationDelay));
+        }
+        else if (commend.Equals(MoveF))
+        {
+            DicCommand.Add(commend, new Func(actionManager.MoveForward));
+        }
+        else if (commend.Equals(MoveFM))
+        {
+            DicCommand.Add(commend, new Func(actionManager.MoveForwardMoment));
+        }
+        else if (commend.Equals(MoveB))
+        {
+            DicCommand.Add(commend, new Func(actionManager.MoveBackward));
+        }
+        else if (commend.Equals(MoveBM))
+        {
+            DicCommand.Add(commend, new Func(actionManager.MoveBackwardMoment));
+        }
+    }
+    #endregion
 }

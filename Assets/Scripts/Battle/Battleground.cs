@@ -20,7 +20,7 @@ public class Battleground : MonoBehaviour
 
     public Vector3 GetTeamPos(EHeroBattleAction stateAction, bool myTeam)
     {
-        if (stateAction == EHeroBattleAction.HeroAction_AtkWin ||
+        if (stateAction == EHeroBattleAction.HeroAction_CntWin ||
             stateAction == EHeroBattleAction.HeroAction_AtkDefeat)
         {
             if (myTeam)
@@ -32,7 +32,7 @@ public class Battleground : MonoBehaviour
                 return BattleActionPosEnemy[(int)BattlePosType.BPT_ATK_FAKE].position;
             }
         }
-        else if (stateAction == EHeroBattleAction.HeroAction_CntWin ||
+        else if (stateAction == EHeroBattleAction.HeroAction_FakeWin ||
                  stateAction == EHeroBattleAction.HeroAction_CntDefeat)
         {
             if (myTeam)
@@ -44,7 +44,7 @@ public class Battleground : MonoBehaviour
                 return BattleActionPosEnemy[(int)BattlePosType.BPT_CNT_ATK].position;
             }
         }
-        else if (stateAction == EHeroBattleAction.HeroAction_FakeWin ||
+        else if (stateAction == EHeroBattleAction.HeroAction_AtkWin ||
                  stateAction == EHeroBattleAction.HeroAction_FakeDefeat)
         {
             if (myTeam)

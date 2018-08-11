@@ -108,14 +108,14 @@ public class HeroBattleAction
         for( int i = 0; i < m_Commends.Count; ++i)
         {
             string commend = m_Commends[i];
-            string[] prams = commend.Split(",".ToCharArray());
-            object[] list = new object[prams.Length - 1];
-            for (int j = 1; j < prams.Length; ++j)
+            string[] param = commend.Split(",".ToCharArray());
+            object[] list = new object[param.Length - 1];
+            for (int j = 1; j < param.Length; ++j)
             {
-                list[j - 1] = prams[j].Trim();
+                list[j - 1] = param[j].Trim();
             }
 
-            yield return m_Owner.BattleActionCommendExcution(prams[0], list);
+            yield return m_Owner.BattleActionCommendExcution(param[0], list);
         }
 
         if (m_Owner.IsDie)
