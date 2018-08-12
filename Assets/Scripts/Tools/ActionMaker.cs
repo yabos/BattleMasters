@@ -96,9 +96,10 @@ public class ActionMaker : MonoBehaviour
     }
 
     public void ExportText(bool myTeam)
-    {
+    {        
         string fileName = string.Empty;
         int heroNo = 0;
+
         if (myTeam)
         {
             heroNo = TBManager.Instance.GetHeroNoByName(heroActor.name);
@@ -110,19 +111,32 @@ public class ActionMaker : MonoBehaviour
             fileName = heroNo.ToString() + "_" + enmeyExcType.ToString() + ".txt";
         }
 
-        string stData = string.Empty;
-        for( int i = 0; i < heroActionData.Count; ++i)
-        {
-            stData += heroActionData[i].commend.ToString() + ",";
-            stData += heroActionData[i].duration.ToString() + ",";
-            stData += heroActionData[i].dist.ToString() + ",";
-            stData += heroActor.GetAniTypeClip(heroActionData[i].aniType) + "\n";
-        }
-
+        string stData = GetActionData(myTeam);
         string path = ResourcePath.CommendExcutePath + heroNo.ToString() + "/" + fileName;
         Debug.Log(path);
         File.WriteAllText(path, stData);
         AssetDatabase.Refresh();
+    }
+
+    string GetActionData(bool myHero)
+    {
+        string stData = string.Empty;
+
+        var data = heroActionData;
+        if (myHero == false)
+        {
+            data = enemyActionData;
+        }
+
+        for (int i = 0; i < data.Count; ++i)
+        {
+            stData += data[i].commend.ToString() + ",";
+            stData += data[i].duration.ToString() + ",";
+            stData += data[i].dist.ToString() + ",";
+            stData += heroActor.GetAniTypeClip(heroActionData[i].aniType) + "\n";
+        }
+
+        return stData;
     }
 
     float myHeroElasedTime = 0;
@@ -174,7 +188,7 @@ public class ActionMaker : MonoBehaviour
         }
         else
         {
-            foreach (var elem in heroActionData)
+            foreach (var elem in enemyActionData)
             {
                 result += elem.duration;
             }
