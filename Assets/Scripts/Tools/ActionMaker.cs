@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 using System;
+using System.IO;
 
 public enum CommendType
 {
@@ -15,14 +17,14 @@ public enum CommendType
 
 public enum ActionExcutionType
 {
-    ATK_WIN,
-    ATK_DEFEAT,
-    CNT_WIN,
-    CNT_DEFEAT,
-    FAKE_WIN,
-    FAKE_DEFEAT,
-    DRAW_ATKDEFEAT,
-    DRAW_DEFEATATK,
+    AtkWin,
+    AtkDefeat,
+    CntWin,
+    CntDefeat,
+    FakeWin,
+    FakeDefeat,
+    DrawAtkDefeat,
+    DrawDefeatAtk,
 }
 
 [Serializable]
@@ -45,8 +47,8 @@ public class ActionMaker : MonoBehaviour
     Actor heroActor;
     Actor enemyActor;
 
-    ActionExcutionType heroExcType;
-    ActionExcutionType enmeyExcType;
+    public ActionExcutionType heroExcType;
+    public ActionExcutionType enmeyExcType;
 
     HeroBattleActionCommendExcutor mActionCommendExcutor;
 
@@ -61,6 +63,8 @@ public class ActionMaker : MonoBehaviour
 
         mActionCommendExcutor = new HeroBattleActionCommendExcutor();
         mActionCommendExcutor.Initialize(this);
+
+        TBManager.Instance.LoadTableAll();
 
         yield return new WaitForSeconds(1);
 
@@ -88,18 +92,32 @@ public class ActionMaker : MonoBehaviour
 
     public void ExportText(bool myTeam)
     {
+        string fileName = string.Empty;
         int heroNo = 0;
         if (myTeam)
         {
             heroNo = TBManager.Instance.GetHeroNoByName(heroActor.name);
+            fileName = heroNo.ToString() + "_" + heroExcType.ToString() + ".txt";
         }
         else
         {
             heroNo = TBManager.Instance.GetHeroNoByName(enemyActor.name);
+            fileName = heroNo.ToString() + "_" + enmeyExcType.ToString() + ".txt";
         }
 
+        string stData = string.Empty;
+        for( int i = 0; i < heroActionData.Count; ++i)
+        {
+            stData += heroActionData[i].commend.ToString() + ",";
+            stData += heroActionData[i].duration.ToString() + ",";
+            stData += heroActionData[i].dist.ToString() + ",";
+            stData += heroActor.GetAniTypeClip(heroActionData[i].aniType) + "\n";
+        }
 
-
+        string path = ResourcePath.CommendExcutePath + heroNo.ToString() + "/" + fileName;
+        Debug.Log(path);
+        File.WriteAllText(path, stData);
+        AssetDatabase.Refresh();
     }
 
     float myHeroElasedTime = 0;

@@ -68,7 +68,7 @@ public class ActionMakerEditor : Editor
         GUILayout.Label("-------------------------------------");
         GUILayout.EndHorizontal();
 
-        DrawProperties("myHero", "heroActionData");
+        DrawProperties("heroExcType", "myHero", "heroActionData");
 
         GUILayout.Space(25);
 
@@ -80,23 +80,23 @@ public class ActionMakerEditor : Editor
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         GUILayout.Label("-------------------------------------");
-        GUILayout.EndHorizontal();
-        
+        GUILayout.EndHorizontal();        
 
-        DrawProperties("enemyHero", "enemyActionData");
+        DrawProperties("enmeyExcType", "enemyHero", "enemyActionData");
 
         serializedObject.ApplyModifiedProperties();
     }
 
-    void DrawProperties(string heroProperty, string actionProperty)
+    void DrawProperties(string heroExc, string heroProperty, string actionProperty)
     {
         GUILayout.BeginHorizontal();
         {
-            SerializedProperty sp = serializedObject.FindProperty(heroProperty);
-            EditorGUILayout.PropertyField(sp, new GUIContent("Hero"));
+            SerializedProperty sp = serializedObject.FindProperty(heroExc);
+            EditorGUILayout.PropertyField(sp, new GUIContent("ActionType"));
         }
-
         GUILayout.EndHorizontal();
+
+        GUILayout.Space(10);
 
         GUILayout.BeginHorizontal();
         {

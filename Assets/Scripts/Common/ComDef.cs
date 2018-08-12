@@ -65,5 +65,5 @@ public class ResourcePath
     public static readonly string TurnIconPath = "UI/Battle/Prefabs/TurnIcon";
 
     // tools
-    public static readonly string CommendExcutePath = "Battle/CommendExcute";    
+    public static readonly string CommendExcutePath = "Assets/Resources/Battle/CommendExcute/";    
 }

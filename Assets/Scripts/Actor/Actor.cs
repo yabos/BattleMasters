@@ -85,4 +85,9 @@ public class Actor : MonoBehaviour
         Debug.LogError("Return Failed AniType!!");
         return AniType.ANI_MAX;
     }
+
+    public string GetAniTypeClip(AniType aniType)
+    {
+        return ClipName[(int)aniType];
+    }
 }
