@@ -96,7 +96,7 @@ public class BattleAIManager
             //heroCont.ActionType = (EAtionType)Random.Range(0, (int)EAtionType.ACTION_MAX);
 
             // 이곳의 주석을 풀고 해당 EAtionType 을 직접 넣어주면 된다.
-             heroCont.ActionType = EAtionType.ACTION_COUNT;
+            heroCont.ActionType = EAtionType.ACTION_COUNT;
         }
     }
 }

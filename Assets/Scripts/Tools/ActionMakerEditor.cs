@@ -92,6 +92,14 @@ public class ActionMakerEditor : Editor
     {
         GUILayout.BeginHorizontal();
         {
+            SerializedProperty sp = serializedObject.FindProperty(heroProperty);
+            EditorGUILayout.PropertyField(sp, new GUIContent("Hero"));
+        }
+
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        {
             //if (PrefabUtility.GetPrefabType(target) == PrefabType.Prefab)
             //{
             //    return;

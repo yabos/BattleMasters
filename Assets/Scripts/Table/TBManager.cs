@@ -73,8 +73,16 @@ public class TBManager : MonoBehaviour
         LoadHeroTable();
     }
 
-    //int GetHeroNoByName(string )
-    //{
+    public int GetHeroNoByName(string name)
+    {
+        foreach (var elem in cont_Hero)
+        {
+            if (elem.Value.mHeroName.Equals(name))
+            {
+                return elem.Value.mHeroNo;
+            }
+        }
 
-    //}
+        return 0;
+    }
 }

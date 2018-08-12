@@ -118,7 +118,8 @@ public class HeroBattleActionManager
     public IEnumerator AnimationDelay(params object [] list)
     {
         float delay = System.Convert.ToSingle(list[0]);
-        string aniType = System.Convert.ToString(list[1]);
+        float dummy = System.Convert.ToSingle(list[1]);
+        string aniType = System.Convert.ToString(list[2]);
 
         Actor.AniType eAniType = m_Owner.Actor.GetAniType(aniType);
         m_Owner.PlayAnimation(eAniType);
@@ -162,7 +163,8 @@ public class HeroBattleActionManager
     public IEnumerator MoveForwardMoment(params object[] list)
     {
         float dist = System.Convert.ToSingle(list[0]);
-        string aniType = System.Convert.ToString(list[1]);
+        float dummy = System.Convert.ToSingle(list[1]);
+        string aniType = System.Convert.ToString(list[2]);
         Actor.AniType eAniType = m_Owner.Actor.GetAniType(aniType);
 
         if (m_Owner.IsMyTeam == false)
@@ -214,7 +216,8 @@ public class HeroBattleActionManager
     public IEnumerator MoveBackwardMoment(params object[] list)
     {
         float dist = System.Convert.ToSingle(list[0]);
-        string aniType = System.Convert.ToString(list[1]);
+        float dummy = System.Convert.ToSingle(list[1]);
+        string aniType = System.Convert.ToString(list[2]);
         Actor.AniType eAniType = m_Owner.Actor.GetAniType(aniType);
 
         if (m_Owner.IsMyTeam)
@@ -233,7 +236,8 @@ public class HeroBattleActionManager
     public IEnumerator FadeOut(params object[] list)
     {
         float duration = System.Convert.ToSingle(list[0]);
-        string aniType = System.Convert.ToString(list[1]);
+        float dummy = System.Convert.ToSingle(list[1]);
+        string aniType = System.Convert.ToString(list[2]);        
         Actor.AniType eAniType = m_Owner.Actor.GetAniType(aniType);
 
         m_Owner.PlayAnimation(eAniType);

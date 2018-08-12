@@ -13,6 +13,18 @@ public enum CommendType
     FadeOut,
 }
 
+public enum ActionExcutionType
+{
+    ATK_WIN,
+    ATK_DEFEAT,
+    CNT_WIN,
+    CNT_DEFEAT,
+    FAKE_WIN,
+    FAKE_DEFEAT,
+    DRAW_ATKDEFEAT,
+    DRAW_DEFEATATK,
+}
+
 [Serializable]
 public struct ActionData
 {    
@@ -33,6 +45,9 @@ public class ActionMaker : MonoBehaviour
     Actor heroActor;
     Actor enemyActor;
 
+    ActionExcutionType heroExcType;
+    ActionExcutionType enmeyExcType;
+
     HeroBattleActionCommendExcutor mActionCommendExcutor;
 
     public bool Loop = false;
@@ -50,16 +65,7 @@ public class ActionMaker : MonoBehaviour
         yield return new WaitForSeconds(1);
 
         heroActor = myHero.GetComponentInChildren<Actor>();
-        //if (heroActor != null)
-        //{
-        //    StartCoroutine(ActionProc(heroActor, true));
-        //}
-
         enemyActor = enemyHero.GetComponentInChildren<Actor>();
-        //if (enemyActor != null)
-        //{
-        //    StartCoroutine(ActionProc(enemyActor, false));
-        //}
     }
 
     public void PlayerOnce()
@@ -82,8 +88,18 @@ public class ActionMaker : MonoBehaviour
 
     public void ExportText(bool myTeam)
     {
-        //TBManager.Instance
-        //heroActor.name
+        int heroNo = 0;
+        if (myTeam)
+        {
+            heroNo = TBManager.Instance.GetHeroNoByName(heroActor.name);
+        }
+        else
+        {
+            heroNo = TBManager.Instance.GetHeroNoByName(enemyActor.name);
+        }
+
+
+
     }
 
     float myHeroElasedTime = 0;
