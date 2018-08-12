@@ -77,17 +77,22 @@ public class ActionMaker : MonoBehaviour
         heroActor = myHero.GetComponentInChildren<Actor>();
         if (heroActor != null)
         {
-            StartCoroutine(ActionProc(heroActor, true));
+            StartCoroutine(ActionProc(heroActor, true, () => 
+            {
+                myHero.transform.localPosition = Vector3.zero;
+                heroActor.PlayAnimation(Actor.AniType.ANI_IDLE);
+            }));
         }
 
         enemyActor = enemyHero.GetComponentInChildren<Actor>();
         if (enemyActor != null)
         {
-            StartCoroutine(ActionProc(enemyActor, false));
+            StartCoroutine(ActionProc(enemyActor, false, () => 
+            {
+                enemyHero.transform.localPosition = Vector3.zero;
+                enemyActor.PlayAnimation(Actor.AniType.ANI_IDLE);
+            }));
         }
-
-        myHero.transform.localPosition = Vector3.zero;
-        enemyHero.transform.localPosition = Vector3.zero;
     }
 
     public void ExportText(bool myTeam)
@@ -131,8 +136,12 @@ public class ActionMaker : MonoBehaviour
         {
             if (heroActor != null)
             {
-                StartCoroutine(ActionProc(heroActor, true));
-                myHero.transform.localPosition = Vector3.zero;
+                StartCoroutine(ActionProc(heroActor, true, () => 
+                {
+                    myHero.transform.localPosition = Vector3.zero;
+                    
+                }));
+
                 myHeroElasedTime = 0;
             }
         }
@@ -142,8 +151,12 @@ public class ActionMaker : MonoBehaviour
         {
             if (enemyActor != null)
             {
-                StartCoroutine(ActionProc(enemyActor, false));
-                enemyHero.transform.localPosition = Vector3.zero;
+                StartCoroutine(ActionProc(enemyActor, false, () => 
+                {
+                    enemyHero.transform.localPosition = Vector3.zero;
+                    enemyActor.PlayAnimation(Actor.AniType.ANI_IDLE);                    
+                }));
+
                 enemyHeroElasedTime = 0;
             }
         }
@@ -170,7 +183,7 @@ public class ActionMaker : MonoBehaviour
         return result;
     }
 
-    public IEnumerator ActionProc(Actor actor, bool isMyTeam)
+    public IEnumerator ActionProc(Actor actor, bool isMyTeam, Action endAction)
     {
         List<ActionData> ActionData;
         if (isMyTeam)
@@ -188,6 +201,8 @@ public class ActionMaker : MonoBehaviour
 
             yield return BattleActionCommendExcution(ActionData[i].commend.ToString(), param);
         }
+
+        endAction();
     }
 
     object[] GetExcuteCommend(Actor actor, bool isMyTeam, ActionData actionData)
@@ -201,14 +216,6 @@ public class ActionMaker : MonoBehaviour
             param[1] = actionData.duration;
             param[2] = "0";
             param[3] = actionData.aniType;
-        }
-        else if (actionData.commend == CommendType.MoveForwardMoment ||
-                actionData.commend == CommendType.MoveBackwardMoment)
-        {
-            param[1] = isMyTeam;
-            param[2] = "0";
-            param[3] = actionData.dist;
-            param[4] = actionData.aniType;
         }
         else
         {
@@ -276,7 +283,7 @@ public class ActionMaker : MonoBehaviour
     {
         Actor actor = list[0] as Actor;
         bool IsMyTeam = Convert.ToBoolean(list[1]);
-
+        float duration = Convert.ToSingle(list[2]);
         float dist = Convert.ToSingle(list[3]);
         Actor.AniType eAniType = (Actor.AniType)list[4];
 
@@ -290,7 +297,7 @@ public class ActionMaker : MonoBehaviour
         actor.transform.position = vPos;
 
         actor.PlayAnimation(eAniType);
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(duration);
     }
 
     public IEnumerator MoveBackward(params object[] list)
@@ -332,7 +339,7 @@ public class ActionMaker : MonoBehaviour
     {
         Actor actor = list[0] as Actor;
         bool IsMyTeam = Convert.ToBoolean(list[1]);
-
+        float duration = Convert.ToSingle(list[2]);
         float dist = Convert.ToSingle(list[3]);
         Actor.AniType eAniType = (Actor.AniType)list[4];
 
@@ -346,7 +353,7 @@ public class ActionMaker : MonoBehaviour
         actor.transform.position = vPos;
 
         actor.PlayAnimation(eAniType);
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(duration);
     }
 
     public IEnumerator FadeOut(params object[] list)

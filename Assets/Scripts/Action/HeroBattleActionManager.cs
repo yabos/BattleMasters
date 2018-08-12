@@ -162,8 +162,8 @@ public class HeroBattleActionManager
 
     public IEnumerator MoveForwardMoment(params object[] list)
     {
-        float dist = System.Convert.ToSingle(list[0]);
-        float dummy = System.Convert.ToSingle(list[1]);
+        float duration = System.Convert.ToSingle(list[0]);
+        float dist = System.Convert.ToSingle(list[1]);        
         string aniType = System.Convert.ToString(list[2]);
         Actor.AniType eAniType = m_Owner.Actor.GetAniType(aniType);
 
@@ -177,7 +177,7 @@ public class HeroBattleActionManager
         m_Owner.transform.position = vPos;
 
         m_Owner.PlayAnimation(eAniType);
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(duration);
     }
 
     public IEnumerator MoveBackward(params object[] list)
@@ -215,8 +215,8 @@ public class HeroBattleActionManager
 
     public IEnumerator MoveBackwardMoment(params object[] list)
     {
-        float dist = System.Convert.ToSingle(list[0]);
-        float dummy = System.Convert.ToSingle(list[1]);
+        float duration = System.Convert.ToSingle(list[0]);
+        float dist = System.Convert.ToSingle(list[1]);
         string aniType = System.Convert.ToString(list[2]);
         Actor.AniType eAniType = m_Owner.Actor.GetAniType(aniType);
 
@@ -230,7 +230,7 @@ public class HeroBattleActionManager
         m_Owner.transform.position = vPos;
 
         m_Owner.PlayAnimation(eAniType);
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(duration);
     }
 
     public IEnumerator FadeOut(params object[] list)

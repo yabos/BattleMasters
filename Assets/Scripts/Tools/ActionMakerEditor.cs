@@ -100,11 +100,11 @@ public class ActionMakerEditor : Editor
 
         GUILayout.BeginHorizontal();
         {
-            //if (PrefabUtility.GetPrefabType(target) == PrefabType.Prefab)
-            //{
-            //    return;
-            //}
-            
+            if (PrefabUtility.GetPrefabType(target) == PrefabType.Prefab)
+            {
+                return;
+            }
+
             SerializedProperty sp = serializedObject.FindProperty(heroProperty);
             EditorGUILayout.PropertyField(sp, new GUIContent("Hero"));
 
@@ -124,12 +124,6 @@ public class ActionMakerEditor : Editor
             if (myIterator.name.Equals("commend"))
             {
                 currentCommend = (CommendType)myIterator.enumValueIndex;
-
-                if (currentCommend == CommendType.MoveForwardMoment ||
-                    currentCommend == CommendType.MoveBackwardMoment)
-                {
-                    EditorGUI.BeginDisabledGroup(true);
-                }
             }
             else if (myIterator.name.Equals("duration"))
             {
