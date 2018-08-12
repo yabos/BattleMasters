@@ -1,4 +1,3 @@
-MoveForward, 0.4, 3, Trace
-MoveBackward, 0.2, 1, Break
-MoveBackward, 0.2, 2, Defeat
-AnimationDelay, 0.2, Defeat
+MoveForward, 0.5, 4.5, Couter
+MoveBackward, 0.3, 4, Defeat
+MoveBackward, 0.5, 0.5, Defeat
