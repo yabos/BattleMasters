@@ -37,25 +37,7 @@ public class ActionMakerEditor : Editor
                 _actionMaker.PlayerOnce();
             }
         }
-        GUILayout.EndHorizontal();
-
-        GUILayout.BeginHorizontal();
-        {
-            if (GUILayout.Button("Export - MyHero", GUILayout.Width(150), GUILayout.Height(30)))
-            {
-                _actionMaker.ExportText(true);
-            }
-        }
-        GUILayout.EndHorizontal();
-
-        GUILayout.BeginHorizontal();
-        {
-            if (GUILayout.Button("Export - EnemyHero", GUILayout.Width(150), GUILayout.Height(30)))
-            {
-                _actionMaker.ExportText(false);
-            }
-        }
-        GUILayout.EndHorizontal();
+        GUILayout.EndHorizontal();        
 
         GUILayout.Space(25);
         GUILayout.BeginHorizontal();
@@ -91,6 +73,34 @@ public class ActionMakerEditor : Editor
     {
         GUILayout.BeginHorizontal();
         {
+            if (GUILayout.Button("Import", GUILayout.Width(150), GUILayout.Height(30)))
+            {
+                if (heroExc.Equals("heroExcType"))
+                {
+                    _actionMaker.LoadActionType(true);
+                }
+                else
+                {
+                    _actionMaker.LoadActionType(false);
+                }
+            }
+
+            if (GUILayout.Button("Export", GUILayout.Width(150), GUILayout.Height(30)))
+            {
+                if (heroExc.Equals("heroExcType"))
+                {
+                    _actionMaker.ExportText(true);
+                }
+                else
+                {
+                    _actionMaker.ExportText(false);
+                }
+            }
+        }
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        {
             SerializedProperty sp = serializedObject.FindProperty(heroExc);
             EditorGUILayout.PropertyField(sp, new GUIContent("ActionType"));
         }
@@ -118,7 +128,21 @@ public class ActionMakerEditor : Editor
 
         CommendType currentCommend = CommendType.AnimationDelay;
         while (myIterator.NextVisible(showChildren))
-        {            
+        {
+            // NextVisible() 함수는 serializedObject.FindProperty(actionProperty) 와
+            // 상관없이 모든 ActionMaker의 변수를 뒤진다. 
+            // 때문에 여기서 그려질 필요가 없는 건 넘겨준다.
+            if (myIterator.name.Equals("heroExcType") ||
+                myIterator.name.Equals("enmeyExcType") ||
+                myIterator.name.Equals("Loop") ||
+                myIterator.name.Equals("heroActionData") ||
+                myIterator.name.Equals("enemyActionData") ||
+                myIterator.name.Equals("myHero") ||
+                myIterator.name.Equals("enemyHero"))
+            {
+                continue;
+            }
+
             var myRect = GUILayoutUtility.GetRect(0f, 16f);
             showChildren = EditorGUI.PropertyField(myRect, myIterator);            
             if (myIterator.name.Equals("commend"))

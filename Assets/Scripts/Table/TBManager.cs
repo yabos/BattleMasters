@@ -36,6 +36,8 @@ public class TBManager : MonoBehaviour
 
     void LoadHeroTable()
     {
+        if (cont_Hero != null) return;
+
         cont_Hero = new Dictionary<int, TB_Hero>();
 
         StringTable st = new StringTable();

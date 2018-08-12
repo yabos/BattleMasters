@@ -57,19 +57,24 @@ public class ActionMaker : MonoBehaviour
     // Use this for initialization
     IEnumerator Start ()
     {
+        yield return new WaitForSeconds(1);
+
+        Initialize();
+    }
+
+    private void Initialize()
+    {
+        heroActor = myHero.GetComponentInChildren<Actor>();
+        enemyActor = enemyHero.GetComponentInChildren<Actor>();
+
         myHero.transform.localRotation = Quaternion.Euler(0, 180, 0);
-        myHero.transform.localScale = new Vector3(Define.ACTION_START_SCALE, Define.ACTION_START_SCALE, Define.ACTION_START_SCALE);        
+        myHero.transform.localScale = new Vector3(Define.ACTION_START_SCALE, Define.ACTION_START_SCALE, Define.ACTION_START_SCALE);
         enemyHero.transform.localScale = new Vector3(Define.ACTION_START_SCALE, Define.ACTION_START_SCALE, Define.ACTION_START_SCALE);
 
         mActionCommendExcutor = new HeroBattleActionCommendExcutor();
         mActionCommendExcutor.Initialize(this);
 
         TBManager.Instance.LoadTableAll();
-
-        yield return new WaitForSeconds(1);
-
-        heroActor = myHero.GetComponentInChildren<Actor>();
-        enemyActor = enemyHero.GetComponentInChildren<Actor>();
     }
 
     public void PlayerOnce()
@@ -96,7 +101,9 @@ public class ActionMaker : MonoBehaviour
     }
 
     public void ExportText(bool myTeam)
-    {        
+    {
+        Initialize();
+
         string fileName = string.Empty;
         int heroNo = 0;
 
@@ -118,6 +125,87 @@ public class ActionMaker : MonoBehaviour
         AssetDatabase.Refresh();
     }
 
+    public void LoadActionType(bool myTeam)
+    {
+        Initialize();
+
+        string fileName = string.Empty;
+        int heroNo = 0;
+
+        if (myTeam)
+        {
+            heroActionData.Clear();
+
+            heroNo = TBManager.Instance.GetHeroNoByName(heroActor.name);
+            fileName = heroNo.ToString() + "_" + heroExcType.ToString() + ".txt";
+        }
+        else
+        {
+            enemyActionData.Clear();
+
+            heroNo = TBManager.Instance.GetHeroNoByName(enemyActor.name);
+            fileName = heroNo.ToString() + "_" + enmeyExcType.ToString() + ".txt";
+        }
+
+        string stData = GetActionData(myTeam);
+        string path = ResourcePath.CommendExcutePath + heroNo.ToString() + "/" + fileName;
+
+        string data = File.ReadAllText(path);
+        ParsingActionData(data, myTeam);
+    }
+
+    void ParsingActionData(string data, bool myTeam)
+    {
+        string[] split = data.Split(new char[] { '\n', '\r' }, System.StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < split.Length; ++i)
+        {
+            var action = split[i].Split(new char[] { ',' }, System.StringSplitOptions.RemoveEmptyEntries);
+            ActionData actionData = new ActionData();
+
+            actionData.commend = GetCommendTypeByString(action[0].Trim());
+            actionData.duration = float.Parse(action[1]);
+            actionData.dist = float.Parse(action[2]);            
+            actionData.aniType = heroActor.GetAniType(action[3].Trim());
+
+            if (myTeam)
+            {
+                heroActionData.Add(actionData);
+            }
+            else
+            {
+                enemyActionData.Add(actionData);
+            }
+        }
+    }
+
+    CommendType GetCommendTypeByString(string type)
+    {
+        for (int i = 0; i <= (int)CommendType.FadeOut; ++i)
+        {
+            if (((CommendType)i).ToString() == type)
+            {
+                return (CommendType)i;
+            }
+        }
+
+        Debug.LogError("No Search Find CommendType.");
+        return CommendType.FadeOut;
+    }
+
+    Actor.AniType GetAniTypeTypeByString(string type)
+    {
+        for (int i = 0; i < (int)Actor.AniType.ANI_MAX; ++i)
+        {
+            if (((Actor.AniType)i).ToString() == type)
+            {
+                return (Actor.AniType)i;
+            }
+        }
+
+        Debug.LogError("No Search Find Actor.AniType.");
+        return Actor.AniType.ANI_MAX;
+    }
+
     string GetActionData(bool myHero)
     {
         string stData = string.Empty;
@@ -133,7 +221,7 @@ public class ActionMaker : MonoBehaviour
             stData += data[i].commend.ToString() + ",";
             stData += data[i].duration.ToString() + ",";
             stData += data[i].dist.ToString() + ",";
-            stData += heroActor.GetAniTypeClip(heroActionData[i].aniType) + "\n";
+            stData += heroActor.GetAniTypeClip(data[i].aniType) + "\n";
         }
 
         return stData;
