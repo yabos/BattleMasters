@@ -9,7 +9,8 @@ public enum CommendType
     MoveForward,
     MoveForwardMoment,
     MoveBackward,
-    MoveBackwardMoment,    
+    MoveBackwardMoment,
+    FadeOut,
 }
 
 [Serializable]
@@ -79,9 +80,10 @@ public class ActionMaker : MonoBehaviour
         enemyHero.transform.localPosition = Vector3.zero;
     }
 
-    public void ExportText()
+    public void ExportText(bool myTeam)
     {
-
+        //TBManager.Instance
+        //heroActor.name
     }
 
     float myHeroElasedTime = 0;
@@ -160,7 +162,7 @@ public class ActionMaker : MonoBehaviour
 
         param[0] = actor;
 
-        if (actionData.commend == CommendType.AnimationDelay)
+        if (actionData.commend == CommendType.AnimationDelay || actionData.commend == CommendType.FadeOut)
         {
             param[1] = actionData.duration;
             param[2] = "0";
@@ -311,5 +313,37 @@ public class ActionMaker : MonoBehaviour
 
         actor.PlayAnimation(eAniType);
         yield return new WaitForEndOfFrame();
+    }
+
+    public IEnumerator FadeOut(params object[] list)
+    {
+        Actor actor = list[0] as Actor;
+
+        float delay = Convert.ToSingle(list[1]);
+        Actor.AniType eAniType = (Actor.AniType)list[3];
+
+        actor.PlayAnimation(eAniType);
+        yield return HeroAlphaFade(actor, delay);
+    }
+    
+    public IEnumerator HeroAlphaFade(Actor actor, float delay)
+    {
+        float ElapsedTime = delay;
+        while (ElapsedTime >= 0)
+        {
+            ElapsedTime -= Time.deltaTime;
+
+            for (int i = 0; i < actor.ListSR.Count; ++i)
+            {
+                actor.ListSR[i].color = new Color(1f, 1f, 1f, ElapsedTime / delay);
+            }
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        for (int i = 0; i < actor.ListSR.Count; ++i)
+        {
+            actor.ListSR[i].color = new Color(1f, 1f, 1f, 1f);
+        }
     }
 }

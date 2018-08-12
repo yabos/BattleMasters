@@ -72,4 +72,9 @@ public class TBManager : MonoBehaviour
     {
         LoadHeroTable();
     }
+
+    //int GetHeroNoByName(string )
+    //{
+
+    //}
 }

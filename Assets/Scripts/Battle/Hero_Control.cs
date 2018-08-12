@@ -322,5 +322,26 @@ public class Hero_Control : MonoBehaviour
         }
 
         endFade();
+    }    
+
+    public IEnumerator HeroAlphaFade(float delay)
+    {
+        float ElapsedTime = delay;
+        while (ElapsedTime >= 0)
+        {
+            ElapsedTime -= Time.deltaTime;
+
+            for (int i = 0; i < Actor.ListSR.Count; ++i)
+            {
+                Actor.ListSR[i].color = new Color(1f, 1f, 1f, ElapsedTime / delay);
+            }
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        for (int i = 0; i < Actor.ListSR.Count; ++i)
+        {
+            Actor.ListSR[i].color = new Color(1f, 1f, 1f, 1f);
+        }
     }
 }

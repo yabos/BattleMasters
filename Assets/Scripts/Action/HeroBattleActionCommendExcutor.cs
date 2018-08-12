@@ -13,6 +13,7 @@ public class HeroBattleActionCommendExcutor
     public static readonly string MoveFM = "MoveForwardMoment";
     public static readonly string MoveB = "MoveBackward";
     public static readonly string MoveBM = "MoveBackwardMoment";
+    public static readonly string FadeOut = "FadeOut";
 
     public string[] ClipName = new string[]
     {
@@ -21,7 +22,8 @@ public class HeroBattleActionCommendExcutor
         "MoveForwardMoment",
         "MoveBackward",
         "MoveBackwardMoment",
-    };
+        "FadeOut",
+};
 
     public void Initialize(HeroBattleActionManager actionManager)
     {
@@ -52,6 +54,10 @@ public class HeroBattleActionCommendExcutor
         else if (commend.Equals(MoveBM))
         {
             DicCommand.Add(commend, new Func(actionManager.MoveBackwardMoment));
+        }
+        else if (commend.Equals(FadeOut))
+        {
+            DicCommand.Add(commend, new Func(actionManager.FadeOut));
         }
     }
 
@@ -106,6 +112,10 @@ public class HeroBattleActionCommendExcutor
         else if (commend.Equals(MoveBM))
         {
             DicCommand.Add(commend, new Func(actionManager.MoveBackwardMoment));
+        }
+        else if (commend.Equals(FadeOut))
+        {
+            DicCommand.Add(commend, new Func(actionManager.FadeOut));
         }
     }
     #endregion

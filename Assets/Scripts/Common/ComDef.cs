@@ -49,6 +49,9 @@ public class Define
 
     public static readonly string DEFAULT_LAYER = "Default";
     public static readonly string BATTLE_ACTION_LAYER = "BattleAction";
+
+    // ActionFadeOut 알파 빠지는 시간.
+    public static readonly float ACTION_FADEOUT_TIME = 0.5f;
 }
 
 public class ResourcePath
@@ -60,4 +63,7 @@ public class ResourcePath
     public static readonly string MapLoadPath = "Map/";
     public static readonly string CommendPath = "Battle/CommendExcute/";
     public static readonly string TurnIconPath = "UI/Battle/Prefabs/TurnIcon";
+
+    // tools
+    public static readonly string CommendExcutePath = "Battle/CommendExcute";    
 }

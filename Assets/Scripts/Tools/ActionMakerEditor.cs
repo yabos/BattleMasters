@@ -43,7 +43,7 @@ public class ActionMakerEditor : Editor
         {
             if (GUILayout.Button("Export - MyHero", GUILayout.Width(150), GUILayout.Height(30)))
             {
-                _actionMaker.ExportText();
+                _actionMaker.ExportText(true);
             }
         }
         GUILayout.EndHorizontal();
@@ -52,7 +52,7 @@ public class ActionMakerEditor : Editor
         {
             if (GUILayout.Button("Export - EnemyHero", GUILayout.Width(150), GUILayout.Height(30)))
             {
-                _actionMaker.ExportText();
+                _actionMaker.ExportText(false);
             }
         }
         GUILayout.EndHorizontal();
@@ -125,7 +125,7 @@ public class ActionMakerEditor : Editor
             }
             else if (myIterator.name.Equals("duration"))
             {
-                if (currentCommend == CommendType.AnimationDelay)
+                if (currentCommend == CommendType.AnimationDelay || currentCommend == CommendType.FadeOut)
                 {
                     EditorGUI.BeginDisabledGroup(true);
                 }

@@ -229,4 +229,14 @@ public class HeroBattleActionManager
         m_Owner.PlayAnimation(eAniType);
         yield return new WaitForEndOfFrame();
     }
+
+    public IEnumerator FadeOut(params object[] list)
+    {
+        float duration = System.Convert.ToSingle(list[0]);
+        string aniType = System.Convert.ToString(list[1]);
+        Actor.AniType eAniType = m_Owner.Actor.GetAniType(aniType);
+
+        m_Owner.PlayAnimation(eAniType);
+        yield return m_Owner.HeroAlphaFade(duration);
+    }
 }
