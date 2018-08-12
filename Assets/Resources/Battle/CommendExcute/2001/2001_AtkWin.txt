@@ -1,2 +1,3 @@
-MoveForward, 0.5, 5, Trace
-MoveForward, 0.1, 0.5, Atk
+MoveForward, 0.5, 4, Trace
+MoveForward, 0.2, 1, Atk
+MoveForward, 0.5, 0.3, Atk
