@@ -1,4 +1,4 @@
 MoveBackward, 0.5, 0.5, Fake
-MoveForward, 0.2, 4, Attack
-MoveForward, 0.3, 0.5, Attack
+MoveForward, 0.2, 4, Atk
+MoveForward, 0.3, 0.5, Atk
 

@@ -1,2 +1,2 @@
 MoveForward, 0.5, 5, Trace
-MoveForward, 0.1, 0.5, Attack
+MoveForward, 0.1, 0.5, Atk
