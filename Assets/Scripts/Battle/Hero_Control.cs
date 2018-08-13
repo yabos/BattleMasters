@@ -65,6 +65,7 @@ public class Hero_Control : MonoBehaviour
     public Transform Ef_Effect { get; set; }
     public Vector3 InitPos { get; set; }
     public Hero_Control TargetHero { get; set; }
+    public int DefaultSortingOrder { get; private set; }
 
     public void InitHero(int sortingOrder)
     {
@@ -80,10 +81,8 @@ public class Hero_Control : MonoBehaviour
         if (tObj != null)
         {
             Actor = tObj.GetComponent<Actor>();
-            for (int i = 0; i < Actor.ListSR.Count; ++i)
-            {
-                Actor.ListSR[i].sortingOrder = sortingOrder + i;
-            }
+            DefaultSortingOrder = sortingOrder;
+            SetSortingOrder(sortingOrder);
 
             Outline = tObj.GetComponent<Outline>();
 
@@ -98,6 +97,22 @@ public class Hero_Control : MonoBehaviour
             {
                 Debug.LogError("Not Find Ef_Effect!");
             }
+        }
+    }
+
+    public void SetSortingOrder(int sortingOrder)
+    {
+        for (int i = 0; i < Actor.ListSR.Count; ++i)
+        {
+            Actor.ListSR[i].sortingOrder = sortingOrder + i;
+        }
+    }
+
+    public void SetDefaultSortingOrder()
+    {
+        for (int i = 0; i < Actor.ListSR.Count; ++i)
+        {
+            Actor.ListSR[i].sortingOrder = DefaultSortingOrder + i;
         }
     }
 
@@ -193,10 +208,12 @@ public class Hero_Control : MonoBehaviour
     }
 
     // 실제 전투 행동
-    public void ExcuteAction(EHeroBattleAction heroAction, Vector3 vPos, Hero_Control targetHero)
+    public void ExcuteAction(EHeroBattleAction heroAction, Vector3 vPos, Hero_Control targetHero, bool isWinner)
     {
         this.TargetHero = targetHero;
 
+        int sortingOrder = isWinner ? Define.BATTLE_WINNER_SORTINGORDER : Define.BATTLE_LOSER_SORTINGORDER;
+        SetSortingOrder(sortingOrder);
         SetPosition(vPos);
         SetScale(new Vector3(Define.ACTION_START_SCALE, Define.ACTION_START_SCALE, Define.ACTION_START_SCALE));
         ChangeState(heroAction);

@@ -40,6 +40,9 @@ public class HeroBattleAction
         if (m_ActionManager.GetCurrentAction() != EHeroBattleAction.HeroAction_Idle)
         {
             m_Owner.TargetHero = null;
+
+            // 전투시 공격 승리자를 더 높게 설정했던 SortingOrder를 원래대로 초기화.
+            m_Owner.SetDefaultSortingOrder();
         }
     }
 

@@ -52,6 +52,10 @@ public class Define
 
     // ActionFadeOut 알파 빠지는 시간.
     public static readonly float ACTION_FADEOUT_TIME = 0.5f;
+
+    // 전투 연출시에만 적용되는 sortingOrder
+    public static readonly int BATTLE_WINNER_SORTINGORDER = 1001;
+    public static readonly int BATTLE_LOSER_SORTINGORDER = 1000;
 }
 
 public class ResourcePath

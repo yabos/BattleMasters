@@ -181,28 +181,34 @@ public class BattleManager : MonoBehaviour
             Debug.Log("TargetHero Action : " + TargetHero.ActionType);
         }
 
-        EHeroBattleAction ActiveAction = ResultBattleAction(ActiveHero, TargetHero);
+        bool isWinner = false;
+        EHeroBattleAction ActiveAction = ResultBattleAction(ActiveHero, TargetHero, ref isWinner);
         Vector3 vPos = Battleground.GetTeamPos(ActiveAction, ActiveHero.IsMyTeam);
-        ActiveHero.ExcuteAction(ActiveAction, vPos, TargetHero);        
+        ActiveHero.ExcuteAction(ActiveAction, vPos, TargetHero, isWinner);        
 
-        EHeroBattleAction TargetHeroAction = ResultBattleAction(TargetHero, ActiveHero);
+        EHeroBattleAction TargetHeroAction = ResultBattleAction(TargetHero, ActiveHero, ref isWinner);
         vPos = Battleground.GetTeamPos(TargetHeroAction, TargetHero.IsMyTeam);
-        TargetHero.ExcuteAction(TargetHeroAction, vPos, ActiveHero);
+        TargetHero.ExcuteAction(TargetHeroAction, vPos, ActiveHero, isWinner);
     }
     
-    EHeroBattleAction ResultBattleAction(Hero_Control mine, Hero_Control yours)
+    EHeroBattleAction ResultBattleAction(Hero_Control mine, Hero_Control yours, ref bool isWinner)
     {
+        isWinner = false;
+
         // Win
         if (mine.ActionType == EAtionType.ACTION_ATK && yours.ActionType == EAtionType.ACTION_FAKE)
         {
+            isWinner = true;
             return EHeroBattleAction.HeroAction_AtkWin;
         }
         else if (mine.ActionType == EAtionType.ACTION_COUNT && yours.ActionType == EAtionType.ACTION_ATK)
         {
+            isWinner = true;
             return EHeroBattleAction.HeroAction_CntWin;
         }
         else if (mine.ActionType == EAtionType.ACTION_FAKE && yours.ActionType == EAtionType.ACTION_COUNT)
         {
+            isWinner = true;
             return EHeroBattleAction.HeroAction_FakeWin;
         }
         // Defeat
@@ -223,6 +229,7 @@ public class BattleManager : MonoBehaviour
             // draw
             if (mine.IsMyTurn)
             {
+                isWinner = true;
                 return EHeroBattleAction.HeroAction_DrawAtkDefeat;
             }
             else
