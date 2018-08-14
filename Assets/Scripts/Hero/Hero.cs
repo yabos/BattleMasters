@@ -3,73 +3,96 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public enum EAtionType
+public class Hero : Actor
 {
-    ACTION_ATK,
-    ACTION_COUNT,
-    ACTION_FAKE,
-    ACTION_MAX
-}
-
-public enum EActionCommend
-{
-    COMMEND_ATK_WIN,
-    COMMEND_ATK_DEFEAT,
-    COMMEND_CNT_WIN,
-    COMMEND_CNT_DEFEAT,
-    COMMEND_FAKE_WIN,
-    COMMEND_FAKE_DEFEAT,
-    COMMEND_DRAW_ATK_DEFEAT,
-    COMMEND_DRAW_DEFEAT_ATK,
-    COMMEND_MAX,
-}
-
-public class Hero_Control : MonoBehaviour
-{
-    public string[] _ActionCommend = new string[] 
+    public enum EAtionType
     {
-        "_AtkWin",
-        "_AtkDefeat",
-        "_CntWin",
-        "_CntDefeat",
-        "_FakeWin",
-        "_FakeDefeat",
-        "_DrawAtkDefeat",
-        "_DrawDefeatAtk",
+        ACTION_ATK,
+        ACTION_COUNT,
+        ACTION_FAKE,
+        ACTION_MAX
+    }
+
+    public enum EActionCommend
+    {
+        COMMEND_ATK_WIN,
+        COMMEND_ATK_DEFEAT,
+        COMMEND_CNT_WIN,
+        COMMEND_CNT_DEFEAT,
+        COMMEND_FAKE_WIN,
+        COMMEND_FAKE_DEFEAT,
+        COMMEND_DRAW_ATK_DEFEAT,
+        COMMEND_DRAW_DEFEAT_ATK,
+        COMMEND_MAX,
+    }
+
+    private readonly string[] ActionCommend = new string[] 
+    {
+        "AtkWin",
+        "AtkDefeat",
+        "CntWin",
+        "CntDefeat",
+        "FakeWin",
+        "FakeDefeat",
+        "DrawAtkDefeat",
+        "DrawDefeatAtk",
     };
 
     HeroBattleActionManager mActionManager;
     HeroBattleActionCommendExcutor mActionCommendExcutor;
     Dictionary<EActionCommend, TextAsset> mActionCommend = new Dictionary<EActionCommend, TextAsset>();
 
-    public Guid HeroUid { get; set; }
-    public int HeroNo { get; set; }
-    public string HeroName { get; set; }
-    public int HP { get; set; }
-    public int MaxHP { get; set; }
-    public int Atk { get; set; }
-    public int Def { get; set; }
-    public float Speed { get; set; }
-    public string StResPath { get; set; }   
+    public Guid HeroUid { get; private set; }
+    public int HeroNo { get; private set; }
+    public string HeroName { get; private set; }
+    public int HP { get; private set; }
+    public int MaxHP { get; private set; }
+    public int Atk { get; private set; }
+    public int Def { get; private set; }
+    public float Speed { get; private set; }
 
-    public bool IsMyTeam { get; set; }      
+    public bool IsMyTeam { get; private set; }      
     public bool IsMyTurn { get; set; }
     public bool IsAction { get; set; }   //  현재 치고받는 엑션을 하고있는지 여부
-    public bool IsDie { get; set; }
+    public bool IsDie { get; private set; }
 
     public EAtionType ActionType { get; set; }    
-    public GameObject HeroObj { get; set; }
-    public Actor Actor { get; set; }
-    public Outline Outline { get; set; }
-    public Transform Ef_HP { get; set; }
-    public Transform Ef_Effect { get; set; }
-    public Vector3 InitPos { get; set; }
-    public Hero_Control TargetHero { get; set; }
+    public GameObject HeroObj { get; private set; }
+    public Actor Actor { get; private set; }
+    public Outline Outline { get; private set; }
+    public Transform Ef_HP { get; private set; }
+    public Transform Ef_Effect { get; private set; }
+    public Vector3 InitPos { get; private set; }    
     public int DefaultSortingOrder { get; private set; }
+
+    /// <summary>
+    /// 전투시에만 사용하는 상대 정보.
+    /// (ex. 추후 전투와 비전투 구분 Hero가 생기면 BattleHero쪽으로 빠져야 된다.)
+    /// </summary>
+    public Hero BattleTargetHero { get; set; }
+
+    public void InitHero(TB_Hero tbHero, Guid uid, int iHeroNo, bool myTeam, int sortingOrder, GameObject heroObj)
+    {
+        HeroObj = heroObj;
+
+        HeroUid = uid;
+        HeroNo = iHeroNo;
+        HeroName = tbHero.mHeroName;
+        HP = tbHero.mHP;
+        MaxHP = HP;
+        Atk = tbHero.mAtk;
+        Def = tbHero.mDef;
+        Speed = tbHero.mSpeed;
+        IsMyTeam = myTeam;
+
+        SetActionCommend();
+
+        InitHero(sortingOrder);
+    }
 
     public void InitHero(int sortingOrder)
     {
-        InitPos = transform.position;
+        InitPos = HeroObj.transform.localPosition;
 
         mActionManager = new HeroBattleActionManager();
         mActionManager.Initialize(this);
@@ -77,26 +100,37 @@ public class Hero_Control : MonoBehaviour
         mActionCommendExcutor = new HeroBattleActionCommendExcutor();
         mActionCommendExcutor.Initialize(mActionManager);
 
-        Transform tObj = transform.Find("Obj");
-        if (tObj != null)
+        if (HeroObj != null)
         {
-            Actor = tObj.GetComponent<Actor>();
+            Actor = HeroObj.GetComponent<Actor>();
             DefaultSortingOrder = sortingOrder;
             SetSortingOrder(sortingOrder);
 
-            Outline = tObj.GetComponent<Outline>();
+            Outline = HeroObj.GetComponent<Outline>();
 
-            Ef_HP = tObj.Find("ef_HP");
+            Ef_HP = HeroObj.transform.Find("ef_HP");
             if (Ef_HP == null)
             {
                 Debug.LogError("Not Find ef_HP!");
             }
 
-            Ef_Effect = tObj.Find("ef_Center");
+            Ef_Effect = HeroObj.transform.Find("ef_Center");
             if (Ef_Effect == null)
             {
                 Debug.LogError("Not Find Ef_Effect!");
             }
+        }
+    }
+
+    protected override void Update()
+    {
+        float fTimeDelta = Time.deltaTime;
+
+        HPGaugePosUpdate();
+
+        if (mActionManager != null)
+        {
+            mActionManager.Update(fTimeDelta);
         }
     }
 
@@ -116,32 +150,12 @@ public class Hero_Control : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        float fTimeDelta = Time.deltaTime;
-
-        HPGaugePosUpdate();
-
-        if (mActionManager != null)
-        {
-            mActionManager.Update(fTimeDelta);
-        }
-    }
-
     void HPGaugePosUpdate()
     {
         if (IsDie) return;
 
         if (BattleManager.Instance.BattleUI == null) return;
         BattleManager.Instance.BattleUI.UpdatePosHPGauge(HeroUid, Ef_HP);
-    }
-
-    public void PlayAnimation(Actor.AniType anim)
-    {
-        if (Actor != null)
-        {
-            Actor.PlayAnimation(anim);
-        }
     }
 
     public void ChangeState(EHeroBattleAction eAction, byte[] data = null, bool bRefresh = false)
@@ -152,7 +166,7 @@ public class Hero_Control : MonoBehaviour
         }
     }    
 
-    public void BeHit(Hero_Control atthero)
+    public void BeHit(Hero atthero)
     {
         // if(immune) return false
 
@@ -208,9 +222,9 @@ public class Hero_Control : MonoBehaviour
     }
 
     // 실제 전투 행동
-    public void ExcuteAction(EHeroBattleAction heroAction, Vector3 vPos, Hero_Control targetHero, bool isWinner)
+    public void ExcuteAction(EHeroBattleAction heroAction, Vector3 vPos, Hero targetHero, bool isWinner)
     {
-        this.TargetHero = targetHero;
+        this.BattleTargetHero = targetHero;
 
         int sortingOrder = isWinner ? Define.BATTLE_WINNER_SORTINGORDER : Define.BATTLE_LOSER_SORTINGORDER;
         SetSortingOrder(sortingOrder);
@@ -227,9 +241,9 @@ public class Hero_Control : MonoBehaviour
 
     public void SetActionCommend()
     {
-        for (int i = 0; i < _ActionCommend.Length; ++i)
+        for (int i = 0; i < ActionCommend.Length; ++i)
         {
-            string resPath = ResourcePath.CommendPath + HeroNo + "/" + HeroNo + _ActionCommend[i];
+            string resPath = ResourcePath.CommendPath + HeroNo + "/" + HeroNo + "_" + ActionCommend[i];
             var excution = VResources.Load<TextAsset>(resPath);
             if (excution != null)
             {
@@ -237,7 +251,7 @@ public class Hero_Control : MonoBehaviour
             }
             else
             {
-                Debug.LogError("Load Fail ActionTxt : " + HeroNo + _ActionCommend[i]);
+                Debug.LogError("Load Fail ActionTxt : " + HeroNo + ActionCommend[i]);
             }
         }
     }
@@ -270,7 +284,7 @@ public class Hero_Control : MonoBehaviour
             tp.style = UITweener.Style.Once;
             tp.duration = duration;
             tp.delay = delay;
-            tp.from = transform.position;
+            tp.from = HeroObj.transform.localPosition;
             tp.to = InitPos;
             tp.animationCurve = Actor.BackStepCurve;
             tp.PlayForward();

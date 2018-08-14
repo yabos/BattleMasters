@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class BattleManager : MonoBehaviour
 {
@@ -23,8 +23,8 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    readonly List<Hero_Control> mListMyHeroes = new List<Hero_Control>();
-    readonly List<Hero_Control> mListEnemyHeroes = new List<Hero_Control>();
+    readonly List<Hero> mListMyHeroes = new List<Hero>();
+    readonly List<Hero> mListEnemyHeroes = new List<Hero>();
 
     public GameObject BattleRoot;
 
@@ -65,12 +65,12 @@ public class BattleManager : MonoBehaviour
         get; set;
     }
 
-    public List<Hero_Control> ListMyHeroes
+    public List<Hero> ListMyHeroes
     {
         get { return mListMyHeroes; }
     }
 
-    public List<Hero_Control> ListEnemyHeroes
+    public List<Hero> ListEnemyHeroes
     {
         get { return mListEnemyHeroes; }
     }
@@ -116,6 +116,51 @@ public class BattleManager : MonoBehaviour
         if (BattleAIManager != null)
         {
             BattleAIManager.Update(fDeltaTime);
+        }
+    }
+
+    public void CreateBattleHero(Transform tParant, int iHeroNo, bool MyTeam, int sortingOrder, int spawnPos)
+    {
+        GameObject goHero = new GameObject();
+
+        Guid uid = Guid.NewGuid();
+        goHero.transform.parent = tParant;
+        goHero.transform.name = uid.ToString();
+
+        var hero = UtilSystem.CreateHero(goHero, uid, iHeroNo, MyTeam, sortingOrder);
+        if (hero != null)
+        {
+            SetBattleSpawnPos(goHero, MyTeam, spawnPos);
+
+            // create hero hp
+            if (BattleUI != null)
+            {
+                BattleUI.CreateHeroHp(hero.HeroUid, MyTeam);
+            }
+
+            if (MyTeam)
+            {
+                ListMyHeroes.Add(hero);
+            }
+            else
+            {
+                ListEnemyHeroes.Add(hero);
+            }
+        }
+        else
+        {
+            Debug.LogError("CreateBattleHero Fail : " + iHeroNo.ToString());
+        }
+    }
+
+    void SetBattleSpawnPos(GameObject goHero, bool myTeam, int spawnPos)
+    {
+        Transform tSPos = myTeam ? Battleground.BattleRegenPosMyTeam[spawnPos] : Battleground.BattleRegenPosEnemy[spawnPos];
+        if (tSPos != null)
+        {
+            goHero.transform.position = tSPos.position;
+            goHero.transform.rotation = Quaternion.identity;
+            goHero.transform.localScale = Vector3.one;
         }
     }
 
@@ -191,36 +236,36 @@ public class BattleManager : MonoBehaviour
         TargetHero.ExcuteAction(TargetHeroAction, vPos, ActiveHero, isWinner);
     }
     
-    EHeroBattleAction ResultBattleAction(Hero_Control mine, Hero_Control yours, ref bool isWinner)
+    EHeroBattleAction ResultBattleAction(Hero mine, Hero yours, ref bool isWinner)
     {
         isWinner = false;
 
         // Win
-        if (mine.ActionType == EAtionType.ACTION_ATK && yours.ActionType == EAtionType.ACTION_FAKE)
+        if (mine.ActionType == Hero.EAtionType.ACTION_ATK && yours.ActionType == Hero.EAtionType.ACTION_FAKE)
         {
             isWinner = true;
             return EHeroBattleAction.HeroAction_AtkWin;
         }
-        else if (mine.ActionType == EAtionType.ACTION_COUNT && yours.ActionType == EAtionType.ACTION_ATK)
+        else if (mine.ActionType == Hero.EAtionType.ACTION_COUNT && yours.ActionType == Hero.EAtionType.ACTION_ATK)
         {
             isWinner = true;
             return EHeroBattleAction.HeroAction_CntWin;
         }
-        else if (mine.ActionType == EAtionType.ACTION_FAKE && yours.ActionType == EAtionType.ACTION_COUNT)
+        else if (mine.ActionType == Hero.EAtionType.ACTION_FAKE && yours.ActionType == Hero.EAtionType.ACTION_COUNT)
         {
             isWinner = true;
             return EHeroBattleAction.HeroAction_FakeWin;
         }
         // Defeat
-        else if (mine.ActionType == EAtionType.ACTION_FAKE && yours.ActionType == EAtionType.ACTION_ATK)
+        else if (mine.ActionType == Hero.EAtionType.ACTION_FAKE && yours.ActionType == Hero.EAtionType.ACTION_ATK)
         {
             return EHeroBattleAction.HeroAction_FakeDefeat;
         }
-        else if (mine.ActionType == EAtionType.ACTION_ATK && yours.ActionType == EAtionType.ACTION_COUNT)
+        else if (mine.ActionType == Hero.EAtionType.ACTION_ATK && yours.ActionType == Hero.EAtionType.ACTION_COUNT)
         {
             return EHeroBattleAction.HeroAction_AtkDefeat;
         }
-        else if (mine.ActionType == EAtionType.ACTION_COUNT && yours.ActionType == EAtionType.ACTION_FAKE)
+        else if (mine.ActionType == Hero.EAtionType.ACTION_COUNT && yours.ActionType == Hero.EAtionType.ACTION_FAKE)
         {
             return EHeroBattleAction.HeroAction_CntDefeat;
         }
@@ -254,7 +299,7 @@ public class BattleManager : MonoBehaviour
         BattleUI.SetTurnTimer(Define.SELECT_TARGET_LIMITTIME, ETurnTimeType.TURNTIME_SEL_TARGET);        
     }
 
-    public Hero_Control GetHeroControl(int heroNo)
+    public Hero GetHeroControl(int heroNo)
     {
         var hero = ListMyHeroes.Find(x => x.HeroNo.Equals(heroNo));
         if (hero != null)
@@ -352,11 +397,11 @@ public class BattleManager : MonoBehaviour
     // 나중에 조건을 검색해서 넘겨줄수도 있음
     public int GetRandomHeroTeam()
     {
-        int Idx = Random.Range(0, mListMyHeroes.Count);
-        Hero_Control randomHero = mListMyHeroes[Idx];
+        int Idx = UnityEngine.Random.Range(0, mListMyHeroes.Count);
+        Hero randomHero = mListMyHeroes[Idx];
         while (randomHero.IsDie)
         {
-            Idx = Random.Range(0, mListMyHeroes.Count);
+            Idx = UnityEngine.Random.Range(0, mListMyHeroes.Count);
             if(mListMyHeroes[Idx].IsDie == false)
             {
                 randomHero = mListMyHeroes[Idx];

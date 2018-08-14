@@ -52,7 +52,7 @@ public class BattleStateNormal : BattleState
 
                 foreach (var hit in hits)
                 {
-                    var heroCont = hit.collider.GetComponentInParent<Hero_Control>();
+                    var heroCont = hit.collider.GetComponentInParent<Hero>();
                     if (heroCont == null) continue;
                     if (heroCont.IsMyTeam) continue;
                     if (BeforeHeroNo.Equals(heroCont.HeroNo)) continue;

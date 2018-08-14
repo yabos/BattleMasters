@@ -39,9 +39,9 @@ public class HeroBattleActionManager
 
     protected EHeroBattleAction m_eCurrentAction;
     protected EHeroBattleAction m_ePreviousAction;
-    protected Hero_Control m_Owner;
+    protected Hero m_Owner;
 
-    public virtual void Initialize(Hero_Control owner)
+    public virtual void Initialize(Hero owner)
     {
         m_ePreviousAction = m_eCurrentAction = EHeroBattleAction.HeroAction_Idle;
 

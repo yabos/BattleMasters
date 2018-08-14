@@ -13,7 +13,7 @@ public class BattleProfile : MonoBehaviour
     public Transform mSelectActionTypeMyTurn;
     public Transform mSelectActionTypeEnemyTurn;
 
-    public void SetProfile(Hero_Control heroCont, bool isActiveHero)
+    public void SetProfile(Hero heroCont, bool isActiveHero)
     {
         mSpriteProfile.spriteName = heroCont.HeroNo.ToString();
         mStatus.InitStatus(heroCont);        
@@ -27,7 +27,7 @@ public class BattleProfile : MonoBehaviour
     }
 
     // BattleStateReady 상태에서 클릭으로 스테이터스 볼 때 사용
-    public void BattleStateReadyOnlyProfile(Hero_Control heroCont)
+    public void BattleStateReadyOnlyProfile(Hero heroCont)
     {
         ActiveProfile(true);
         ActiveTargetBtn(false);

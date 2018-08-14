@@ -6,7 +6,7 @@ public class ActionEventListener : MonoBehaviour
 {
     public void OnAtk()
     {
-        var attackHero = transform.GetComponentInParent<Hero_Control>();
+        var attackHero = transform.GetComponentInParent<Hero>();
         if (attackHero != null)
         {
             TB_Hero tbHero;
@@ -15,9 +15,9 @@ public class ActionEventListener : MonoBehaviour
                 SoundManager.Instance.PlaySoundOnce(tbHero.mBaseAtkSound);
             }
 
-            if (attackHero.TargetHero != null)
+            if (attackHero.BattleTargetHero != null)
             {
-                attackHero.TargetHero.BeHit(attackHero);
+                attackHero.BattleTargetHero.BeHit(attackHero);
             }
         }
     }

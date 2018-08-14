@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class HeroBattleActionDrawDefeatAtk : HeroBattleAction
 {
-    public override void Initialize(Hero_Control owner, HeroBattleActionManager action_manager)
+    public override void Initialize(Hero owner, HeroBattleActionManager action_manager)
     {
         base.Initialize(owner, action_manager);
-        ReadCommend(EActionCommend.COMMEND_DRAW_DEFEAT_ATK);
+        ReadCommend(Hero.EActionCommend.COMMEND_DRAW_DEFEAT_ATK);
     }
 
     public override void DoStart(byte[] data = null)

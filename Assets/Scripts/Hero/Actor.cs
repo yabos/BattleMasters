@@ -59,6 +59,11 @@ public class Actor : MonoBehaviour
         }
     }
 
+    protected virtual void Update()
+    {
+
+    }
+
     public void PlayAnimation(AniType eActiveAni)
     {
         if (AniState == eActiveAni) return;

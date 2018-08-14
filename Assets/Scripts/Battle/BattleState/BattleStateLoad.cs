@@ -89,20 +89,7 @@ public class BattleStateLoad : BattleState
         {
             for (int i = 0; i < 4; ++i)
             {
-                Hero_Control hero = UtilFunc.CreateHero(tTeam, 1001 + i, 1, true);
-                if (hero != null)
-                {
-                    Transform tSPos = m_Owner.Battleground.BattleRegenPosMyTeam[i];
-                    if (tSPos != null)
-                    {
-                        hero.transform.position = tSPos.position;
-                        hero.transform.rotation = Quaternion.identity;
-                        hero.transform.localScale = Vector3.one;
-                    }
-
-                    hero.InitHero((i + 1)* 10);
-                    m_Owner.ListMyHeroes.Add(hero);
-                }
+                m_Owner.CreateBattleHero(tTeam, 1001 + i, true, (i + 1) * 10,  i);
             }
         }
     }
@@ -114,20 +101,7 @@ public class BattleStateLoad : BattleState
         {
             for (int i = 0; i < 4; ++i)
             {
-                Hero_Control hero = UtilFunc.CreateHero(tTeam, 2001 + i, 1, false);
-                if (hero != null)
-                {
-                    Transform tSPos = m_Owner.Battleground.BattleRegenPosEnemy[i];
-                    if (tSPos != null)
-                    {
-                        hero.transform.position = tSPos.position;
-                        hero.transform.rotation = Quaternion.identity;
-                        hero.transform.localScale = Vector3.one;
-                    }
-
-                    hero.InitHero((i + 1)* 10);
-                    m_Owner.ListEnemyHeroes.Add(hero);
-                }
+                m_Owner.CreateBattleHero(tTeam, 2001 + i, false, (i + 1) * 10, i);
             }
         }
     }

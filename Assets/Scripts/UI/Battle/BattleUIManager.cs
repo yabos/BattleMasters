@@ -102,15 +102,15 @@ public class BattleUIManager : BaseUIManager
         }
         else if (uIEvent == EBattleEvent.UIEVENT_ACTION_ATK)
         {
-            SetHeroActionType(EAtionType.ACTION_ATK);            
+            SetHeroActionType(Hero.EAtionType.ACTION_ATK);            
         }
         else if (uIEvent == EBattleEvent.UIEVENT_ACTION_COUNT)
         {
-            SetHeroActionType(EAtionType.ACTION_COUNT);
+            SetHeroActionType(Hero.EAtionType.ACTION_COUNT);
         }
         else if (uIEvent == EBattleEvent.UIEVENT_ACTION_FAKE)
         {
-            SetHeroActionType(EAtionType.ACTION_FAKE);
+            SetHeroActionType(Hero.EAtionType.ACTION_FAKE);
         }
     }
 
@@ -127,7 +127,7 @@ public class BattleUIManager : BaseUIManager
         }
     }
 
-    public void SetHeroActionType(EAtionType eAtionType)
+    public void SetHeroActionType(Hero.EAtionType eAtionType)
     {
         int heroNo = BattleManager.Instance.ActiveTurnHeroNo;
         if (BattleManager.Instance.GetActiveHeroTeam() == false)
@@ -284,7 +284,7 @@ public class BattleUIManager : BaseUIManager
         }
     }
 
-    public void SetReadyStateProfileUI(Hero_Control heroCont)
+    public void SetReadyStateProfileUI(Hero heroCont)
     {
         var bp = GetProfile(heroCont.HeroNo);
         if (bp != null)

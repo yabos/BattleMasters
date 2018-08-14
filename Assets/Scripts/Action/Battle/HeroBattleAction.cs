@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class HeroBattleAction
 {
-    protected Hero_Control m_Owner;
+    protected Hero m_Owner;
     protected HeroBattleActionManager m_ActionManager;
     protected List<string> m_Commends;
     protected Vector3 m_veOriginalPos;
 
-    public virtual void Initialize(Hero_Control owner, HeroBattleActionManager action_manager)
+    public virtual void Initialize(Hero owner, HeroBattleActionManager action_manager)
     {
         m_Owner = owner;
         m_ActionManager = action_manager;
@@ -39,7 +39,7 @@ public class HeroBattleAction
         // idle Action을 제외하고 모든 행동 끝에는 targetHero를 초기화 시킨다.
         if (m_ActionManager.GetCurrentAction() != EHeroBattleAction.HeroAction_Idle)
         {
-            m_Owner.TargetHero = null;
+            m_Owner.BattleTargetHero = null;
 
             // 전투시 공격 승리자를 더 높게 설정했던 SortingOrder를 원래대로 초기화.
             m_Owner.SetDefaultSortingOrder();
@@ -91,7 +91,7 @@ public class HeroBattleAction
     {
     }
 
-    protected void ReadCommend(EActionCommend actionCommend)
+    protected void ReadCommend(Hero.EActionCommend actionCommend)
     {
         var textAsset = m_Owner.GetActionCommend(actionCommend);
         if (textAsset != null)
@@ -116,6 +116,12 @@ public class HeroBattleAction
             for (int j = 1; j < param.Length; ++j)
             {
                 list[j - 1] = param[j].Trim();
+            }
+
+            if (m_Owner.IsDie)
+            {
+                m_Owner.ChangeState(EHeroBattleAction.HeroAction_BattleDie);
+                continue;
             }
 
             yield return m_Owner.BattleActionCommendExcution(param[0], list);

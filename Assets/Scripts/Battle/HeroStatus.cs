@@ -14,7 +14,7 @@ public class HeroStatus : MonoBehaviour
 
     public UILabel[] mPassive = new UILabel[3];
 
-    public void InitStatus(Hero_Control heroCont)
+    public void InitStatus(Hero heroCont)
     {
         mName.text = heroCont.HeroName;
         mHP.text = heroCont.HP + "/" + heroCont.MaxHP;

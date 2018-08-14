@@ -67,7 +67,7 @@ public class TurnTimer : MonoBehaviour
                     // random att type
                     if (BattleManager.Instance.ActiveTargetHeroNo > 0)
                     {
-                        EAtionType actionType = (EAtionType)Random.Range(0, (int)EAtionType.ACTION_MAX);
+                        Hero.EAtionType actionType = (Hero.EAtionType)Random.Range(0, (int)Hero.EAtionType.ACTION_MAX);
                         BattleManager.Instance.BattleUI.SetHeroActionType(actionType);
                     }
                 }
