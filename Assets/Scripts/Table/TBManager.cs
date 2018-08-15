@@ -40,30 +40,25 @@ public class TBManager : MonoBehaviour
 
         cont_Hero = new Dictionary<int, TB_Hero>();
 
-        StringTable st = new StringTable();
+        List<Dictionary<string, object>> data = CSVReader.Read("Table/TB_Hero");
 
-        if (false == st.Build("Table/TB_Hero")) { return; }
-
-        int iRowCount = st.row;
-
-        for (int x = 0; x < iRowCount; ++x)
+        for (var i = 0; i < data.Count; i++)
         {
             TB_Hero tbHero = new TB_Hero();
 
-            tbHero.mHeroNo = st.GetValueAsInt(x, "HeroNo");
-            tbHero.mHeroName = st.GetValue(x, "Name");
-            tbHero.mHP = st.GetValueAsInt(x, "HP");
-            tbHero.mAtk = st.GetValueAsInt(x, "Atk");
-            tbHero.mSpeed = st.GetValueAsInt(x, "Speed");
-            //tbHero.mSpeed = (float)iSpeed * 0.001f;
-            tbHero.mBaseAtkEfc = st.GetValue(x, "BaseAtkEfc");
-            tbHero.mBaseAtkSound = st.GetValue(x, "BaseAtkSound");
-            tbHero.mResPath = st.GetValue(x, "ResPath");
+            tbHero.mHeroNo = System.Convert.ToInt32(data[i]["HeroNo"]);
+            tbHero.mHeroName = System.Convert.ToString(data[i]["Name"]);
+            tbHero.mHP = System.Convert.ToInt32(data[i]["HP"]);
+            tbHero.mAtk = System.Convert.ToInt32(data[i]["Atk"]);
+            tbHero.mSpeed = System.Convert.ToInt32(data[i]["Speed"]);
+            tbHero.mBaseAtkEfc = System.Convert.ToString(data[i]["BaseAtkEfc"]);
+            tbHero.mBaseAtkSound = System.Convert.ToString(data[i]["BaseAtkSound"]);
+            tbHero.mResPath = System.Convert.ToString(data[i]["ResPath"]);
 
             int key = tbHero.mHeroNo;
             if (cont_Hero.ContainsKey(key))
             {
-                Debug.LogError("Already exist key. " + key.ToString() );
+                Debug.LogError("Already exist key. " + key.ToString());
             }
 
             cont_Hero.Add(key, tbHero);
