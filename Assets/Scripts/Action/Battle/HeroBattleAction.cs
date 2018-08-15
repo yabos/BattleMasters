@@ -117,10 +117,9 @@ public class HeroBattleAction
             {
                 list[j - 1] = param[j].Trim();
             }
-
-            if (m_Owner.IsDie)
+            
+            if (m_Owner.IsDie || m_Owner.BattleTargetHero.IsDie)
             {
-                m_Owner.ChangeState(EHeroBattleAction.HeroAction_BattleDie);
                 continue;
             }
 
