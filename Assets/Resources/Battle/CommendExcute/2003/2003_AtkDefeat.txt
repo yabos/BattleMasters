@@ -1,3 +1,0 @@
-MoveForward, 0.4, 5, Trace
-MoveBackward, 0.5, 3.5, Break
-MoveBackward, 0.5, 1, Defeat

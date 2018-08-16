@@ -1,5 +1,0 @@
-MoveBackward, 0.2, 4, Defeat
-MoveBackward, 0.3, 0.5, Defeat
-FadeOut, 0.5, 1.5, Defeat
-MoveForwardMoment, 0.2, 3, Atk
-MoveForward, 0.3, 0.5, Atk

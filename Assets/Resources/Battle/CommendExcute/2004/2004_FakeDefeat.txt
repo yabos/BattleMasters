@@ -1,3 +1,0 @@
-MoveBackward, 0.5, 1, Fake
-MoveBackward, 0.2, 3.5, Defeat
-MoveBackward, 0.5, 0.5, Defeat

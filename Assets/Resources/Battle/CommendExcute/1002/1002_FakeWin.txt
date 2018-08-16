@@ -1,3 +1,0 @@
-MoveBackward, 0.8, 3.5, Fake
-MoveForward, 0.2, 2.5, Atk
-MoveForward, 0.5, 0.5, Atk
