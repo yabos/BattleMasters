@@ -1,0 +1,4 @@
+AnimationDelay, 0.3, 0, Idle
+MoveForward, 0.2, 2.5, Cnt
+MoveForward, 0.3, 0.5, Cnt
+MoveForward, 0.5, 0.5, Atk

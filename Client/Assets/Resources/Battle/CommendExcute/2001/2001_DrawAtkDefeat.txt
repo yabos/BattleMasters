@@ -1,0 +1,5 @@
+MoveForward, 0.2, 2, Atk
+MoveForward, 0.3, 0.5, Atk
+FadeOut, 0.5, 1, Atk
+MoveBackward, 0.2, 3, Defeat
+MoveBackward, 0.3, 0.5, Defeat
