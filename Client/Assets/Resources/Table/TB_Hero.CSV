@@ -1,9 +1,9 @@
 HeroNo,Name,HP,Atk,Speed,BaseAtkEfc,BaseAtkSound,ResPath
 1001,Yu,500,100,800,Blade,Blow1,Heroes/Prefabs/Yu
-1002,La,550,1200,600,Blade,Blow1,Heroes/Prefabs/La
-1003,Mi,550,1200,700,Blade,Blow1,Heroes/Prefabs/Mi
-1004,Ce,550,1200,400,Blow1,Blow1,Heroes/Prefabs/Ce
-2001,Ag,600,1000,150,Blow1,Blow2,Heroes/Prefabs/Ag
+1002,La,550,100,600,Blade,Blow1,Heroes/Prefabs/La
+1003,Mi,550,120,700,Blade,Blow1,Heroes/Prefabs/Mi
+1004,Ce,550,120,400,Blow1,Blow1,Heroes/Prefabs/Ce
+2001,Ag,600,100,150,Blow1,Blow2,Heroes/Prefabs/Ag
 2002,Ak,600,20,250,Blow2,Blow2,Heroes/Prefabs/Ak
 2003,El,600,20,350,Blow3,Blow2,Heroes/Prefabs/El
 2004,Bc,400,15,250,Blade,Blow2,Heroes/Prefabs/Bc

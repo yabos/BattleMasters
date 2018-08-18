@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(ActionMaker), true)]
@@ -167,3 +168,4 @@ public class ActionMakerEditor : Editor
         }        
     }
 }
+#endif

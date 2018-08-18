@@ -80,6 +80,7 @@ public class HeroBattleActionCommendExcutor
         }
     }
 
+#if UNITY_EDITOR
     // ActionMaker Tools Only.
     #region ActionMaker Tool
     public void Initialize(ActionMaker actionMaker)
@@ -119,4 +120,5 @@ public class HeroBattleActionCommendExcutor
         }
     }
     #endregion
+#endif
 }
