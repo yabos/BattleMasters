@@ -27,7 +27,7 @@ public class BattleStateLoad : BattleState
         }
         m_Owner.BattleUI.ActiveLoadingIMG(false);
         m_Owner.TurnUI.CreateTurnIcon();
-        SoundManager.Instance.PlayBattleBGM(SoundManager.eBattleBGM.eBattleBGM_Normal);
+        SoundManager.Instance.PlayBGM(SoundManager.eBGMType.eBGM_Battle);
 
         m_StateManager.ChangeState(EBattleState.BattleState_Ready);
     }

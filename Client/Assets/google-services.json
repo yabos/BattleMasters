@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "110186072408",
+    "firebase_url": "https://flushx-f0024.firebaseio.com",
+    "project_id": "flushx-f0024",
+    "storage_bucket": "flushx-f0024.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:110186072408:android:2ff9ee075e3241e3",
+        "android_client_info": {
+          "package_name": "com.novusvia.flushx"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "110186072408-oe4t5r8ogsh0d61dfs2rj7d5qs1ieo09.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.novusvia.flushx",
+            "certificate_hash": "2b58b7297ed79ec99e4ac877e2bb922c5c410a22"
+          }
+        },
+        {
+          "client_id": "110186072408-csuj86ijr0hisqcqmmjnuk09hcvp95qi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuSN4W5oVUcm9jrkL6esHf--VCgwQPTBc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "110186072408-csuj86ijr0hisqcqmmjnuk09hcvp95qi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "110186072408-omqa2q4mb9qdg52i6brcn812p288ph02.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.novusvia.flushx"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

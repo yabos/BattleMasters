@@ -89,7 +89,7 @@ public class BattleManager : MonoBehaviour
     {
         EffectRoot = BattleRoot.transform.Find("Effect");
 
-        TBManager.Instance.LoadTableAll();
+        //TBManager.Instance.LoadTableAll();
 
         if (BattleStateManager == null)
         {

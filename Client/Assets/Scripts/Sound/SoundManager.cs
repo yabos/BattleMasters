@@ -26,28 +26,14 @@ public class SoundManager : MonoBehaviour
     public enum eBGMType
     {
         eBGM_Title,
-        eBGM_BaseVill,
-        eBGM_StoneCave,
-    }
-
-    public enum eBattleBGM
-    {
-        eBattleBGM_Normal,
-        eBattleBGM_Boss,
-        eBattleBGM_Epic,
+        eBGM_Lobby,
+        eBGM_Battle,
     }
 
     string[] m_stBGMPath = new string[] 
     {
-        "BattleBGM",
-        "BattleBGM",
-        "BattleBGM",
-    };
-
-    string[] m_stBattleBGMPath = new string[]
-    {
-        "BattleBGM",
-        "BattleBGM",
+        "Title",
+        "Lobby",
         "BattleBGM",
     };
 
@@ -150,28 +136,7 @@ public class SoundManager : MonoBehaviour
             musicPlayer.Play();
         }
     }
-
-    public void PlayBattleBGM(eBattleBGM eType)
-    {
-        //if (!GameSetting.hasMusic)
-        //{
-        //    return;
-        //}
-
-        string stName = m_stBattleBGMPath[(int)eType];
-        if (musicPlayer.clip == null || musicPlayer.clip.name != stName)
-        {
-            musicPlayer.clip = VResources.Load<AudioClip>("Sound/BGM/" + stName);
-            musicPlayer.Stop();
-            musicPlayer.loop = true;
-            musicPlayer.Play();
-        }
-        else
-        {
-            musicPlayer.loop = true;
-            musicPlayer.Play();
-        }
-    }
+    
     public void PlayCurrentBGM()
     {
         string stName = m_stBGMPath[(int)m_eCurBGM];
