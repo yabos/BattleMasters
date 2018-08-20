@@ -6,9 +6,9 @@ using Firebase.Auth;
 
 public class FirebaseAuth_Facebook : FirebaseAuth
 {
-    public override void InitializeFirebaseAuth()
+    public override void InitializeFirebaseAuth(FirebaseAuthManager owner)
     {
-        base.InitializeFirebaseAuth();
+        base.InitializeFirebaseAuth(owner);
 
         // facebook sdk 초기화
         if (!FB.IsInitialized)
@@ -67,7 +67,7 @@ public class FirebaseAuth_Facebook : FirebaseAuth
             Debug.Log(string.Format("Facebook access token: {0}", accessToken.TokenString));
 
             // 이미 firebase에 account 등록이 되었는지 확인
-            if (SingedInFirebase)
+            if (mOwner.SingedInFirebase)
             {
                 LinkFacebookAccount(accessToken);
             }
@@ -88,7 +88,7 @@ public class FirebaseAuth_Facebook : FirebaseAuth
     {
         Credential credential = FacebookAuthProvider.GetCredential(accessToken.TokenString);
 
-        auth
+        mOwner.auth
           .SignInWithCredentialAsync(credential)
           .ContinueWith(task => {
               if (task.IsCanceled)
@@ -102,11 +102,9 @@ public class FirebaseAuth_Facebook : FirebaseAuth
                   return;
               }
 
-              user = task.Result;
+              mOwner.user = task.Result;
               Debug.Log(string.Format("User signed in successfully: {0} ({1})",
-              user.DisplayName, user.UserId));
-              PlayerPrefs.SetString("LoginType", "FACEBOOK");
-              PlayerPrefs.SetString("UserId", user.UserId);
+              mOwner.user.DisplayName, mOwner.user.UserId));              
           });
     }
 
@@ -115,7 +113,7 @@ public class FirebaseAuth_Facebook : FirebaseAuth
     {
         Credential credential = FacebookAuthProvider.GetCredential(accessToken.TokenString);
 
-        auth.CurrentUser
+        mOwner.auth.CurrentUser
           .LinkWithCredentialAsync(credential)
           .ContinueWith(task => {
               if (task.IsCanceled)
@@ -129,11 +127,9 @@ public class FirebaseAuth_Facebook : FirebaseAuth
                   return;
               }
 
-              user = task.Result;
+              mOwner.user = task.Result;
               Debug.Log(string.Format("Credentials successfully linked to Firebase user: {0} ({1})",
-              user.DisplayName, user.UserId));
-              PlayerPrefs.SetString("LoginType", "FACEBOOK");
-              PlayerPrefs.SetString("UserId", user.UserId);
+              mOwner.user.DisplayName, mOwner.user.UserId));
           });
     }
 }

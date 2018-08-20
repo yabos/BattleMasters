@@ -8,7 +8,7 @@ public class Title_Control : MonoBehaviour
 {
     public GameObject mLoginType;
 
-    private IEnumerator Start()
+    private void Start()
     {
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Screen.SetResolution((Screen.width * 16) / 9, Screen.width, true);
@@ -19,21 +19,33 @@ public class Title_Control : MonoBehaviour
 
         TBManager.Instance.LoadTableAll();
 
-        yield return new WaitForSeconds(3);
-
         var loginType = PlayerPrefs.GetString("LoginType");
         if (string.IsNullOrEmpty(loginType))
         {
-            mLoginType.SetActive(true);            
+            mLoginType.SetActive(true);
         }
         else
         {
             mLoginType.SetActive(false);
 
             var userId = PlayerPrefs.GetString("UserId");
-            Debug.Log(userId);
-            FirebaseDBMamager.Instance.GetUsers(userId);
+            FirebaseAuthManager.Instance.SetProvider(loginType);
         }
+    }
+
+    public void TestGetData()
+    {
+        FirebaseDBMamager.Instance.GetUsers("");
+    }
+
+    public void TestUpdate()
+    {
+        FirebaseDBMamager.Instance.OnClickUpdateChildren();
+    }
+
+    public void TestLogOut()
+    {
+        FirebaseAuthManager.Instance.LogOut();
     }
 
     void SetFirebaseDatabase()

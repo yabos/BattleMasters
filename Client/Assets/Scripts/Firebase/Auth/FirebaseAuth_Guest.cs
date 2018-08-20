@@ -4,17 +4,15 @@ using UnityEngine;
 
 public class FirebaseAuth_Guest : FirebaseAuth
 {
-    public override void InitializeFirebaseAuth()
+    public override void InitializeFirebaseAuth(FirebaseAuthManager owner)
     {
-        base.InitializeFirebaseAuth();
-
-        auth.StateChanged += AuthStateChanged;
+        base.InitializeFirebaseAuth(owner);
     }
 
     /** 익명 로그인 요청 */
     public void GuestLogin()
     {
-        auth
+        mOwner.auth
           .SignInAnonymouslyAsync()
           .ContinueWith(task => {
               if (task.IsCanceled)
@@ -28,31 +26,9 @@ public class FirebaseAuth_Guest : FirebaseAuth
                   return;
               }
 
-              user = task.Result;
+              mOwner.user = task.Result;
               Debug.Log(string.Format("User signed in successfully: {0} ({1})",
-              user.DisplayName, user.UserId));
-              PlayerPrefs.SetString("LoginType", "GUEST");
-              PlayerPrefs.SetString("UserId", user.UserId);
-              FirebaseDBMamager.Instance.InitUserData(user.UserId, "anu");
+              mOwner.user.DisplayName, mOwner.user.UserId));              
           });
-    }
-
-
-    /** 상태변화 추적 */
-    void AuthStateChanged(object sender, System.EventArgs eventArgs)
-    {
-        if (auth.CurrentUser != user)
-        {
-            if (!SingedInFirebase && user != null)
-            {
-                Debug.LogFormat("Signed out {0}", user.UserId);
-            }
-            user = auth.CurrentUser;
-            if (SingedInFirebase)
-            {
-                Debug.Log(string.Format("Signed in {0}", user.UserId));
-                Debug.Log(string.Format("Signed in {0} _ {1}", user.DisplayName, user.Email));
-            }
-        }
     }
 }

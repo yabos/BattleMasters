@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class FirebaseAuth_Google : FirebaseAuth
 {
-    public override void InitializeFirebaseAuth()
+    public override void InitializeFirebaseAuth(FirebaseAuthManager owner)
     {
-        base.InitializeFirebaseAuth();
+        base.InitializeFirebaseAuth(owner);
     }
 
     public void GoogleLogin()

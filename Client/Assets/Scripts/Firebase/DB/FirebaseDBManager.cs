@@ -50,15 +50,17 @@ public class FirebaseDBMamager : MonoBehaviour
 
     public void GetUsers(string userId)
     {
-        Firebase.Database.FirebaseDatabase dbInstance = Firebase.Database.FirebaseDatabase.DefaultInstance;
-        dbInstance.GetReference("users").Child(userId).GetValueAsync().ContinueWith(task => {
+        DatabaseReference mDatabaseRef = FirebaseDatabase.DefaultInstance.RootReference;
+        mDatabaseRef.Child("users").GetValueAsync().ContinueWith(task => {
             if (task.IsFaulted)
             {
+                Debug.Log(task.Exception);
                 // Handle the error...
-                Debug.Log(task.Result.Value);
+                Debug.Log("fai1l");
             }
             else if (task.IsCompleted)
             {
+                Debug.Log("suc");
                 DataSnapshot snapshot = task.Result;
                 foreach (DataSnapshot user in snapshot.Children)
                 {
@@ -76,8 +78,7 @@ public class FirebaseDBMamager : MonoBehaviour
         string userId = "testUserId";
 
         Dictionary<string, object> childUpdates = new Dictionary<string, object>();
-        childUpdates["/users/" + userId + "/" + "username"] = "editedTestUserName";
-        childUpdates["/users/" + userId + "/" + "score"] = 100;
+        childUpdates["/users/" + userId] = "editedTestUserName";
 
         mDatabaseRef.UpdateChildrenAsync(childUpdates).ContinueWith(
             task =>
