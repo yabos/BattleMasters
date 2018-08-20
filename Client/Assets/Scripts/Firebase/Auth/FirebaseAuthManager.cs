@@ -32,7 +32,7 @@ public class FirebaseAuthManager : MonoBehaviour
         }
     }
 
-    FirebaseAuth[] FirebaseAuth = new FirebaseAuth[]
+    FirebaseAuth_Base[] FirebaseAuth = new FirebaseAuth_Base[]
     {
         new FirebaseAuth_Guest(),
         new FirebaseAuth_Facebook(),

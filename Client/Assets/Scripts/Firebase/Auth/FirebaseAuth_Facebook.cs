@@ -4,7 +4,7 @@ using UnityEngine;
 using Facebook.Unity;
 using Firebase.Auth;
 
-public class FirebaseAuth_Facebook : FirebaseAuth
+public class FirebaseAuth_Facebook : FirebaseAuth_Base
 {
     public override void InitializeFirebaseAuth(FirebaseAuthManager owner)
     {

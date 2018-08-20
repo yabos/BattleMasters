@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FirebaseAuth_Twitter : FirebaseAuth
+public class FirebaseAuth_Twitter : FirebaseAuth_Base
 {
     public override void InitializeFirebaseAuth(FirebaseAuthManager owner)
     {
