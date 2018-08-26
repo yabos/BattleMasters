@@ -13,7 +13,7 @@ public class Title_Control : MonoBehaviour
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Screen.SetResolution((Screen.width * 16) / 9, Screen.width, true);
 
-        SoundManager.Instance.PlayBGM(SoundManager.eBGMType.eBGM_Title);
+        Global.SoundMgr.PlayBGM(SoundManager.eBGMType.eBGM_Title);
 
         SetFirebaseDatabase();
 
@@ -29,7 +29,7 @@ public class Title_Control : MonoBehaviour
             mLoginType.SetActive(false);
 
             var userId = PlayerPrefs.GetString("UserId");
-            FirebaseAuthManager.Instance.SetProvider(loginType);
+            Global.AuthMgr.SetProvider(loginType);
         }
     }
 
@@ -45,7 +45,7 @@ public class Title_Control : MonoBehaviour
 
     public void TestLogOut()
     {
-        FirebaseAuthManager.Instance.LogOut();
+        Global.AuthMgr.LogOut();
     }
 
     void SetFirebaseDatabase()
@@ -59,6 +59,9 @@ public class Title_Control : MonoBehaviour
 
     public void OnNextLevel()
     {
-        SceneManager.LoadScene("Battle");
+        //Global.SceneMgr.Transition(new SceneTransition(typeof(LoginScene).ToString(), "Battle", 0.5f, 0.3f, (code) =>
+        //{
+        //    Global.SceneMgr.LogWarning(StringUtil.Format("Page Transition -> {0}", "BattleScene"));
+        //}));
     }	
 }

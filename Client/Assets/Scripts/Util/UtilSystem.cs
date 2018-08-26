@@ -8,7 +8,7 @@ public static class UtilSystem
         TB_Hero tbHero;
         if (TBManager.Instance.cont_Hero.TryGetValue(iHeroNo, out tbHero))
         {
-            GameObject goRes = VResources.Load<GameObject>(tbHero.mResPath);
+            GameObject goRes = Global.ResourceMgr.Load<GameObject>(tbHero.mResPath);
             if (goRes == null) return null;
 
             GameObject go = UnityEngine.Object.Instantiate(goRes) as GameObject;

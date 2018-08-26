@@ -40,7 +40,7 @@ public class TurnUI_Control : MonoBehaviour
     {
         for (int i = 0; i < listHero.Count; ++i)
         {
-            GameObject goIcon = Instantiate(VResources.Load<GameObject>(ResourcePath.TurnIconPath)) as GameObject;
+            GameObject goIcon = Instantiate(Global.ResourceMgr.Load<GameObject>(ResourcePath.TurnIconPath)) as GameObject;
             if (goIcon != null)
             {
                 goIcon.transform.parent = transform;

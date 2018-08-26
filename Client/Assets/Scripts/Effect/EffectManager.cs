@@ -55,7 +55,7 @@ public class EffectManager : MonoBehaviour
     void AddEffectPool(EffectType type)
     {
         string path = "Effect/Hero/";
-        GameObject efc = VResources.Load<GameObject>(path + effectName[(int)type]);
+        GameObject efc = Global.ResourceMgr.Load<GameObject>(path + effectName[(int)type]);
         if (efc != null)
         {
             mDicEffectPool.Add(type, efc);

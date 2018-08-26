@@ -29,16 +29,16 @@ public class BattleUIManager : BaseUIManager
 		BattleLoading = transform.Find ("Anchor/Loading");
         DamageRoot = transform.Find("Anchor/DamageRoot");
 
-        var Tran = transform.Find("Anchor_BL/Profile");
-        if (Tran != null)
+        var tranProfile = transform.Find("Anchor_BL/Profile");
+        if (tranProfile != null)
         {
-            Profiles[0] = Tran.GetComponent<BattleProfile>();
+            Profiles[0] = tranProfile.GetComponent<BattleProfile>();
         }
         
-        Tran = transform.Find("Anchor_BR/Profile");
-        if (Tran != null)
+        tranProfile = transform.Find("Anchor_BR/Profile");
+        if (tranProfile != null)
         {
-            Profiles[1] = Tran.GetComponent<BattleProfile>();
+            Profiles[1] = tranProfile.GetComponent<BattleProfile>();
         }
 
         GoTurnTimer = transform.Find("Anchor/Timer").gameObject;
@@ -58,7 +58,7 @@ public class BattleUIManager : BaseUIManager
 
     void AddBattleUI(eBattleUI type, string Path)
     {
-        GameObject goUI = VResources.Load<GameObject>(Path);
+        GameObject goUI = Global.ResourceMgr.Load<GameObject>(Path);
         if (goUI != null)
         {
             GameObject uiRoot = Instantiate(goUI) as GameObject;
@@ -161,7 +161,7 @@ public class BattleUIManager : BaseUIManager
 
     public void CreateHeroHp(System.Guid uid, bool bMyTeam)
     {
-		GameObject goHPRes = VResources.Load<GameObject>("UI/Common/Prefabs/HPGauge");
+		GameObject goHPRes = Global.ResourceMgr.Load<GameObject>("UI/Common/Prefabs/HPGauge");
         if (goHPRes == null) return;
 
         GameObject goHP = Instantiate(goHPRes) as GameObject;
@@ -323,7 +323,7 @@ public class BattleUIManager : BaseUIManager
 
     public void CreateDamage(int iDamage, Vector3 vPos, bool bMyTeam)
     {
-        GameObject goDamageRes = VResources.Load<GameObject>("UI/Common/Prefabs/HeroDamage");
+        GameObject goDamageRes = Global.ResourceMgr.Load<GameObject>("UI/Common/Prefabs/HeroDamage");
         if (goDamageRes != null)
         {
             GameObject goDamage = Instantiate(goDamageRes) as GameObject;

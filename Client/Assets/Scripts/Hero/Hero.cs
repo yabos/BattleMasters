@@ -244,7 +244,7 @@ public class Hero : Actor
         for (int i = 0; i < ActionCommend.Length; ++i)
         {
             string resPath = ResourcePath.CommendPath + HeroNo + "/" + HeroNo + "_" + ActionCommend[i];
-            var excution = VResources.Load<TextAsset>(resPath);
+            var excution = Global.ResourceMgr.Load<TextAsset>(resPath);
             if (excution != null)
             {
                 mActionCommend.Add((EActionCommend)i, excution);                

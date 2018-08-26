@@ -27,7 +27,7 @@ public class BattleStateLoad : BattleState
         }
         m_Owner.BattleUI.ActiveLoadingIMG(false);
         m_Owner.TurnUI.CreateTurnIcon();
-        SoundManager.Instance.PlayBGM(SoundManager.eBGMType.eBGM_Battle);
+        Global.SoundMgr.PlayBGM(SoundManager.eBGMType.eBGM_Battle);
 
         m_StateManager.ChangeState(EBattleState.BattleState_Ready);
     }
@@ -39,7 +39,7 @@ public class BattleStateLoad : BattleState
 
     public void LoadBattleHUD()
     {
-        GameObject goUI = VResources.Load<GameObject>(ResourcePath.BattleUIPath);
+        GameObject goUI = Global.ResourceMgr.Load<GameObject>(ResourcePath.BattleUIPath);
         if (goUI != null)
         {
             GameObject uiRoot = Object.Instantiate(goUI) as GameObject;
@@ -65,7 +65,7 @@ public class BattleStateLoad : BattleState
             Object.Destroy(goBattlegound);
         }
 
-        GameObject goMap = VResources.Load<GameObject>(ResourcePath.MapLoadPath + iMapNo.ToString());
+        GameObject goMap = Global.ResourceMgr.Load<GameObject>(ResourcePath.MapLoadPath + iMapNo.ToString());
         if (goMap != null)
         {
             goBattlegound = Object.Instantiate(goMap) as GameObject;

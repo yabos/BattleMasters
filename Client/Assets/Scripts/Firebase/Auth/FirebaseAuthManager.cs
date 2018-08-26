@@ -11,27 +11,8 @@ public enum EFirebaseProvider
     GOOGLE,
 }
 
-public class FirebaseAuthManager : MonoBehaviour
+public class FirebaseAuthManager : GlobalManagerBase<ManagerSettingBase>
 {
-    private static FirebaseAuthManager _instance;
-    public static FirebaseAuthManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = FindObjectOfType(typeof(FirebaseAuthManager)) as FirebaseAuthManager;
-                if (_instance == null)
-                {
-                    GameObject manaer = new GameObject("FirebaseAuthManager", typeof(FirebaseAuthManager));
-                    _instance = manaer.GetComponent<FirebaseAuthManager>();
-                }
-            }
-
-            return _instance;
-        }
-    }
-
     FirebaseAuth_Base[] FirebaseAuth = new FirebaseAuth_Base[]
     {
         new FirebaseAuth_Guest(),
@@ -56,6 +37,83 @@ public class FirebaseAuthManager : MonoBehaviour
             return user != auth.CurrentUser && auth.CurrentUser != null;
         }
     }
+
+    #region Events
+    public override void OnAppStart(ManagerSettingBase managerSetting)
+    {
+        
+    }
+
+    public override void OnAppEnd()
+    {
+        DestroyRootObject();
+
+        if (m_setting != null)
+        {
+            GameObjectFactory.DestroyComponent(m_setting);
+            m_setting = null;
+        }
+    }
+
+    public override void OnAppFocus(bool focused)
+    {
+
+    }
+
+    public override void OnAppPause(bool paused)
+    {
+
+    }
+
+    public override void OnPageEnter(string pageName)
+    {
+    }
+
+    public override IEnumerator OnPageExit()
+    {
+        yield return new WaitForEndOfFrame();
+    }
+
+    #endregion Events
+
+    #region IBhvUpdatable
+
+    public override void BhvOnEnter()
+    {
+
+    }
+
+    public override void BhvOnLeave()
+    {
+
+    }
+
+    public override void BhvFixedUpdate(float dt)
+    {
+
+    }
+
+    public override void BhvLateFixedUpdate(float dt)
+    {
+
+    }
+
+    public override void BhvUpdate(float dt)
+    {
+    }
+
+    public override void BhvLateUpdate(float dt)
+    {
+
+    }
+
+
+    //public override bool OnMessage(IMessage message)
+    //{
+    //    return false;
+    //}
+
+    #endregion IBhvUpdatable
 
     // Use this for initialization
     void Start ()

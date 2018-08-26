@@ -12,7 +12,7 @@ public class ActionEventListener : MonoBehaviour
             TB_Hero tbHero;
             if (TBManager.Instance.cont_Hero.TryGetValue(attackHero.HeroNo, out tbHero))
             {
-                SoundManager.Instance.PlaySoundOnce(tbHero.mBaseAtkSound);
+                Global.SoundMgr.PlaySoundOnce(tbHero.mBaseAtkSound);
             }
 
             if (attackHero.BattleTargetHero != null)

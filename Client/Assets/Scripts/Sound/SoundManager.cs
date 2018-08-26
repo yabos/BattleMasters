@@ -2,27 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class SoundManager : MonoBehaviour
+public class SoundManager : GlobalManagerBase<ManagerSettingBase>
 {
-    private static SoundManager _instance;
-    public static SoundManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = FindObjectOfType(typeof(SoundManager)) as SoundManager;
-                if (_instance == null)
-                {
-                    GameObject dataManaer = new GameObject("SoundManager", typeof(SoundManager));
-                    _instance = dataManaer.GetComponent<SoundManager>();
-                }
-            }
-
-            return _instance;
-        }
-    }
-
     public enum eBGMType
     {
         eBGM_Title,
@@ -30,7 +11,13 @@ public class SoundManager : MonoBehaviour
         eBGM_Battle,
     }
 
-    string[] m_stBGMPath = new string[] 
+    string[] m_stOnce = new string[]
+    {
+        "Blow1",
+        "Blow2",
+    };
+
+    string[] m_stBGMPath = new string[]
     {
         "Title",
         "Lobby",
@@ -47,37 +34,94 @@ public class SoundManager : MonoBehaviour
 
     public eBGMType m_eCurBGM = eBGMType.eBGM_Title;
 
-    void Awake()
+    #region Events
+    public override void OnAppStart(ManagerSettingBase managerSetting)
     {
-        al = GetComponent<AudioListener>();
-        audioClips = new Dictionary<string, AudioClip>();
-        foreach (AudioClip a in audioSources)
+        m_name = typeof(SceneManager).ToString();
+
+        if (string.IsNullOrEmpty(m_name))
         {
-            audioClips.Add(a.name, a);
+            throw new System.Exception("manager name is empty");
+        }
+
+        m_setting = managerSetting as SceneManagerSetting;
+
+        if (null == m_setting)
+        {
+            throw new System.Exception("manager setting is null");
+        }
+
+        CreateRootObject(m_setting.transform, "SoundManager");
+
+        al = ComponentFactory.AddComponent<AudioListener>(RootObject);
+        audioClips = new Dictionary<string, AudioClip>();
+        foreach (var name in m_stOnce)
+        {
+            var clip = Global.ResourceMgr.Load<AudioClip>("Sound/SFX/" + name);
+            audioClips.Add(name, clip);
         }
 
         audioPrefab = audioPrefabSource;
-        musicPlayer = GetComponent<AudioSource>();
+        musicPlayer = ComponentFactory.AddComponent<AudioSource>(RootObject);
         aliveSounds = new Dictionary<string, Audio>();
-
-        DontDestroyOnLoad(this);
     }
 
-    void Update()
+    public override void OnAppEnd()
     {
-        //if (!GameSetting.hasMusic)
-        //{
-        //    musicPlayer.Pause();
-        //}
-        //else
-        //{
-        //    if (!musicPlayer.isPlaying)
-        //    {
-        //        musicPlayer.Play();
-        //    }
-        //}
+        DestroyRootObject();
 
-        //if (!gamesetting.hassound && aliveSounds.count > 0)
+        if (m_setting != null)
+        {
+            GameObjectFactory.DestroyComponent(m_setting);
+            m_setting = null;
+        }
+    }
+
+    public override void OnAppFocus(bool focused)
+    {
+
+    }
+
+    public override void OnAppPause(bool paused)
+    {
+
+    }
+
+    public override void OnPageEnter(string pageName)
+    {
+    }
+
+    public override IEnumerator OnPageExit()
+    {
+        yield return new WaitForEndOfFrame();
+    }
+
+    #endregion Events
+
+    #region IBhvUpdatable
+
+    public override void BhvOnEnter()
+    {
+
+    }
+
+    public override void BhvOnLeave()
+    {
+
+    }
+
+    public override void BhvFixedUpdate(float dt)
+    {
+
+    }
+
+    public override void BhvLateFixedUpdate(float dt)
+    {
+
+    }
+
+    public override void BhvUpdate(float dt)
+    {
         if (aliveSounds == null) return;
 
         if (aliveSounds.Count > 0)
@@ -95,6 +139,14 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    public override void BhvLateUpdate(float dt)
+    {
+
+    }
+
+    #endregion IBhvUpdatable
+
+
     public void PlaySoundOnce(string name)
     {
         //if (!GameSetting.hasSound)
@@ -106,12 +158,11 @@ public class SoundManager : MonoBehaviour
         {
             return;
         }
-        GameObject go = Instantiate(audioPrefab) as GameObject;
-        go.transform.parent = this.transform;
+        GameObject go = Object.Instantiate(audioPrefab) as GameObject;
+        //go.transform.parent = this.transform;
         Audio a = go.GetComponent<Audio>();
         a.PlaySoundOnce(audioClips[name]);        
     }
-
 
     public void PlayBGM(eBGMType eBGMType)
     {
@@ -125,7 +176,7 @@ public class SoundManager : MonoBehaviour
         string stName = m_stBGMPath[(int)m_eCurBGM];
         if (musicPlayer.clip == null || musicPlayer.clip.name != stName)
         {
-            musicPlayer.clip = VResources.Load<AudioClip>("Sound/BGM/" + stName);
+            musicPlayer.clip = Global.ResourceMgr.Load<AudioClip>("Sound/BGM/" + stName);
             musicPlayer.Stop();
             musicPlayer.loop = true;
             musicPlayer.Play();
@@ -142,7 +193,7 @@ public class SoundManager : MonoBehaviour
         string stName = m_stBGMPath[(int)m_eCurBGM];
         if (musicPlayer.clip == null || musicPlayer.clip.name != stName)
         {
-            musicPlayer.clip = VResources.Load<AudioClip>("Sound/BGM" + stName);
+            musicPlayer.clip = Global.ResourceMgr.Load<AudioClip>("Sound/BGM" + stName);
             musicPlayer.Stop();
             musicPlayer.loop = true;
             musicPlayer.Play();
