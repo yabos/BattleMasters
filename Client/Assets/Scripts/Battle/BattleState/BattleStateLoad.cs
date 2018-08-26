@@ -39,10 +39,10 @@ public class BattleStateLoad : BattleState
 
     public void LoadBattleHUD()
     {
-        GameObject goUI = Global.ResourceMgr.Load<GameObject>(ResourcePath.BattleUIPath);
+        var goUI = Global.ResourceMgr.CreateUIResource(ResourcePath.BattleUIPath, true);
         if (goUI != null)
         {
-            GameObject uiRoot = Object.Instantiate(goUI) as GameObject;
+            GameObject uiRoot = Object.Instantiate(goUI.ResourceData) as GameObject;
             if (uiRoot != null)
             {
                 uiRoot.transform.name = uiRoot.name;
@@ -65,10 +65,10 @@ public class BattleStateLoad : BattleState
             Object.Destroy(goBattlegound);
         }
 
-        GameObject goMap = Global.ResourceMgr.Load<GameObject>(ResourcePath.MapLoadPath + iMapNo.ToString());
+        var goMap = Global.ResourceMgr.CreatePrefabResource(ResourcePath.MapLoadPath + iMapNo.ToString());
         if (goMap != null)
         {
-            goBattlegound = Object.Instantiate(goMap) as GameObject;
+            goBattlegound = Object.Instantiate(goMap.ResourceData) as GameObject;
             if (goBattlegound != null)
             {
                 goBattlegound.name = "Map";

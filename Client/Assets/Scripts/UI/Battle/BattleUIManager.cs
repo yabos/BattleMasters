@@ -58,10 +58,10 @@ public class BattleUIManager : BaseUIManager
 
     void AddBattleUI(eBattleUI type, string Path)
     {
-        GameObject goUI = Global.ResourceMgr.Load<GameObject>(Path);
+        var goUI = Global.ResourceMgr.CreateUIResource(Path, true);
         if (goUI != null)
         {
-            GameObject uiRoot = Instantiate(goUI) as GameObject;
+            GameObject uiRoot = Instantiate(goUI.ResourceData) as GameObject;
             if (uiRoot != null)
             {
                 uiRoot.transform.name = uiRoot.name;
@@ -161,10 +161,10 @@ public class BattleUIManager : BaseUIManager
 
     public void CreateHeroHp(System.Guid uid, bool bMyTeam)
     {
-		GameObject goHPRes = Global.ResourceMgr.Load<GameObject>("UI/Common/Prefabs/HPGauge");
+		var goHPRes = Global.ResourceMgr.CreateUIResource("UI/Common/Prefabs/HPGauge", false);
         if (goHPRes == null) return;
 
-        GameObject goHP = Instantiate(goHPRes) as GameObject;
+        GameObject goHP = Instantiate(goHPRes.ResourceData) as GameObject;
         if (goHP != null)
         {
             goHP.transform.parent = HeroHp.transform;
@@ -323,10 +323,10 @@ public class BattleUIManager : BaseUIManager
 
     public void CreateDamage(int iDamage, Vector3 vPos, bool bMyTeam)
     {
-        GameObject goDamageRes = Global.ResourceMgr.Load<GameObject>("UI/Common/Prefabs/HeroDamage");
+        var goDamageRes = Global.ResourceMgr.CreateUIResource("UI/Common/Prefabs/HeroDamage", false);
         if (goDamageRes != null)
         {
-            GameObject goDamage = Instantiate(goDamageRes) as GameObject;
+            GameObject goDamage = Instantiate(goDamageRes.ResourceData) as GameObject;
             if (goDamage != null)
             {
                 goDamage.transform.parent = DamageRoot;

@@ -55,10 +55,10 @@ public class EffectManager : MonoBehaviour
     void AddEffectPool(EffectType type)
     {
         string path = "Effect/Hero/";
-        GameObject efc = Global.ResourceMgr.Load<GameObject>(path + effectName[(int)type]);
-        if (efc != null)
+        var resource =Global.ResourceMgr.CreatePrefabResource(path + effectName[(int)type]);
+        if (resource != null)
         {
-            mDicEffectPool.Add(type, efc);
+            mDicEffectPool.Add(type, resource.ResourceGameObject);
         }
     }
 

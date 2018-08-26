@@ -66,6 +66,15 @@ public class Global : SingletonMonoBehaviour<Global>
         }
     }
 
+    private UIManager m_UIManager = null;
+    public static UIManager UIMgr
+    {
+        get
+        {
+            return m_instance.m_UIManager;
+        }
+    }
+
     void Awake()
     {
         Log("Awake()");
@@ -377,11 +386,6 @@ public class Global : SingletonMonoBehaviour<Global>
             m_managers.Clear();
         }
 
-        if (CreateManager<SceneManager, SceneManagerSetting > (ref m_sceneManager))
-        {
-            AddManager(m_sceneManager);
-        }
-
         if (CreateManager<FirebaseAuthManager, ManagerSettingBase>(ref m_AuthManager))
         {
             AddManager(m_AuthManager);
@@ -395,6 +399,16 @@ public class Global : SingletonMonoBehaviour<Global>
         if (CreateManager<SoundManager, ManagerSettingBase>(ref m_soundManager))
         {
             AddManager(m_soundManager);
+        }
+
+        if (CreateManager<UIManager, ManagerSettingBase>(ref m_UIManager))
+        {
+            AddManager(m_UIManager);
+        }
+
+        if (CreateManager<SceneManager, SceneManagerSetting>(ref m_sceneManager))
+        {
+            AddManager(m_sceneManager);
         }
 
         //DataManager.Instance.LoadData();

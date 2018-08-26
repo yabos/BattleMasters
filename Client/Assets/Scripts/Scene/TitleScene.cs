@@ -9,14 +9,14 @@ public class TitleScene : SceneBase
     {
         yield return base.OnEnter(progress);
 
-        //yield return Global.WidgetMgr.OnCreateWidgetAsync<LoginWidget>("LoginWidget", widget =>
-        //{
-        //    if (widget != null)
-        //    {
-        //        widget.Show();
-        //        SetEnterPageProgressInfo(0.5f);
-        //    }
-        //});
+        yield return Global.UIMgr.OnCreateWidgetAsync<TitleUI>(ResourcePath.TitleUI, widget =>
+        {
+            if (widget != null)
+            {
+                widget.Show();
+                SetEnterPageProgressInfo(0.5f);
+            }
+        });
 
         yield return new WaitForSeconds(1.0f);
     }

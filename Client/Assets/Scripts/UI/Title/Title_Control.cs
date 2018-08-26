@@ -10,8 +10,8 @@ public class Title_Control : MonoBehaviour
 
     private void Start()
     {
-        Screen.sleepTimeout = SleepTimeout.NeverSleep;
-        Screen.SetResolution((Screen.width * 16) / 9, Screen.width, true);
+        //Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        //Screen.SetResolution((Screen.width * 16) / 9, Screen.width, true);
 
         Global.SoundMgr.PlayBGM(SoundManager.eBGMType.eBGM_Title);
 

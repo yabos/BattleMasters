@@ -37,14 +37,14 @@ public class SoundManager : GlobalManagerBase<ManagerSettingBase>
     #region Events
     public override void OnAppStart(ManagerSettingBase managerSetting)
     {
-        m_name = typeof(SceneManager).ToString();
+        m_name = typeof(SoundManager).ToString();
 
         if (string.IsNullOrEmpty(m_name))
         {
             throw new System.Exception("manager name is empty");
         }
 
-        m_setting = managerSetting as SceneManagerSetting;
+        m_setting = managerSetting as ManagerSettingBase;
 
         if (null == m_setting)
         {
@@ -57,8 +57,8 @@ public class SoundManager : GlobalManagerBase<ManagerSettingBase>
         audioClips = new Dictionary<string, AudioClip>();
         foreach (var name in m_stOnce)
         {
-            var clip = Global.ResourceMgr.Load<AudioClip>("Sound/SFX/" + name);
-            audioClips.Add(name, clip);
+            var clip = Global.ResourceMgr.CreateSoundResource("Sound/SFX/" + name);
+            audioClips.Add(name, clip.AudioClip);
         }
 
         audioPrefab = audioPrefabSource;
@@ -176,7 +176,8 @@ public class SoundManager : GlobalManagerBase<ManagerSettingBase>
         string stName = m_stBGMPath[(int)m_eCurBGM];
         if (musicPlayer.clip == null || musicPlayer.clip.name != stName)
         {
-            musicPlayer.clip = Global.ResourceMgr.Load<AudioClip>("Sound/BGM/" + stName);
+            var clip = Global.ResourceMgr.CreateSoundResource("Sound/BGM/" + stName);
+            musicPlayer.clip = clip.AudioClip;
             musicPlayer.Stop();
             musicPlayer.loop = true;
             musicPlayer.Play();
@@ -193,7 +194,8 @@ public class SoundManager : GlobalManagerBase<ManagerSettingBase>
         string stName = m_stBGMPath[(int)m_eCurBGM];
         if (musicPlayer.clip == null || musicPlayer.clip.name != stName)
         {
-            musicPlayer.clip = Global.ResourceMgr.Load<AudioClip>("Sound/BGM" + stName);
+            var clip = Global.ResourceMgr.CreateSoundResource("Sound/BGM/" + stName);
+            musicPlayer.clip = clip.AudioClip;
             musicPlayer.Stop();
             musicPlayer.loop = true;
             musicPlayer.Play();

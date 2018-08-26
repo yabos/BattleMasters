@@ -2,9 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum eResourceType
+{
+    Prefab,
+    Sound,
+    UI,
+    Max,
+}
+
 public class ResourceManager : GlobalManagerBase<ManagerSettingBase>
 {
-    static Dictionary<string, Object> resourceCache = new Dictionary<string, Object>();
+    private Dictionary<int, IResource>[] m_dicResource = new Dictionary<int, IResource>[(int)eResourceType.Max];
+
+    public ResourceManager()
+    {
+        for (int i = 0; i < (int)eResourceType.Max; i++)
+        {
+            m_dicResource[i] = new Dictionary<int, IResource>();
+        }
+    }
 
 
     #region Events
@@ -91,14 +107,104 @@ public class ResourceManager : GlobalManagerBase<ManagerSettingBase>
 
     #endregion IBhvUpdatable
 
-    public T Load<T>(string path) where T : Object
-    {
-        if (!resourceCache.ContainsKey(path))
-            resourceCache[path] = Resources.Load<T>(path);
+    //public T Load<T>(string path) where T : Object
+    //{
+    //    var resourceCache = new Dictionary<string, object>();
+    //    if (!resourceCache.ContainsKey(path))
+    //        resourceCache[path] = Resources.Load<T>(path);
 
-        return (T)resourceCache[path];
+    //    return (T)resourceCache[path];
+    //}
+
+    public PrefabResource CreateUIResource(string path, bool dontDestroyOnLoad)
+    {
+        IResource res = FindResource(eResourceType.UI, path);
+        if (res != null)
+        {
+            return (PrefabResource)res;
+        }
+
+        return (PrefabResource)CreateResource(eResourceType.UI, path);
     }
-    
+
+    public PrefabResource CreatePrefabResource(string path)
+    {
+        IResource res = FindResource(eResourceType.Prefab, path);
+        if (res != null)
+        {
+            return (PrefabResource)res;
+        }
+
+        return (PrefabResource)CreateResource(eResourceType.Prefab, path);
+    }
+
+    public SoundResource CreateSoundResource(string path)
+    {
+        IResource res = null;
+        res = FindResource(eResourceType.Sound, path);
+        if (res != null)
+        {
+            return (SoundResource)res;
+        }
+
+        return (SoundResource)CreateResource(eResourceType.Sound, path);
+    }
+
+    private IResource CreateResource(eResourceType eType, string path)
+    {
+        // 사운드는 넘어오는 name이 실제 파일 이름이 아니라 내부 이름이므로 변경 프로세스가 필요
+        //             if (eType == E_ResourceType.Sound)
+        //             {
+        //                 SoundInfo si;
+        //                 if (DataManager.Instance.GetScriptData<SoundData>(E_GameScriptData.Sound).GetSoundInfo(name, out si))
+        //                 {
+        //                     name = si.Filename;
+        //                 }
+        //             }
+
+        bool isAssetBundle = false;
+        Object objresource = Resources.Load(path);
+
+        if (objresource == null)
+        {
+            return null;
+        }
+
+        return CreateResource(eType, path, path, objresource, isAssetBundle);
+    }
+
+
+    private IResource CreateResource(eResourceType eType, string name, string assetpath, Object objresource, bool isAssetBundle)
+    {
+        IResource resource = null;
+        switch (eType)
+        {
+            //case E_ResourceType.Actor:
+            case eResourceType.UI:
+            case eResourceType.Prefab:
+                resource = new PrefabResource(objresource, eType, isAssetBundle);
+                break;
+
+            case eResourceType.Sound:
+                resource = new SoundResource(objresource, isAssetBundle);
+                break;
+
+        }
+        resource.InitLoad(name, assetpath);
+
+        Dictionary<int, IResource> dicRes = GetDicResource(eType);
+        if (dicRes.ContainsKey(resource.GetHashCode()))
+        {
+            //           LogManager.GetInstance().LogDebug("CreateResource name error" + name);
+        }
+        else
+        {
+            dicRes.Add(resource.GetHashCode(), resource);
+        }
+
+        return resource;
+    }
+
 
     #region Asysc Methods
 
@@ -146,66 +252,91 @@ public class ResourceManager : GlobalManagerBase<ManagerSettingBase>
         yield return true;
     }
 
+    public IEnumerator CreateResourceAsync(eResourceType resourceType, string path, System.Action<IResource> action)
+    {
+        if (string.IsNullOrEmpty(path) == true)
+        {
+            action(null);
+            yield break;
+        }
 
-    //public IEnumerator CreateResourceAsync(eResourceType resourceType, string resourceName, ePath pathType, System.Action<IResource> action)
-    //{
-    //    if (string.IsNullOrEmpty(resourceName) == true)
-    //    {
-    //        action(null);
-    //        yield break;
-    //    }
+        bool isAssetBundle = false;
+        UnityEngine.Object resourceData = null;
 
-    //    bool isAssetBundle = false;
-    //    string resourcePath = StringUtil.Format("{0}/{1}", m_pathManager.GetPath(pathType), resourceName);
-    //    UnityEngine.Object resourceData = null;
+        ResourceRequest request = Resources.LoadAsync(path);
+        yield return request;
+        resourceData = request.asset;
 
-    //    ResourceRequest request = Resources.LoadAsync(resourcePath);
-    //    yield return request;
-    //    resourceData = request.asset;
+        if (resourceData == null)
+        {
+            LogError("resource is null: " + resourceType.ToString() + ", " + path);
+            action(null);
+            yield break;
+        }
 
-    //    if (resourceData == null)
-    //    {
-    //        LogError("resource is null: " + resourceType.ToString() + ", " + pathType.ToString() + ", " + resourceName);
-    //        action(null);
-    //        yield break;
-    //    }
-
-    //    action(CreateResource(resourceType, resourceName, resourcePath, resourceData, isAssetBundle));
-    //}
+        action(CreateResource(resourceType, path, path, resourceData, isAssetBundle));
+    }
 
 
-    //public IEnumerator CreatePrefabResourceAsync(ePath path, string prefabName, System.Action<PrefabResource> action)
-    //{
-    //    IResource res = FindResource(eResourceType.Prefab, prefabName);
-    //    if (res != null)
-    //    {
-    //        action(res as PrefabResource);
-    //    }
-    //    else
-    //    {
-    //        yield return CreateResourceAsync(eResourceType.Prefab, prefabName, path, result =>
-    //        {
-    //            action(result as PrefabResource);
-    //        });
-    //    }
-    //}
+    public IEnumerator CreatePrefabResourceAsync(string path, string prefabName, System.Action<PrefabResource> action)
+    {
+        IResource res = FindResource(eResourceType.Prefab, prefabName);
+        if (res != null)
+        {
+            action(res as PrefabResource);
+        }
+        else
+        {
+            yield return CreateResourceAsync(eResourceType.Prefab, path, result =>
+            {
+                action(result as PrefabResource);
+            });
+        }
+    }
 
 
-    //public IEnumerator CreateUIResourceAsync(string prefabName, ePath pathType, bool dontDestroyOnLoad, System.Action<PrefabResource> action)
-    //{
-    //    IResource res = FindResource(eResourceType.UI, prefabName);
-    //    if (res != null)
-    //    {
-    //        action(res as PrefabResource);
-    //    }
-    //    else
-    //    {
-    //        yield return CreateResourceAsync(eResourceType.UI, prefabName, pathType, result =>
-    //        {
-    //            action(result as PrefabResource);
-    //        });
-    //    }
-    //}
+    public IEnumerator CreateUIResourceAsync(string path, bool dontDestroyOnLoad, System.Action<PrefabResource> action)
+    {
+        IResource res = FindResource(eResourceType.UI, path);
+        if (res != null)
+        {
+            action(res as PrefabResource);
+        }
+        else
+        {
+            yield return CreateResourceAsync(eResourceType.UI, path, result =>
+            {
+                action(result as PrefabResource);
+            });
+        }
+    }
 
     #endregion Asysc Methods
+
+    public IResource FindResource(string name)
+    {
+        for (int i = 0; i < (int)eResourceType.Max; i++)
+        {
+            IResource res = FindResource((eResourceType)i, name);
+            if (res != null)
+                return res;
+        }
+        return null;
+    }
+
+    public IResource FindResource(eResourceType eType, string name)
+    {
+        Dictionary<int, IResource> dicresource = GetDicResource(eType);
+        int hashcode = name.GetHashCode();
+        if (dicresource.ContainsKey(hashcode))
+        {
+            return dicresource[hashcode];
+        }
+        return null;
+    }
+
+    private Dictionary<int, IResource> GetDicResource(eResourceType eType)
+    {
+        return m_dicResource[(int)eType];
+    }
 }
