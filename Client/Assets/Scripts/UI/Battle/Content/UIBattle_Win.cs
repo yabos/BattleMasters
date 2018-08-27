@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BattleUI_Lose : BaseUI
+public class UIBattle_Win : UIBase
 {
     #region IBhvUpdatable
 

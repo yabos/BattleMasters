@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BattleUI_Win : BaseUI
+public class UITitle : UIBase
 {
     #region IBhvUpdatable
 
-    public override void BhvOnEnter() { }
+    public override void BhvOnEnter()
+    {
+        Global.SoundMgr.PlayBGM(SoundManager.eBGMType.eBGM_Title);
+    }
+
     public override void BhvOnLeave() { }
 
     public override void BhvFixedUpdate(float dt)
@@ -33,5 +37,13 @@ public class BattleUI_Win : BaseUI
     public override void OnNotify(INotify message)
     {
 
+    }
+
+    public void OnNextLevel()
+    {
+        Global.SceneMgr.Transition<LobbyScene>("LobbyScene", 0.5f, 0.3f, (code) =>
+        {
+            Global.SceneMgr.LogWarning(StringUtil.Format("Scene Transition -> {0}", "LobbyScene"));
+        });
     }
 }

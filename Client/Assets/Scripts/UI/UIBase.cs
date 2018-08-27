@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public abstract class BaseUI : NotifyHanlderBehaviour
+public abstract class UIBase : NotifyHanlderBehaviour
 {
     public bool IsPopupType = false;
 

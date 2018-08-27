@@ -87,7 +87,7 @@ public abstract class SceneBase : NotifyHanlderBehaviour
     {
         m_currentProgress = m_baseProgress + (progress * m_remainProgress);
         //Global.ResourceMgr.LogWarning(StringUtil.Format("OnTransitionCoroutine -> Enter Page {0} %", (int)(m_currentProgress * 100)));
-        //Global.WidgetMgr.SetLoadingProgressInfo(m_currentProgress);
+        Global.UIMgr.SetLoadingProgressInfo(m_currentProgress);
     }
 
     public void TransitionPage<T>(string pageResourceName, float fadeInDuration, float fadeOutDuration) where T : SceneBase

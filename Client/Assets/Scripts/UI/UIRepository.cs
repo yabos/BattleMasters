@@ -2,11 +2,11 @@
 using UnityEngine;
 using System;
 
-public class UIRepository : IRepository<string, BaseUI>, IGraphUpdatable
+public class UIRepository : IRepository<string, UIBase>, IGraphUpdatable
 {
-    private Dictionary<string, BaseUI> m_widgets = new Dictionary<string, BaseUI>(StringComparer.CurrentCultureIgnoreCase);
+    private Dictionary<string, UIBase> m_widgets = new Dictionary<string, UIBase>(StringComparer.CurrentCultureIgnoreCase);
 
-    public Dictionary<string, BaseUI> Widgets
+    public Dictionary<string, UIBase> Widgets
     {
         get { return m_widgets; }
     }
@@ -20,14 +20,14 @@ public class UIRepository : IRepository<string, BaseUI>, IGraphUpdatable
         m_widgets.Clear();
     }
 
-    public bool Get(string widgetType, out BaseUI widget)
+    public bool Get(string widgetType, out UIBase widget)
     {
         return m_widgets.TryGetValue(widgetType, out widget);
     }
 
-    public void Insert(BaseUI widget)
+    public void Insert(UIBase widget)
     {
-        BaseUI resultwidget;
+        UIBase resultwidget;
         string widgetType = widget.WidgetName;
         if (Get(widgetType, out resultwidget) == false)
         {
@@ -39,7 +39,7 @@ public class UIRepository : IRepository<string, BaseUI>, IGraphUpdatable
         }
     }
 
-    public bool Remove(BaseUI widget)
+    public bool Remove(UIBase widget)
     {
         string widgetType = widget.UniqueName;
 
@@ -51,9 +51,9 @@ public class UIRepository : IRepository<string, BaseUI>, IGraphUpdatable
         return m_widgets.Remove(widgetType);
     }
 
-    public bool GetWidgets(ref List<BaseUI> lstActors)
+    public bool GetWidgets(ref List<UIBase> lstActors)
     {
-        foreach (KeyValuePair<string, BaseUI> keyValuePair in m_widgets)
+        foreach (KeyValuePair<string, UIBase> keyValuePair in m_widgets)
         {
             lstActors.Add(keyValuePair.Value);
         }
@@ -63,9 +63,9 @@ public class UIRepository : IRepository<string, BaseUI>, IGraphUpdatable
 
     public void HideAllWidgets(float deactiveTime = 0.0f)
     {
-        foreach (KeyValuePair<string, BaseUI> keyValuePair in m_widgets)
+        foreach (KeyValuePair<string, UIBase> keyValuePair in m_widgets)
         {
-            BaseUI widgetBase = keyValuePair.Value;
+            UIBase widgetBase = keyValuePair.Value;
 
 
             //if (widgetBase is LoadingWidget)

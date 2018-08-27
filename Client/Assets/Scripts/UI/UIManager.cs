@@ -109,48 +109,48 @@ public class UIManager : GlobalManagerBase<ManagerSettingBase>
         m_widgetRepositories.FinalizeWidgets(false);
     }
 
-    //public void ShowLoadingWidget(float activeTime = 0.0f, string currentPageName = "", string nextPageName = "")
-    //{
-    //    LoadingWidget widget = m_widgetRepositories.FindWidget("LoadingWidget") as LoadingWidget;
-    //    if (widget == null)
-    //    {
-    //        widget = m_widgetRepositories.CreateWidget<LoadingWidget>("System/LoadingWidget");
-    //    }
+    public void ShowLoadingWidget(float activeTime = 0.0f, string currentPageName = "", string nextPageName = "")
+    {
+        UILoading widget = m_widgetRepositories.FindWidget("UILoading") as UILoading;
+        if (widget == null)
+        {
+            widget = m_widgetRepositories.CreateWidget<UILoading>("UI/Prefabs/System/UILoading");
+        }
 
-    //    if (widget != null)
-    //    {
-    //        widget.Show(activeTime);
-    //        widget.SetLoadingPanelInfo(currentPageName, nextPageName);
-    //        widget.SetLoadingProgressInfo(0.0f);
-    //    }
-    //}
+        if (widget != null)
+        {
+            widget.Show(activeTime);
+            widget.SetLoadingPanelInfo(currentPageName, nextPageName);
+            widget.SetLoadingProgressInfo(0.0f);
+        }
+    }
 
-    //public void SetLoadingPanelInfo(string currentPageName, string nextPageName)
-    //{
-    //    LoadingWidget widget = m_widgetRepositories.FindWidget("LoadingWidget") as LoadingWidget;
-    //    if (widget != null)
-    //    {
-    //        widget.SetLoadingPanelInfo(currentPageName, nextPageName);
-    //    }
-    //}
+    public void SetLoadingPanelInfo(string currentPageName, string nextPageName)
+    {
+        UILoading widget = m_widgetRepositories.FindWidget("UILoading") as UILoading;
+        if (widget != null)
+        {
+            widget.SetLoadingPanelInfo(currentPageName, nextPageName);
+        }
+    }
 
-    //public void SetLoadingProgressInfo(float progress)
-    //{
-    //    LoadingWidget widget = m_widgetRepositories.FindWidget("LoadingWidget") as LoadingWidget;
-    //    if (widget != null)
-    //    {
-    //        widget.SetLoadingProgressInfo(progress);
-    //    }
-    //}
+    public void SetLoadingProgressInfo(float progress)
+    {
+        UILoading widget = m_widgetRepositories.FindWidget("UILoading") as UILoading;
+        if (widget != null)
+        {
+            widget.SetLoadingProgressInfo(progress);
+        }
+    }
 
-    //public void HideLoadingWidget(float deactiveTime = 0.0f)
-    //{
-    //    LoadingWidget widget = m_widgetRepositories.FindWidget("LoadingWidget") as LoadingWidget;
-    //    if (widget != null)
-    //    {
-    //        widget.Hide(deactiveTime);
-    //    }
-    //}
+    public void HideLoadingWidget(float deactiveTime = 0.0f)
+    {
+        UILoading widget = m_widgetRepositories.FindWidget("UILoading") as UILoading;
+        if (widget != null)
+        {
+            widget.Hide(deactiveTime);
+        }
+    }
 
 
     //public void ShowMessageBox(string title, string message, eMessageBoxType messageBoxType,
@@ -217,13 +217,13 @@ public class UIManager : GlobalManagerBase<ManagerSettingBase>
     //    }
     //}    
 
-    public BaseUI ShowWidget(string widgetName, float activeTime = 0.0f, params object[] data)
+    public UIBase ShowWidget(string widgetName, float activeTime = 0.0f, params object[] data)
     {
-        BaseUI widget = FindWidget(widgetName);
+        UIBase widget = FindWidget(widgetName);
 
         if (widget == null)
         {
-            widget = CreateWidget<BaseUI>(widgetName);
+            widget = CreateWidget<UIBase>(widgetName);
         }
 
         widget.Show(activeTime, data);
@@ -232,7 +232,7 @@ public class UIManager : GlobalManagerBase<ManagerSettingBase>
 
     public void Hide(string widgetName, float activeTime = 0.0f)
     {
-        BaseUI widget = FindWidget(widgetName);
+        UIBase widget = FindWidget(widgetName);
 
         if (widget != null)
         {
@@ -240,18 +240,18 @@ public class UIManager : GlobalManagerBase<ManagerSettingBase>
         }
     }
 
-    public T CreateWidget<T>(string path, bool dontDestroyOnLoad = false) where T : BaseUI
+    public T CreateWidget<T>(string path, bool dontDestroyOnLoad = false) where T : UIBase
     {
         return m_widgetRepositories.CreateWidget<T>(path, dontDestroyOnLoad);
     }
 
     public IEnumerator OnCreateWidgetAsync<T>(string path, System.Action<T> action, bool dontDestroyOnLoad = false)
-        where T : BaseUI
+        where T : UIBase
     {
         yield return m_widgetRepositories.OnCreateWidgetAsync<T>(path, action, dontDestroyOnLoad);
     }
 
-    public BaseUI FindWidget(string widgetType)
+    public UIBase FindWidget(string widgetType)
     {
         return m_widgetRepositories.FindWidget(widgetType);
     }

@@ -217,7 +217,7 @@ public class SceneManager : GlobalManagerBase<SceneManagerSetting>
         string currentPageType = m_currentScene ? m_currentScene.GetType().ToString() : string.Empty;
         string nextPageType = typeof(T).ToString();
 
-        //Global.WidgetMgr.ShowLoadingWidget(fadeInDuration, currentPageType, nextPageType);
+        Global.UIMgr.ShowLoadingWidget(fadeInDuration, currentPageType, nextPageType);
 
         yield return new WaitForEndOfFrame();
 
@@ -247,7 +247,7 @@ public class SceneManager : GlobalManagerBase<SceneManagerSetting>
                 {
                     // scene loading..
                     currentProgress = progress * sceneLoadingProgressRate;
-                    //Global.WidgetMgr.SetLoadingProgressInfo(currentProgress);
+                    Global.UIMgr.SetLoadingProgressInfo(currentProgress);
 
                     LogWarning(StringUtil.Format("OnTransitionCoroutine -> LoadScene {0} %", (int)(currentProgress * 100)));
                 },
@@ -255,7 +255,7 @@ public class SceneManager : GlobalManagerBase<SceneManagerSetting>
                 {
                     // completed scene load
                     currentProgress = sceneLoadingProgressRate;
-                    //Global.WidgetMgr.SetLoadingProgressInfo(currentProgress);
+                    Global.UIMgr.SetLoadingProgressInfo(currentProgress);
 
                     LogWarning("OnTransitionCoroutine -> Completed LoadScene.");
                 });
@@ -283,7 +283,7 @@ public class SceneManager : GlobalManagerBase<SceneManagerSetting>
 
         if (completed != null)
         {
-            //Global.WidgetMgr.HideLoadingWidget(fadeOutDuration);
+            Global.UIMgr.HideLoadingWidget(fadeOutDuration);
             completed(eSceneTransitionErrorCode.Success);
         }
 

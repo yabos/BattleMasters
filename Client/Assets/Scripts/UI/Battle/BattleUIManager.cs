@@ -20,7 +20,7 @@ public class BattleUIManager : BaseUIManager
     GameObject GoTurnTimer;
     TurnTimer TurnTime;
 
-    Dictionary<eBattleUI, BaseUI> DicBattleUI = new Dictionary<eBattleUI, BaseUI>();
+    Dictionary<eBattleUI, UIBase> DicBattleUI = new Dictionary<eBattleUI, UIBase>();
 
 	// Use this for initialization
 	void Awake ()
@@ -71,7 +71,7 @@ public class BattleUIManager : BaseUIManager
                 uiRoot.transform.localRotation = Quaternion.identity;
                 uiRoot.transform.localScale = Vector3.one;
 
-                var baseUI = uiRoot.GetComponent<BaseUI>();
+                var baseUI = uiRoot.GetComponent<UIBase>();
                 DicBattleUI.Add(type, baseUI);
 
                 uiRoot.SetActive(false);

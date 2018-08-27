@@ -1,15 +1,14 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class TitleScene : SceneBase
+public class LobbyScene : SceneBase
 {
-    protected bool IsPageLogin = false;
-
     public override IEnumerator OnEnter(float progress)
     {
         yield return base.OnEnter(progress);
 
-        yield return Global.UIMgr.OnCreateWidgetAsync<UITitle>(ResourcePath.UITitle, widget =>
+        yield return Global.UIMgr.OnCreateWidgetAsync<UILobby>(ResourcePath.UILobby, widget =>
         {
             if (widget != null)
             {
@@ -30,6 +29,7 @@ public class TitleScene : SceneBase
 
     public override void OnInitialize()
     {
+
     }
 
     public override void OnFinalize()
@@ -55,5 +55,5 @@ public class TitleScene : SceneBase
     public override void OnNotify(INotify notify)
     {
         base.OnNotify(notify);
-    }    
+    }
 }

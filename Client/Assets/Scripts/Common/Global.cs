@@ -82,7 +82,7 @@ public class Global : SingletonMonoBehaviour<Global>
         if (null != m_instance)
         {
             FinalizeManager();
-            //GameObjectFactory.Destroy(gameObject);
+            GameObjectFactory.Destroy(gameObject);
             return;
         }
         else
@@ -118,7 +118,7 @@ public class Global : SingletonMonoBehaviour<Global>
         {
             if (m_managers[i].Value != null)
             {
-                //if (m_managers[i].Value is WidgetManager) continue;
+                if (m_managers[i].Value is UIManager) continue;
 
                 m_managers[i].Value.BhvOnEnter();
             }
@@ -428,10 +428,11 @@ public class Global : SingletonMonoBehaviour<Global>
             }
         }
 
-
         DestroyManager<SceneManager>(ref m_sceneManager);
         DestroyManager<FirebaseAuthManager>(ref m_AuthManager);
         DestroyManager<ResourceManager>(ref m_resourceManager);
+        DestroyManager<SoundManager>(ref m_soundManager);
+        DestroyManager<UIManager>(ref m_UIManager);
 
         m_isInitialized = false;
     }

@@ -120,7 +120,7 @@ public class UIRepositories : IGraphUpdatable
 
     #endregion IBhvUpdatable
 
-    public Dictionary<string, BaseUI> GetWidgets()
+    public Dictionary<string, UIBase> GetWidgets()
     {
         return m_widgetRepository.Widgets;
     }
@@ -134,8 +134,7 @@ public class UIRepositories : IGraphUpdatable
         }
         else
         {
-            rootGameObjects = GameObjectFactory.GetRootGameObject()
-                .Where(c => c.layer == LayerMask.NameToLayer("UI")).ToList();
+            rootGameObjects = GameObjectFactory.GetRootGameObject().Where(c => c.layer == LayerMask.NameToLayer("UI")).ToList();
             if (rootGameObjects == null || rootGameObjects.Any() == false)
             {
                 m_root = new GameObject("UIPanel");
@@ -159,8 +158,7 @@ public class UIRepositories : IGraphUpdatable
 
         for (int i = 0; i < rootGameObjects.Count; ++i)
         {
-            Transform[] transforms =
-                ComponentFactory.GetChildComponents<Transform>(rootGameObjects[i], IfNotExist.ReturnNull);
+            Transform[] transforms = ComponentFactory.GetChildComponents<Transform>(rootGameObjects[i], IfNotExist.ReturnNull);
             if (transforms == null)
             {
                 continue;
@@ -168,14 +166,12 @@ public class UIRepositories : IGraphUpdatable
 
             for (int j = 0; j < transforms.Length; ++j)
             {
-                if (m_staticPanel == null && transforms[j].name
-                        .IndexOf("StaticPanel", System.StringComparison.OrdinalIgnoreCase) >= 0)
+                if (m_staticPanel == null && transforms[j].name.IndexOf("StaticPanel", System.StringComparison.OrdinalIgnoreCase) >= 0)
                 {
                     m_staticPanel = transforms[j].gameObject;
                 }
 
-                if (m_dynamicPanel == null && transforms[j].name
-                        .IndexOf("DynamicPanel", System.StringComparison.OrdinalIgnoreCase) >= 0)
+                if (m_dynamicPanel == null && transforms[j].name.IndexOf("DynamicPanel", System.StringComparison.OrdinalIgnoreCase) >= 0)
                 {
                     m_dynamicPanel = transforms[j].gameObject;
                 }
@@ -207,7 +203,7 @@ public class UIRepositories : IGraphUpdatable
 
     public void FinalizeWidgets(bool dontDestroy)
     {
-        List<BaseUI> removeWidgets = new List<BaseUI>();
+        List<UIBase> removeWidgets = new List<UIBase>();
         m_widgetRepository.GetWidgets(ref removeWidgets);
         m_widgetRepository.Terminate();
 
@@ -229,7 +225,7 @@ public class UIRepositories : IGraphUpdatable
         removeWidgets.Clear();
     }
 
-    private void FinalizeWidget(Transform rootTransform, BaseUI widget)
+    private void FinalizeWidget(Transform rootTransform, UIBase widget)
     {
         if (widget == null || widget.transform == null)
         {
@@ -243,9 +239,9 @@ public class UIRepositories : IGraphUpdatable
         widget.transform.localRotation = Quaternion.identity;
     }
 
-    public T CreateWidget<T>(string path, bool dontDestroyOnLoad = false) where T : BaseUI
+    public T CreateWidget<T>(string path, bool dontDestroyOnLoad = false) where T : UIBase
     {
-        BaseUI widget = FindWidget(path);
+        UIBase widget = FindWidget(path);
 
         if (widget != null)
         {
@@ -291,9 +287,9 @@ public class UIRepositories : IGraphUpdatable
     //}
 
     public IEnumerator OnCreateWidgetAsync<T>(string path, System.Action<T> action, bool dontDestroyOnLoad)
-        where T : BaseUI
+        where T : UIBase
     {
-        BaseUI widget = FindWidget(path);
+        UIBase widget = FindWidget(path);
 
         if (widget != null)
         {
@@ -313,7 +309,7 @@ public class UIRepositories : IGraphUpdatable
         }
     }
 
-    protected T LoadWiget<T>(string path, bool dontDestroyOnLoad) where T : BaseUI
+    protected T LoadWiget<T>(string path, bool dontDestroyOnLoad) where T : UIBase
     {
         PrefabResource resource = Global.ResourceMgr.CreateUIResource(path, dontDestroyOnLoad);
 
@@ -336,13 +332,13 @@ public class UIRepositories : IGraphUpdatable
     }
 
     protected IEnumerator LoadWigetAsync<T>(string path, bool dontDestroyOnLoad, System.Action<T> action)
-        where T : BaseUI
+        where T : UIBase
     {
         PrefabResource resource = null;
         yield return Global.ResourceMgr.CreateUIResourceAsync(path, dontDestroyOnLoad,
             o => { resource = o; });
 
-        BaseUI widget = null;
+        UIBase widget = null;
         if (resource != null)
         {
             widget = ComponentFactory.GetComponent<T>(GameObject.Instantiate(resource.ResourceData) as GameObject,
@@ -360,7 +356,7 @@ public class UIRepositories : IGraphUpdatable
     }
 
 
-    protected void InitWidget(string path, BaseUI widget, System.Action<BaseUI> action)
+    protected void InitWidget(string path, UIBase widget, System.Action<UIBase> action)
     {
         if (widget == null)
             return;
@@ -368,10 +364,12 @@ public class UIRepositories : IGraphUpdatable
         if (widget.IsPopupType == true)
         {
             widget.transform.SetParent(m_dynamicPanel != null ? m_dynamicPanel.transform : m_root.transform, true);
+            widget.transform.localScale = Vector3.one;
         }
         else
         {
             widget.transform.SetParent(m_staticPanel != null ? m_staticPanel.transform : m_root.transform, true);
+            widget.transform.localScale = Vector3.one;
         }
 
         //if (Global.SceneMgr != null && Global.SceneMgr.CurrentScene != null)
@@ -397,7 +395,7 @@ public class UIRepositories : IGraphUpdatable
     }
 
 
-    protected void AddWidget(string path, BaseUI widget, bool dontDestroyOnLoad)
+    protected void AddWidget(string path, UIBase widget, bool dontDestroyOnLoad)
     {
         if (m_widgetRepository == null || m_dontDestroy_widgetRepository == null)
         {
@@ -421,7 +419,7 @@ public class UIRepositories : IGraphUpdatable
         }
     }
 
-    protected bool RemoveWidget(BaseUI widget)
+    protected bool RemoveWidget(UIBase widget)
     {
         if (m_widgetRepository == null || m_dontDestroy_widgetRepository == null)
         {
@@ -439,7 +437,7 @@ public class UIRepositories : IGraphUpdatable
         return false;
     }
 
-    public BaseUI FindWidget(string widgetType)
+    public UIBase FindWidget(string widgetType)
     {
         if (m_widgetRepository == null || m_dontDestroy_widgetRepository == null)
         {
@@ -448,7 +446,7 @@ public class UIRepositories : IGraphUpdatable
 
         string widgetName = UIPathToName(widgetType);
 
-        BaseUI widget;
+        UIBase widget;
         if (m_widgetRepository.Get(widgetName, out widget))
         {
             return widget;

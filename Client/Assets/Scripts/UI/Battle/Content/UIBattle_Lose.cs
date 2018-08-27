@@ -2,15 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TitleUI : BaseUI
+public class UIBattle_Lose : UIBase
 {
     #region IBhvUpdatable
 
-    public override void BhvOnEnter()
-    {
-        Global.SoundMgr.PlayBGM(SoundManager.eBGMType.eBGM_Title);
-    }
-
+    public override void BhvOnEnter() { }
     public override void BhvOnLeave() { }
 
     public override void BhvFixedUpdate(float dt)
