@@ -13,6 +13,8 @@ public class TitleScene : SceneBase
         {
             if (widget != null)
             {
+                Global.SoundMgr.PlayBGM(SoundManager.eBGMType.eBGM_Title);
+
                 widget.Show();
                 SetEnterPageProgressInfo(0.5f);
             }

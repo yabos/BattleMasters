@@ -75,7 +75,7 @@ public class ActionMaker : MonoBehaviour
         mActionCommendExcutor = new HeroBattleActionCommendExcutor();
         mActionCommendExcutor.Initialize(this);
 
-        TBManager.Instance.LoadTableAll();
+        //TBManager.Instance.LoadTableAll();
     }
 
     public void PlayerOnce()
@@ -110,12 +110,12 @@ public class ActionMaker : MonoBehaviour
 
         if (myTeam)
         {
-            heroNo = TBManager.Instance.GetHeroNoByName(heroActor.name);
+            heroNo = Global.TBMgr.GetHeroNoByName(heroActor.name);
             fileName = heroNo.ToString() + "_" + heroExcType.ToString() + ".txt";
         }
         else
         {
-            heroNo = TBManager.Instance.GetHeroNoByName(enemyActor.name);
+            heroNo = Global.TBMgr.GetHeroNoByName(enemyActor.name);
             fileName = heroNo.ToString() + "_" + enmeyExcType.ToString() + ".txt";
         }
 
@@ -137,14 +137,14 @@ public class ActionMaker : MonoBehaviour
         {
             heroActionData.Clear();
 
-            heroNo = TBManager.Instance.GetHeroNoByName(heroActor.name);
+            heroNo = Global.TBMgr.GetHeroNoByName(heroActor.name);
             fileName = heroNo.ToString() + "_" + heroExcType.ToString() + ".txt";
         }
         else
         {
             enemyActionData.Clear();
 
-            heroNo = TBManager.Instance.GetHeroNoByName(enemyActor.name);
+            heroNo = Global.TBMgr.GetHeroNoByName(enemyActor.name);
             fileName = heroNo.ToString() + "_" + enmeyExcType.ToString() + ".txt";
         }
 

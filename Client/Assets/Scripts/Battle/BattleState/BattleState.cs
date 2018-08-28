@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class BattleState
 {
-    protected BattleManager m_Owner;
+    protected BattleScene m_Owner;
     protected BattleStateManager m_StateManager;
     protected float TimeElapsed;
 
-    public virtual void Initialize(BattleManager owner, BattleStateManager state_manager)
+    public virtual void Initialize(BattleScene owner, BattleStateManager state_manager)
     {
         m_Owner = owner;
         m_StateManager = state_manager;

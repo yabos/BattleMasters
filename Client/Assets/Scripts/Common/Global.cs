@@ -5,6 +5,8 @@ using System.Linq;
 
 public class Global : SingletonMonoBehaviour<Global>
 {
+    public bool IsTool = false;
+
     protected bool m_isInitialized = false;
 
     private bool m_hasSetOriginalScreenResolution = false;
@@ -45,6 +47,15 @@ public class Global : SingletonMonoBehaviour<Global>
         get
         {
             return m_instance.m_AuthManager;
+        }
+    }
+
+    private TableManager m_tableManager = null;
+    public static TableManager TBMgr
+    {
+        get
+        {
+            return m_instance.m_tableManager;
         }
     }
 
@@ -107,7 +118,16 @@ public class Global : SingletonMonoBehaviour<Global>
             DontDestroyOnLoad(this);
         }
 
-        InitializeManager();
+        if (IsTool)
+        {
+#if UNITY_EDITOR
+            InitializeManager_UseTools();
+#endif
+        }
+        else
+        {
+            InitializeManager();
+        }
     }
 
     void Start()
@@ -260,11 +280,14 @@ public class Global : SingletonMonoBehaviour<Global>
     void OnDestroy()
     {
         Log("OnDestroy()");
+#if UNITY_EDITOR
 
+#else
         FinalizeManager();
+#endif
     }
 
-    #region Methods
+#region Methods
 
     public IEnumerator OnAppPreload(System.Action completed)
     {
@@ -396,6 +419,11 @@ public class Global : SingletonMonoBehaviour<Global>
             AddManager(m_resourceManager);
         }
 
+        if (CreateManager<TableManager, ManagerSettingBase>(ref m_tableManager))
+        {
+            AddManager(m_tableManager);
+        }
+
         if (CreateManager<SoundManager, ManagerSettingBase>(ref m_soundManager))
         {
             AddManager(m_soundManager);
@@ -416,6 +444,21 @@ public class Global : SingletonMonoBehaviour<Global>
         m_isInitialized = true;
     }
 
+#if UNITY_EDITOR
+    void InitializeManager_UseTools()
+    {
+        if (CreateManager<ResourceManager, ManagerSettingBase>(ref m_resourceManager))
+        {
+            AddManager(m_resourceManager);
+        }
+
+        if (CreateManager<TableManager, ManagerSettingBase>(ref m_tableManager))
+        {
+            AddManager(m_tableManager);
+        }
+    }
+#endif
+
     void FinalizeManager()
     {
         Log("FinalizeManager()");
@@ -433,6 +476,7 @@ public class Global : SingletonMonoBehaviour<Global>
         DestroyManager<ResourceManager>(ref m_resourceManager);
         DestroyManager<SoundManager>(ref m_soundManager);
         DestroyManager<UIManager>(ref m_UIManager);
+        DestroyManager<TableManager>(ref m_tableManager);
 
         m_isInitialized = false;
     }
@@ -468,9 +512,9 @@ public class Global : SingletonMonoBehaviour<Global>
         Log(StringUtil.Format("SetResoultion({0}, {1}, {2})", Screen.width, Screen.height, Screen.fullScreen));
     }
 
-    #endregion // Methods
+#endregion // Methods
 
-    #region Log Methods
+#region Log Methods
     public void Log(string msg)
     {
         msg = StringUtil.Format("<color=#ffffffff>[Global] {0}</color>", msg);
@@ -498,7 +542,7 @@ public class Global : SingletonMonoBehaviour<Global>
         }
     }
 
-    #endregion //Log Methods
+#endregion //Log Methods
 
 
 }

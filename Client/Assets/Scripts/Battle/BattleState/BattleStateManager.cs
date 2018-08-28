@@ -30,9 +30,9 @@ public class BattleStateManager
     protected EBattleState m_eCurrentState;
     protected EBattleState m_ePreviousState;
 
-    protected BattleManager m_Owner;
+    protected BattleScene m_Owner;
 
-    public void Initialize(BattleManager owner)
+    public void Initialize(BattleScene owner)
     {
         m_Owner = owner;
 

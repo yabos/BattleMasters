@@ -9,7 +9,7 @@ public class UILobby : UIBase
 
     public override void BhvOnEnter()
     {
-        Global.SoundMgr.PlayBGM(SoundManager.eBGMType.eBGM_Title);
+        
     }
 
     public override void BhvOnLeave() { }
@@ -40,11 +40,19 @@ public class UILobby : UIBase
 
     }
 
-    public void OnNextLevel()
+    public void OnTitleScene()
     {
-        //Global.SceneMgr.Transition<InGameScene>("Game", 0.5f, 0.3f, (code) =>
-        //{
-        //    Global.SceneMgr.LogWarning(StringUtil.Format("Scene Transition -> {0}", "Game"));
-        //});
+        Global.SceneMgr.Transition<TitleScene>("TitleScene", 0.5f, 0.3f, (code) =>
+        {
+            Global.SceneMgr.LogWarning(StringUtil.Format("Scene Transition -> {0}", "TitleScene"));
+        });
+    }
+
+    public void OnBattleScene()
+    {
+        Global.SceneMgr.Transition<BattleScene>("BattleScene", 0.5f, 0.3f, (code) =>
+        {
+            Global.SceneMgr.LogWarning(StringUtil.Format("Scene Transition -> {0}", "BattleScene"));
+        });
     }
 }

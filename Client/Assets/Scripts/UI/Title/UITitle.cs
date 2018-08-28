@@ -8,7 +8,7 @@ public class UITitle : UIBase
 
     public override void BhvOnEnter()
     {
-        Global.SoundMgr.PlayBGM(SoundManager.eBGMType.eBGM_Title);
+        
     }
 
     public override void BhvOnLeave() { }

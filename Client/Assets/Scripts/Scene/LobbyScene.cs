@@ -12,6 +12,8 @@ public class LobbyScene : SceneBase
         {
             if (widget != null)
             {
+                Global.SoundMgr.PlayBGM(SoundManager.eBGMType.eBGM_Lobby);
+
                 widget.Show();
                 SetEnterPageProgressInfo(0.5f);
             }

@@ -6,7 +6,7 @@ public class BattleStateNormal : BattleState
 {
     int BeforeHeroNo = 0;
 
-    public override void Initialize(BattleManager owner, BattleStateManager state_manager)
+    public override void Initialize(BattleScene owner, BattleStateManager state_manager)
     {
         base.Initialize(owner, state_manager);
     }
@@ -59,8 +59,13 @@ public class BattleStateNormal : BattleState
 
                     m_Owner.ActiveTargetHeroNo = heroCont.HeroNo;
                     m_Owner.SetOutlineHero(heroCont.HeroNo);
-                    m_Owner.BattleUI.SetProfileUI(heroCont.HeroNo, false);
-                    m_Owner.BattleUI.ActiveBattleProfile(true, false);
+
+                    var battleUI = Global.UIMgr.GetUIBattle();
+                    if (battleUI != null)
+                    {
+                        battleUI.SetProfileUI(heroCont.HeroNo, false);
+                        battleUI.ActiveBattleProfile(true, false);
+                    }
 
                     BeforeHeroNo = heroCont.HeroNo;
                 }

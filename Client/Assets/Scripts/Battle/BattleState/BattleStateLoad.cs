@@ -6,7 +6,7 @@ public class BattleStateLoad : BattleState
 {
     GameObject goBattlegound;
 
-    public override void Initialize(BattleManager owner, BattleStateManager state_manager)
+    public override void Initialize(BattleScene owner, BattleStateManager state_manager)
     {
         base.Initialize(owner, state_manager);
     }
@@ -25,7 +25,6 @@ public class BattleStateLoad : BattleState
         {
             vCurOutline.Initialise();
         }
-        m_Owner.BattleUI.ActiveLoadingIMG(false);
         m_Owner.TurnUI.CreateTurnIcon();
         Global.SoundMgr.PlayBGM(SoundManager.eBGMType.eBGM_Battle);
 
@@ -52,7 +51,6 @@ public class BattleStateLoad : BattleState
                 uiRoot.transform.rotation = Quaternion.identity;
                 uiRoot.transform.localScale = Vector3.one;
 
-                m_Owner.BattleUI = uiRoot.GetComponent<BattleUIManager>();
                 m_Owner.TurnUI = uiRoot.GetComponentInChildren<TurnUI_Control>();
             }
         }

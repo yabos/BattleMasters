@@ -28,6 +28,17 @@ public class UIManager : GlobalManagerBase<ManagerSettingBase>
         CreateRootObject(m_setting.transform, "UIManager");
         m_widgetRepositories = new UIRepositories(this);
 
+        
+        var uiRoot = RootObject.GetComponent<UIRoot>();
+        if (uiRoot == null)
+        {
+            uiRoot = RootObject.AddComponent<UIRoot>();
+        }
+
+        uiRoot.scalingStyle = UIRoot.Scaling.ConstrainedOnMobiles;
+        uiRoot.fitHeight = true;
+        uiRoot.fitWidth = true;
+
         BhvOnEnter();
     }
 
@@ -254,6 +265,13 @@ public class UIManager : GlobalManagerBase<ManagerSettingBase>
     public UIBase FindWidget(string widgetType)
     {
         return m_widgetRepositories.FindWidget(widgetType);
+    }
+
+    // 이거는 이거대로 쓸일 있으니 놔두고 나중에 NotifyMgr 만들면 지금  ui 들 다 이벤트로 바꿔야함
+    public UIBattle GetUIBattle()
+    {
+        var uibase = m_widgetRepositories.FindWidget("UIBattle");
+        return uibase as UIBattle;
     }
 
     public void HideAllWidgets(float deactiveTime = 0.0f)

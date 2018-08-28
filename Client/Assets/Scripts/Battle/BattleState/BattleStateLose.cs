@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BattleStateLose : BattleState
 {
-    public override void Initialize(BattleManager owner, BattleStateManager state_manager)
+    public override void Initialize(BattleScene owner, BattleStateManager state_manager)
     {
         base.Initialize(owner, state_manager);
     }
@@ -15,7 +15,12 @@ public class BattleStateLose : BattleState
 
         m_Owner.TurnUI.TurnPause = true;
         m_Owner.ActiveOutline(false);
-        m_Owner.BattleUI.ActiveUI(eBattleUI.Lose, true);
+
+        var battleUI = Global.UIMgr.GetUIBattle();
+        if (battleUI != null)
+        {
+            battleUI.ActiveUI(eBattleUI.Lose, true);
+        }
     }
 
     public override void DoEnd()

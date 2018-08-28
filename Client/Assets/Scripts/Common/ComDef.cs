@@ -62,6 +62,7 @@ public class ResourcePath
 {
     public static readonly string UITitle = "UI/Prefabs/Title/UITitle";
     public static readonly string UILobby = "UI/Prefabs/Lobby/UILobby";
+    public static readonly string UIBattle = "UI/Prefabs/Battle/UIBattle";
     public static readonly string BattleRootPath = "Battle/Prefabs/Battle_Root";
     public static readonly string BattleUIPath = "UI/Battle/Prefabs/UIBattlI";
     public static readonly string BattleUIWinPath = "UI/Battle/Prefabs/BattleWin";

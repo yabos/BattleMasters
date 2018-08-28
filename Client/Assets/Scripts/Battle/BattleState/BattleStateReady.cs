@@ -6,7 +6,7 @@ public class BattleStateReady : BattleState
 {
     int BeforeHeroNo = 0;
 
-    public override void Initialize(BattleManager owner, BattleStateManager state_manager)
+    public override void Initialize(BattleScene owner, BattleStateManager state_manager)
     {
         base.Initialize(owner, state_manager);
     }
@@ -24,7 +24,12 @@ public class BattleStateReady : BattleState
     public override void DoEnd()
     {
         base.DoEnd();
-        m_Owner.BattleUI.ActiveAllBattleProfile(false);
+
+        var battleUI = Global.UIMgr.GetUIBattle();
+        if (battleUI != null)
+        {
+            battleUI.ActiveAllBattleProfile(false);
+        }
     }
 
     public override void Update(float fTimeDelta)
@@ -45,7 +50,13 @@ public class BattleStateReady : BattleState
                 if (BeforeHeroNo.Equals(heroCont.HeroNo)) continue;
 
                 m_Owner.SetOutlineHero(heroCont.HeroNo);
-                m_Owner.BattleUI.SetReadyStateProfileUI(heroCont);
+
+                var battleUI = Global.UIMgr.GetUIBattle();
+                if (battleUI != null)
+                {
+                    battleUI.SetReadyStateProfileUI(heroCont);
+                }
+
                 BeforeHeroNo = heroCont.HeroNo;
             }
         }

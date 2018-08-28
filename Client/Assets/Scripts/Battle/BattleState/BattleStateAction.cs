@@ -6,7 +6,7 @@ public class BattleStateAction : BattleState
 {
     bool IsTurnOut = false;
 
-    public override void Initialize(BattleManager owner, BattleStateManager state_manager)
+    public override void Initialize(BattleScene owner, BattleStateManager state_manager)
     {
         base.Initialize(owner, state_manager);
     }

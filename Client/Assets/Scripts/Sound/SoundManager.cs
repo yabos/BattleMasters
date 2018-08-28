@@ -21,7 +21,7 @@ public class SoundManager : GlobalManagerBase<ManagerSettingBase>
     {
         "Title",
         "Lobby",
-        "BattleBGM",
+        "Battle",
     };
 
     public AudioClip[] audioSources;

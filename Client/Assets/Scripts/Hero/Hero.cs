@@ -190,7 +190,7 @@ public class Hero : Actor
     void CreateDamageEfc(int heroNo)
     {
         TB_Hero tbHero;
-        if (TBManager.Instance.cont_Hero.TryGetValue(heroNo, out tbHero))
+        if (Global.TBMgr.cont_Hero.TryGetValue(heroNo, out tbHero))
         {
             var goEfc = Instantiate(EffectManager.Instance.GetEffect(tbHero.mBaseAtkEfc)) as GameObject;
             if (goEfc != null)

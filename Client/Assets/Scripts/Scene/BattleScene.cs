@@ -1,53 +1,21 @@
-﻿using UnityEngine;
+﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 using System;
 
-public class BattleManager : MonoBehaviour
+public class BattleScene : SceneBase
 {
-    private static BattleManager _instance;
-    public static BattleManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = FindObjectOfType(typeof(BattleManager)) as BattleManager;
-                if (_instance == null)
-                {
-                    GameObject manaer = new GameObject("BattleManager", typeof(BattleManager));
-                    _instance = manaer.GetComponent<BattleManager>();
-                }
-            }
-
-            return _instance;
-        }
-    }
-
     readonly List<Hero> mListMyHeroes = new List<Hero>();
     readonly List<Hero> mListEnemyHeroes = new List<Hero>();
 
-    public GameObject BattleRoot;
-
+    public GameObject BattleRoot { get; private set; }
+    public BattleStateManager BattleStateManager { get; private set; }
+    public BattleAIManager BattleAIManager { get; private set; }
+    public Transform EffectRoot { get; private set; }
     public Battleground Battleground
     {
         get; set;
     }
-
-    public BattleStateManager BattleStateManager
-    {
-        get; set;
-    }
-
-    public BattleAIManager BattleAIManager
-    {
-        get; set;
-    }
-
-    public BattleUIManager BattleUI
-    {
-        get; set;
-    }
-
     public TurnUI_Control TurnUI
     {
         get; set;
@@ -80,21 +48,27 @@ public class BattleManager : MonoBehaviour
         get; set;
     }
 
-    public Transform EffectRoot
+    public override IEnumerator OnEnter(float progress)
     {
-        get; private set;
-    }
+        yield return base.OnEnter(progress);
 
-    void Awake()
-    {
+        yield return Global.UIMgr.OnCreateWidgetAsync<UIBattle>(ResourcePath.UIBattle, widget =>
+        {
+            if (widget != null)
+            {
+                Global.SoundMgr.PlayBGM(SoundManager.eBGMType.eBGM_Battle);
+
+                widget.Show();
+                SetEnterPageProgressInfo(0.5f);
+            }
+        });
+
         EffectRoot = BattleRoot.transform.Find("Effect");
-
-        //TBManager.Instance.LoadTableAll();
 
         if (BattleStateManager == null)
         {
-            //BattleStateManager = new BattleStateManager();
-            //BattleStateManager.Initialize(this);
+            BattleStateManager = new BattleStateManager();
+            BattleStateManager.Initialize(this);
         }
 
         if (BattleAIManager == null)
@@ -102,10 +76,40 @@ public class BattleManager : MonoBehaviour
             BattleAIManager = new BattleAIManager();
             BattleAIManager.Initialize();
         }
+
+        yield return new WaitForSeconds(1.0f);
     }
 
-    void Update()
+    public override void OnExit()
     {
+        base.OnExit();
+
+        Global.UIMgr.HideAllWidgets(0.3f);
+    }
+
+    public override void OnInitialize()
+    {
+
+    }
+
+    public override void OnFinalize()
+    {
+    }
+
+    public override void OnRequestEvent(string netClentTypeName, string requestPackets)
+    {
+        Global.UIMgr.ShowLoadingWidget(0.3f);
+    }
+
+    public override void OnReceivedEvent(string netClentTypeName, string receivePackets)
+    {
+        Global.UIMgr.HideLoadingWidget(0.1f);
+    }
+
+    public override void OnUpdate(float dt)
+    {
+        base.OnUpdate(dt);
+
         float fDeltaTime = Time.deltaTime;
 
         if (BattleStateManager != null)
@@ -118,6 +122,19 @@ public class BattleManager : MonoBehaviour
             BattleAIManager.Update(fDeltaTime);
         }
     }
+
+
+    //private void ShowMessageBoxWithPluginNotifyInfo(string message, eMessageBoxType boxType = eMessageBoxType.OK, System.Action<bool> completed = null)
+    //{
+    //    string title = StringUtil.Format("<color=#{0}>{1}</color>", ColorUtility.ToHtmlStringRGBA(Color.blue), "System Info Message");
+    //    Global.WidgetMgr.ShowMessageBox(title, message, boxType, completed);
+    //}
+
+    public override void OnNotify(INotify notify)
+    {
+        base.OnNotify(notify);
+    }
+
 
     public void CreateBattleHero(Transform tParant, int iHeroNo, bool MyTeam, int sortingOrder, int spawnPos)
     {
@@ -132,10 +149,11 @@ public class BattleManager : MonoBehaviour
         {
             SetBattleSpawnPos(goHero, MyTeam, spawnPos);
 
+            var battleUI = Global.UIMgr.GetUIBattle();
             // create hero hp
-            if (BattleUI != null)
+            if (battleUI != null)
             {
-                BattleUI.CreateHeroHp(hero.HeroUid, MyTeam);
+                battleUI.CreateHeroHp(hero.HeroUid, MyTeam);
             }
 
             if (MyTeam)
@@ -169,9 +187,13 @@ public class BattleManager : MonoBehaviour
         ActiveBlur(!isTurnOut);
         ActiveOutline(false);
 
-        BattleUI.ActiveAllBattleProfile(false);
-        BattleUI.ActiveHUDUI(isTurnOut);
-        BattleUI.ActiveTurnTimer(false);
+        var battleUI = Global.UIMgr.GetUIBattle();
+        if (battleUI != null)
+        {
+            battleUI.ActiveAllBattleProfile(false);
+            battleUI.ActiveHUDUI(isTurnOut);
+            battleUI.ActiveTurnTimer(false);
+        }
 
         if (isTurnOut == false)
         {
@@ -184,8 +206,12 @@ public class BattleManager : MonoBehaviour
         InitHeroTween();
         TurnUI.InitActiveTurnMember(ActiveTurnHeroNo);
 
-        BattleUI.ActiveSelActionType(false);
-        BattleUI.ActiveHUDUI(true);
+        var battleUI = Global.UIMgr.GetUIBattle();
+        if (battleUI != null)
+        {
+            battleUI.ActiveSelActionType(false);
+            battleUI.ActiveHUDUI(true);
+        }
 
         ActiveBlur(false);
         ActiveTurnHeroNo = 0;
@@ -229,13 +255,13 @@ public class BattleManager : MonoBehaviour
         bool isWinner = false;
         EHeroBattleAction ActiveAction = ResultBattleAction(ActiveHero, TargetHero, ref isWinner);
         Vector3 vPos = Battleground.GetTeamPos(ActiveAction, ActiveHero.IsMyTeam);
-        ActiveHero.ExcuteAction(ActiveAction, vPos, TargetHero, isWinner);        
+        ActiveHero.ExcuteAction(ActiveAction, vPos, TargetHero, isWinner);
 
         EHeroBattleAction TargetHeroAction = ResultBattleAction(TargetHero, ActiveHero, ref isWinner);
         vPos = Battleground.GetTeamPos(TargetHeroAction, TargetHero.IsMyTeam);
         TargetHero.ExcuteAction(TargetHeroAction, vPos, ActiveHero, isWinner);
     }
-    
+
     EHeroBattleAction ResultBattleAction(Hero mine, Hero yours, ref bool isWinner)
     {
         isWinner = false;
@@ -280,10 +306,10 @@ public class BattleManager : MonoBehaviour
             else
             {
                 return EHeroBattleAction.HeroAction_DrawDefeatAtk;
-            }            
+            }
         }
     }
-    
+
     public void SetActiveTurnHero(int heroNo)
     {
         ActiveTurnHeroNo = heroNo;
@@ -294,9 +320,13 @@ public class BattleManager : MonoBehaviour
             hero.IsMyTurn = true;
         }
 
-        BattleUI.ActiveBattleProfile(true, hero.IsMyTeam);
-        BattleUI.SetProfileUI(heroNo, true);
-        BattleUI.SetTurnTimer(Define.SELECT_TARGET_LIMITTIME, ETurnTimeType.TURNTIME_SEL_TARGET);        
+        var battleUI = Global.UIMgr.GetUIBattle();
+        if (battleUI != null)
+        {
+            battleUI.ActiveBattleProfile(true, hero.IsMyTeam);
+            battleUI.SetProfileUI(heroNo, true);
+            battleUI.SetTurnTimer(Define.SELECT_TARGET_LIMITTIME, ETurnTimeType.TURNTIME_SEL_TARGET);
+        }
     }
 
     public Hero GetHeroControl(int heroNo)
@@ -402,7 +432,7 @@ public class BattleManager : MonoBehaviour
         while (randomHero.IsDie)
         {
             Idx = UnityEngine.Random.Range(0, mListMyHeroes.Count);
-            if(mListMyHeroes[Idx].IsDie == false)
+            if (mListMyHeroes[Idx].IsDie == false)
             {
                 randomHero = mListMyHeroes[Idx];
             }

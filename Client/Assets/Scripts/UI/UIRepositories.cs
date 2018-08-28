@@ -143,6 +143,16 @@ public class UIRepositories : IGraphUpdatable
                         ? m_widgetManager.RootObject.transform
                         : m_widgetManager.Setting.transform, true);
 
+                //var uiRoot = m_root.GetComponent<UIRoot>();
+                //if (uiRoot == null)
+                //{
+                //    uiRoot = m_root.AddComponent<UIRoot>();
+                //}
+
+                //uiRoot.scalingStyle = UIRoot.Scaling.ConstrainedOnMobiles;
+                //uiRoot.fitHeight = true;
+                //uiRoot.fitWidth = true;
+
                 GameObject staticPanel = new GameObject("StaticPanel");
                 staticPanel.transform.SetParent(m_root.transform, true);
 

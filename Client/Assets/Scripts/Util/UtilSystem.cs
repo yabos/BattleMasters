@@ -8,7 +8,7 @@ public static class UtilSystem
     public static Hero CreateHero(GameObject goHero, Guid uid, int iHeroNo, bool MyTeam, int sortingOrder)
     {
         TB_Hero tbHero;
-        if (TBManager.Instance.cont_Hero.TryGetValue(iHeroNo, out tbHero))
+        if (Global.TBMgr.cont_Hero.TryGetValue(iHeroNo, out tbHero))
         {
             Hero hero = new Hero();
 

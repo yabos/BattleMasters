@@ -1,7 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+using Firebase;
 using Firebase.Auth;
+using Firebase.Unity.Editor;
 
 public enum EFirebaseProvider
 {
@@ -41,12 +44,17 @@ public class FirebaseAuthManager : GlobalManagerBase<ManagerSettingBase>
     #region Events
     public override void OnAppStart(ManagerSettingBase managerSetting)
     {
-        
+        // Set this before calling into the realtime database.
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://flushx-f0024.firebaseio.com/");
+        FirebaseApp.DefaultInstance.SetEditorP12FileName("flushx-f0024-424618bd0ee8.p12");
+        FirebaseApp.DefaultInstance.SetEditorServiceAccountEmail("flushx-f0024@appspot.gserviceaccount.com");
+        FirebaseApp.DefaultInstance.SetEditorP12Password("notasecret");
     }
 
     public override void OnAppEnd()
     {
         DestroyRootObject();
+        Global.AuthMgr.LogOut();
 
         if (m_setting != null)
         {

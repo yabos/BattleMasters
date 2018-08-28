@@ -1,36 +1,79 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.IO;
+using UnityEngine;
 
-public class TBManager : MonoBehaviour
+public class TableManager : GlobalManagerBase<ManagerSettingBase>
 {
-    private static TBManager _instance;
-    public static TBManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = FindObjectOfType(typeof(TBManager)) as TBManager;
-                if (_instance == null)
-                {
-                    GameObject dataManaer = new GameObject("TBManager", typeof(TBManager));
-                    _instance = dataManaer.GetComponent<TBManager>();
-                }
-            }
 
-            return _instance;
-        }
+    #region Events
+    public override void OnAppStart(ManagerSettingBase managerSetting)
+    {
+        LoadTableAll();
+    }
+
+    public override void OnAppEnd()
+    {
+    }
+
+    public override void OnAppFocus(bool focused)
+    {
+
+    }
+
+    public override void OnAppPause(bool paused)
+    {
+
+    }
+
+    public override void OnPageEnter(string pageName)
+    {
+    }
+
+    public override IEnumerator OnPageExit()
+    {
+        yield return new WaitForEndOfFrame();
+    }
+
+    #endregion Events
+
+    #region IBhvUpdatable
+
+    public override void BhvOnEnter()
+    {
+
+    }
+
+    public override void BhvOnLeave()
+    {
+
+    }
+
+    public override void BhvFixedUpdate(float dt)
+    {
+
+    }
+
+    public override void BhvLateFixedUpdate(float dt)
+    {
+
+    }
+
+    public override void BhvUpdate(float dt)
+    {
+    }
+
+    public override void BhvLateUpdate(float dt)
+    {
+
     }
 
 
-    // ------------------------------------//
+    //public override bool OnMessage(IMessage message)
+    //{
+    //    return false;
+    //}
 
-    private void Awake()
-    {
-        DontDestroyOnLoad(this);
-    }
+    #endregion IBhvUpdatable
 
     public Dictionary<int, TB_Hero> cont_Hero = null;
 
@@ -65,7 +108,7 @@ public class TBManager : MonoBehaviour
         }
     }
 
-    public void LoadTableAll()
+    void LoadTableAll()
     {
         LoadHeroTable();
     }
