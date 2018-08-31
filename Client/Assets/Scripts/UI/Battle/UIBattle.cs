@@ -2,8 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum eBattleUI
+{
+    Win,
+    Lose,
+    Max
+}
+
 public class UIBattle : UIBase
 {
+    BattleScene Owner;
+
     Transform BattleLoading = null;
     Transform HeroHp = null;
     Transform DamageRoot = null;
@@ -18,6 +27,8 @@ public class UIBattle : UIBase
 
     public override void BhvOnEnter()
     {
+        Owner = OwnerScene as BattleScene;
+
         HeroHp = transform.Find("Anchor/HeroHP");
         BattleLoading = transform.Find("Anchor/Loading");
         DamageRoot = transform.Find("Anchor/DamageRoot");
@@ -146,26 +157,27 @@ public class UIBattle : UIBase
 
     public void SetBattleSelActionType()
     {
-        var profile = GetProfile(BattleManager.Instance.ActiveTargetHeroNo);
+        
+        var profile = GetProfile(Owner.ActiveTargetHeroNo);
         if (profile != null)
         {
             profile.TweenPosSpriteProfile(true);
             ActiveSelActionType(true, true);
             SetTurnTimer(Define.SELECT_ACTIONTYPE_LIMITTIME, ETurnTimeType.TURNTIME_SEL_ACTIONTYPE);
 
-            BattleManager.Instance.OnlyActionInput = true;
+            Owner.OnlyActionInput = true;
         }
     }
 
     public void SetHeroActionType(Hero.EAtionType eAtionType)
     {
-        int heroNo = BattleManager.Instance.ActiveTurnHeroNo;
-        if (BattleManager.Instance.GetActiveHeroTeam() == false)
+        int heroNo = Owner.ActiveTurnHeroNo;
+        if (Owner.GetActiveHeroTeam() == false)
         {
-            heroNo = BattleManager.Instance.ActiveTargetHeroNo;
+            heroNo = Owner.ActiveTargetHeroNo;
         }
 
-        var heroCont = BattleManager.Instance.GetHeroControl(heroNo);
+        var heroCont = BattleHeroManager.Instance.GetHeroControl(heroNo);
         if (heroCont != null)
         {
             heroCont.ActionType = eAtionType;
@@ -173,15 +185,15 @@ public class UIBattle : UIBase
 
         // 원래는 상대방의 입력 정보를 알아와야되는데
         // 지금은 AI로 대체 . 랜덤으로 타입을 정해준다.
-        heroNo = BattleManager.Instance.ActiveTargetHeroNo;
-        if (BattleManager.Instance.GetActiveHeroTeam() == false)
+        heroNo = Owner.ActiveTargetHeroNo;
+        if (Owner.GetActiveHeroTeam() == false)
         {
-            heroNo = BattleManager.Instance.ActiveTurnHeroNo;
+            heroNo = Owner.ActiveTurnHeroNo;
         }
-        BattleManager.Instance.BattleAIManager.SetRandomActionType(heroNo);
+        Owner.BattleAIManager.SetRandomActionType(heroNo);
 
-        BattleManager.Instance.BattleStateManager.ChangeState(EBattleState.BattleState_Action);
-        BattleManager.Instance.OnlyActionInput = false;
+        Owner.BattleStateManager.ChangeState(EBattleState.BattleState_Action);
+        Owner.OnlyActionInput = false;
     }
 
     public void ActiveLoadingIMG(bool bActive)
@@ -263,7 +275,7 @@ public class UIBattle : UIBase
 
     BattleProfile GetProfile(int heroNo)
     {
-        var heroCont = BattleManager.Instance.GetHeroControl(heroNo);
+        var heroCont = BattleHeroManager.Instance.GetHeroControl(heroNo);
         if (heroCont != null)
         {
             BattleProfile bp = null;
@@ -291,13 +303,13 @@ public class UIBattle : UIBase
 
     public void SetTurnTimer(float fTime, ETurnTimeType type)
     {
-        TurnTime.SetTimer(fTime, type);
+        TurnTime.SetTimer(this, fTime, type);
         ActiveTurnTimer(true);
     }
 
     public void ActiveHUDUI(bool active)
     {
-        BattleManager.Instance.TurnUI.ActiveTurnUI(active);
+        Owner.TurnUI.ActiveTurnUI(active);
         ActiveHPUI(active);
     }
 
@@ -306,7 +318,7 @@ public class UIBattle : UIBase
         var bp = GetProfile(heroNo);
         if (bp != null)
         {
-            var heroCont = BattleManager.Instance.GetHeroControl(heroNo);
+            var heroCont = BattleHeroManager.Instance.GetHeroControl(heroNo);
             if (heroCont != null)
             {
                 bp.SetProfile(heroCont, isActiveHero);

@@ -9,12 +9,12 @@ public class BattleStateWin : BattleState
         base.Initialize(owner, state_manager);
     }
 
-    public override void DoStart(byte[] data = null)
+    public override IEnumerator DoStart(byte[] data = null)
     {
-        base.DoStart();
+        yield return base.DoStart();
 
         m_Owner.TurnUI.TurnPause = true;
-        m_Owner.ActiveOutline(false);
+        BattleHeroManager.Instance.ActiveHeroOutline(false);
 
         var battleUI = Global.UIMgr.GetUIBattle();
         if (battleUI != null)

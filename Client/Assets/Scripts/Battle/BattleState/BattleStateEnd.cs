@@ -9,9 +9,9 @@ public class BattleStateEnd : BattleState
         base.Initialize(owner, state_manager);
     }
 
-    public override void DoStart(byte[] data = null)
+    public override IEnumerator DoStart(byte[] data = null)
     {
-        base.DoStart();
+        yield return base.DoStart();
     }
 
     public override void DoEnd()

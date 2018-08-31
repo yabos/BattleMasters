@@ -11,9 +11,9 @@ public class BattleStateReady : BattleState
         base.Initialize(owner, state_manager);
     }
 
-    public override void DoStart(byte[] data = null)
+    public override IEnumerator DoStart(byte[] data = null)
     {
-        base.DoStart();
+        yield return base.DoStart();
 
         m_Owner.TurnUI.TurnPause = false;
 
@@ -49,7 +49,7 @@ public class BattleStateReady : BattleState
                 if (heroCont == null) continue;               
                 if (BeforeHeroNo.Equals(heroCont.HeroNo)) continue;
 
-                m_Owner.SetOutlineHero(heroCont.HeroNo);
+                BattleHeroManager.Instance.SetHeroOutline(heroCont.HeroNo);
 
                 var battleUI = Global.UIMgr.GetUIBattle();
                 if (battleUI != null)

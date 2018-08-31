@@ -32,8 +32,8 @@ public class TurnUI_Control : MonoBehaviour
     {
         ListTurnIcons = new List<TurnIcon>();
 
-        CreateTurnIcon(BattleManager.Instance.ListMyHeroes);
-        CreateTurnIcon(BattleManager.Instance.ListEnemyHeroes);
+        CreateTurnIcon(BattleHeroManager.Instance.ListMyHeroes);
+        CreateTurnIcon(BattleHeroManager.Instance.ListEnemyHeroes);
     }
 
     void CreateTurnIcon(List<Hero> listHero)
@@ -65,8 +65,8 @@ public class TurnUI_Control : MonoBehaviour
     public void UpdateTurnSpeed()
     {
         List<Hero> listTemp = new List<Hero>();
-        listTemp.AddRange(BattleManager.Instance.ListMyHeroes);
-        listTemp.AddRange(BattleManager.Instance.ListEnemyHeroes);
+        listTemp.AddRange(BattleHeroManager.Instance.ListMyHeroes);
+        listTemp.AddRange(BattleHeroManager.Instance.ListEnemyHeroes);
 
         for (int i = 0; i < listTemp.Count; ++i)
         {
@@ -129,7 +129,12 @@ public class TurnUI_Control : MonoBehaviour
         int place = 0;
         byte[] data = new byte[128];
         System.Buffer.BlockCopy(System.BitConverter.GetBytes(heroNo), 0, data, place, sizeof(int));
-        BattleManager.Instance.BattleStateManager.ChangeState(EBattleState.BattleState_Normal, data);
+
+        var battleScene = Global.SceneMgr.CurrentScene as BattleScene;
+        if (battleScene != null)
+        {
+            battleScene.BattleStateManager.ChangeState(EBattleState.BattleState_Normal, data);
+        }
     }
 
     public void DestroyTurnIcon(int heroNo)

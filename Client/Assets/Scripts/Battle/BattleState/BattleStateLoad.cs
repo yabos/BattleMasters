@@ -11,20 +11,20 @@ public class BattleStateLoad : BattleState
         base.Initialize(owner, state_manager);
     }
 
-    public override void DoStart(byte[] data = null)
+    public override IEnumerator DoStart(byte[] data = null)
     {
-        base.DoStart();
+        yield return base.DoStart();
 
-        LoadBattleHUD();
         LoadBattleground(10101);
-        LoadBattleHero();
-        LoadBattleEnemy();
+        yield return LoadBattleHero();
+        yield return LoadBattleEnemy();
         LoadEffects();
 
         foreach (Outline vCurOutline in (Outline[])Object.FindObjectsOfType(typeof(Outline)))
         {
             vCurOutline.Initialise();
         }
+
         m_Owner.TurnUI.CreateTurnIcon();
         Global.SoundMgr.PlayBGM(SoundManager.eBGMType.eBGM_Battle);
 
@@ -34,27 +34,7 @@ public class BattleStateLoad : BattleState
     public override void DoEnd()
     {
         base.DoEnd();
-    }
-
-    public void LoadBattleHUD()
-    {
-        var goUI = Global.ResourceMgr.CreateUIResource(ResourcePath.BattleUIPath, true);
-        if (goUI != null)
-        {
-            GameObject uiRoot = Object.Instantiate(goUI.ResourceData) as GameObject;
-            if (uiRoot != null)
-            {
-                uiRoot.transform.name = uiRoot.name;
-                uiRoot.transform.parent = GameObject.FindGameObjectWithTag("UICamera").transform;
-
-                uiRoot.transform.position = Vector3.zero;
-                uiRoot.transform.rotation = Quaternion.identity;
-                uiRoot.transform.localScale = Vector3.one;
-
-                m_Owner.TurnUI = uiRoot.GetComponentInChildren<TurnUI_Control>();
-            }
-        }
-    }
+    }    
 
     protected void LoadBattleground(int iMapNo)
     {
@@ -80,26 +60,26 @@ public class BattleStateLoad : BattleState
         m_Owner.Battleground = goBattlegound.GetComponent<Battleground>();
     }
 
-    protected void LoadBattleHero()
+    protected IEnumerator LoadBattleHero()
     {
         Transform tTeam = m_Owner.BattleRoot.transform.Find("Team/MyTeam");
         if (tTeam != null)
         {
             for (int i = 0; i < 4; ++i)
             {
-                m_Owner.CreateBattleHero(tTeam, 1001 + i, true, (i + 1) * 10,  i);
+                yield return m_Owner.CreateBattleHero(tTeam, 1001 + i, true, (i + 1) * 10,  i);
             }
         }
     }
 
-    protected void LoadBattleEnemy()
+    protected IEnumerator LoadBattleEnemy()
     {
         Transform tTeam = m_Owner.BattleRoot.transform.Find("Team/EnemyTeam");
         if (tTeam != null)
         {
             for (int i = 0; i < 4; ++i)
             {
-                m_Owner.CreateBattleHero(tTeam, 2001 + i, false, (i + 1) * 10, i);
+                yield return m_Owner.CreateBattleHero(tTeam, 2001 + i, false, (i + 1) * 10, i);
             }
         }
     }

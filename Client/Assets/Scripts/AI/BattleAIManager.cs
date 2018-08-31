@@ -45,7 +45,7 @@ public class BattleAIManager
                         var Owner = Global.SceneMgr.CurrentScene as BattleScene;
                         if (Owner != null)
                         {
-                            if (Owner.IsMyTeamAllDie())
+                            if (BattleHeroManager.Instance.IsMyTeamAllDie())
                             {
                                 CurAI = eAI_Proc.AI_Action;
                                 TimeElapsed = 0;
@@ -53,9 +53,9 @@ public class BattleAIManager
                             }
 
                             // 살아있는 상대방 적 1인 랜덤으로 선택 해줌.
-                            int targetHeroNo = Owner.GetRandomHeroTeam();
+                            int targetHeroNo = BattleHeroManager.Instance.GetRandomHeroTeam();
                             Owner.ActiveTargetHeroNo = targetHeroNo;
-                            Owner.SetOutlineHero(targetHeroNo);
+                            BattleHeroManager.Instance.SetHeroOutline(targetHeroNo);
 
                             var battleUI = Global.UIMgr.GetUIBattle();
                             if (battleUI != null)
@@ -92,7 +92,7 @@ public class BattleAIManager
         var Owner = Global.SceneMgr.CurrentScene as BattleScene;
         if (Owner != null)
         {
-            var heroCont = Owner.GetHeroControl(heroNo);
+            var heroCont = BattleHeroManager.Instance.GetHeroControl(heroNo);
             if (heroCont != null)
             {
                 // 상대방이 특정 행동만 하게 하려면 여기를 주석 걸고,

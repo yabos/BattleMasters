@@ -17,8 +17,14 @@ public class TurnTimer : MonoBehaviour
     float TimeElapsed;
     ETurnTimeType Type;
 
-    public void SetTimer(float time, ETurnTimeType type)
+    BattleScene mBattleScene;
+    UIBattle Owner;
+
+    public void SetTimer(UIBattle _owner, float time, ETurnTimeType type)
     {
+        mBattleScene = Global.SceneMgr.CurrentScene as BattleScene;
+        Owner = _owner;
+
         Type = type;
         Time = time;
         TimeElapsed = 0;
@@ -49,9 +55,9 @@ public class TurnTimer : MonoBehaviour
             {
                 if (Type == ETurnTimeType.TURNTIME_SEL_TARGET)
                 {
-                    if (BattleManager.Instance.ActiveTargetHeroNo > 0)
+                    if (mBattleScene.ActiveTargetHeroNo > 0)
                     {
-                        BattleManager.Instance.BattleUI.SetBattleSelActionType();
+                        Owner.SetBattleSelActionType();
                     }
                     else
                     {
@@ -59,16 +65,16 @@ public class TurnTimer : MonoBehaviour
                         int place = 0;
                         byte[] data = new byte[128];
                         System.Buffer.BlockCopy(System.BitConverter.GetBytes(true), 0, data, place, sizeof(bool));
-                        BattleManager.Instance.BattleStateManager.ChangeState(EBattleState.BattleState_Action, data);
+                        mBattleScene.BattleStateManager.ChangeState(EBattleState.BattleState_Action, data);
                     }
                 }
                 else
                 {
                     // random att type
-                    if (BattleManager.Instance.ActiveTargetHeroNo > 0)
+                    if (mBattleScene.ActiveTargetHeroNo > 0)
                     {
                         Hero.EAtionType actionType = (Hero.EAtionType)Random.Range(0, (int)Hero.EAtionType.ACTION_MAX);
-                        BattleManager.Instance.BattleUI.SetHeroActionType(actionType);
+                        Owner.SetHeroActionType(actionType);
                     }
                 }
             }

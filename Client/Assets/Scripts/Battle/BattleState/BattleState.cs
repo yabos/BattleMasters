@@ -14,9 +14,10 @@ public class BattleState
         m_StateManager = state_manager;
     }
 
-    public virtual void DoStart(byte[] data = null)
+    public virtual IEnumerator DoStart(byte[] data = null)
     {
         TimeElapsed = 0.0f;
+        yield return null;
     }
 
     public virtual void DoEnd()

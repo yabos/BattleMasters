@@ -4,49 +4,19 @@ using UnityEngine;
 using System;
 
 public class BattleScene : SceneBase
-{
-    readonly List<Hero> mListMyHeroes = new List<Hero>();
-    readonly List<Hero> mListEnemyHeroes = new List<Hero>();
-
+{   
     public GameObject BattleRoot { get; private set; }
     public BattleStateManager BattleStateManager { get; private set; }
     public BattleAIManager BattleAIManager { get; private set; }
     public Transform EffectRoot { get; private set; }
-    public Battleground Battleground
-    {
-        get; set;
-    }
-    public TurnUI_Control TurnUI
-    {
-        get; set;
-    }
+    public Battleground Battleground { get; set; }
+    public TurnUI_Control TurnUI { get; set; }
+
+    public int ActiveTurnHeroNo { get; set; }
+    public int ActiveTargetHeroNo { get; set; }
+    public bool OnlyActionInput { get; set; }
 
     public GameObject Blur;
-
-    public int ActiveTurnHeroNo
-    {
-        get; set;
-    }
-
-    public int ActiveTargetHeroNo
-    {
-        get; set;
-    }
-
-    public List<Hero> ListMyHeroes
-    {
-        get { return mListMyHeroes; }
-    }
-
-    public List<Hero> ListEnemyHeroes
-    {
-        get { return mListEnemyHeroes; }
-    }
-
-    public bool OnlyActionInput
-    {
-        get; set;
-    }
 
     public override IEnumerator OnEnter(float progress)
     {
@@ -58,11 +28,31 @@ public class BattleScene : SceneBase
             {
                 Global.SoundMgr.PlayBGM(SoundManager.eBGMType.eBGM_Battle);
 
-                widget.Show();
+                TurnUI = transform.GetComponentInChildren<TurnUI_Control>();
+
+                widget.OwnerScene = this;
+                widget.Show();                
+
                 SetEnterPageProgressInfo(0.5f);
             }
         });
 
+        yield return Global.ResourceMgr.CreateResourceAsync( eResourceType.Prefab, "Battle/Prefabs/BattleRoot", (prefabResource) =>
+        {
+            BattleRoot = Instantiate(prefabResource.ResourceData) as GameObject;
+            if (BattleRoot != null)
+            {
+                BattleRoot.name = "BattleRoot";
+
+                BattleRoot.transform.position = Vector3.zero;
+                BattleRoot.transform.rotation = Quaternion.identity;
+                BattleRoot.transform.localScale = Vector3.one;
+
+                SetEnterPageProgressInfo(0.5f);
+            }
+        });
+        
+        //BattleRoot
         EffectRoot = BattleRoot.transform.Find("Effect");
 
         if (BattleStateManager == null)
@@ -136,7 +126,7 @@ public class BattleScene : SceneBase
     }
 
 
-    public void CreateBattleHero(Transform tParant, int iHeroNo, bool MyTeam, int sortingOrder, int spawnPos)
+    public IEnumerator CreateBattleHero(Transform tParant, int iHeroNo, bool MyTeam, int sortingOrder, int spawnPos)
     {
         GameObject goHero = new GameObject();
 
@@ -144,30 +134,15 @@ public class BattleScene : SceneBase
         goHero.transform.parent = tParant;
         goHero.transform.name = uid.ToString();
 
-        var hero = UtilSystem.CreateHero(goHero, uid, iHeroNo, MyTeam, sortingOrder);
-        if (hero != null)
-        {
-            SetBattleSpawnPos(goHero, MyTeam, spawnPos);
+        yield return BattleHeroManager.Instance.CreateHero(goHero, uid, iHeroNo, MyTeam, sortingOrder);
 
-            var battleUI = Global.UIMgr.GetUIBattle();
-            // create hero hp
-            if (battleUI != null)
-            {
-                battleUI.CreateHeroHp(hero.HeroUid, MyTeam);
-            }
+        SetBattleSpawnPos(goHero, MyTeam, spawnPos);
 
-            if (MyTeam)
-            {
-                ListMyHeroes.Add(hero);
-            }
-            else
-            {
-                ListEnemyHeroes.Add(hero);
-            }
-        }
-        else
+        // create hero hp
+        var battleUI = Global.UIMgr.GetUIBattle();
+        if (battleUI != null)
         {
-            Debug.LogError("CreateBattleHero Fail : " + iHeroNo.ToString());
+            battleUI.CreateHeroHp(uid, MyTeam);
         }
     }
 
@@ -185,7 +160,7 @@ public class BattleScene : SceneBase
     public void SetBattleStateActionStart(bool isTurnOut)
     {
         ActiveBlur(!isTurnOut);
-        ActiveOutline(false);
+        BattleHeroManager.Instance.ActiveHeroOutline(false);
 
         var battleUI = Global.UIMgr.GetUIBattle();
         if (battleUI != null)
@@ -220,7 +195,7 @@ public class BattleScene : SceneBase
 
     public void InitHeroTween()
     {
-        var hero = GetHeroControl(ActiveTurnHeroNo);
+        var hero = BattleHeroManager.Instance.GetHeroControl(ActiveTurnHeroNo);
         if (hero != null)
         {
             hero.InitHeroTween();
@@ -229,7 +204,7 @@ public class BattleScene : SceneBase
             UtilFunc.ChangeLayersRecursively(hero.transform, Define.DEFAULT_LAYER);
         }
 
-        hero = GetHeroControl(ActiveTargetHeroNo);
+        hero = BattleHeroManager.Instance.GetHeroControl(ActiveTargetHeroNo);
         if (hero != null)
         {
             hero.InitHeroTween();
@@ -240,13 +215,13 @@ public class BattleScene : SceneBase
 
     void ExcuteHeroAction()
     {
-        var ActiveHero = GetHeroControl(ActiveTurnHeroNo);
+        var ActiveHero = BattleHeroManager.Instance.GetHeroControl(ActiveTurnHeroNo);
         if (ActiveHero != null)
         {
             Debug.Log("ActiveHero Action : " + ActiveHero.ActionType);
         }
 
-        var TargetHero = GetHeroControl(ActiveTargetHeroNo);
+        var TargetHero = BattleHeroManager.Instance.GetHeroControl(ActiveTargetHeroNo);
         if (TargetHero != null)
         {
             Debug.Log("TargetHero Action : " + TargetHero.ActionType);
@@ -314,7 +289,7 @@ public class BattleScene : SceneBase
     {
         ActiveTurnHeroNo = heroNo;
 
-        var hero = GetHeroControl(heroNo);
+        var hero = BattleHeroManager.Instance.GetHeroControl(heroNo);
         if (hero != null)
         {
             hero.IsMyTurn = true;
@@ -327,143 +302,21 @@ public class BattleScene : SceneBase
             battleUI.SetProfileUI(heroNo, true);
             battleUI.SetTurnTimer(Define.SELECT_TARGET_LIMITTIME, ETurnTimeType.TURNTIME_SEL_TARGET);
         }
-    }
-
-    public Hero GetHeroControl(int heroNo)
-    {
-        var hero = ListMyHeroes.Find(x => x.HeroNo.Equals(heroNo));
-        if (hero != null)
-        {
-            return hero;
-        }
-
-        hero = ListEnemyHeroes.Find(x => x.HeroNo.Equals(heroNo));
-        if (hero != null)
-        {
-            return hero;
-        }
-
-        return null;
-    }
-
-    public void SetOutlineHero(int heroNo)
-    {
-        var heroCont = GetHeroControl(heroNo);
-        if (heroCont == null) return;
-
-        if (heroCont.IsMyTeam)
-        {
-            foreach (var elem in mListMyHeroes)
-            {
-                elem.Outline.eraseRenderer = !elem.HeroNo.Equals(heroNo);
-            }
-        }
-        else
-        {
-            foreach (var elem in mListEnemyHeroes)
-            {
-                elem.Outline.eraseRenderer = !elem.HeroNo.Equals(heroNo);
-            }
-        }
-    }
-
-    public void ActiveOutline(bool active)
-    {
-        foreach (var elem in mListMyHeroes)
-        {
-            elem.Outline.eraseRenderer = !active;
-        }
-
-        foreach (var elem in mListEnemyHeroes)
-        {
-            elem.Outline.eraseRenderer = !active;
-        }
-    }
+    }    
 
     public void ActiveBlur(bool active)
     {
         Blur.SetActive(active);
     }
 
-    public bool CheckAction()
-    {
-        bool myHeroAction = false;
-        foreach (var elem in mListMyHeroes)
-        {
-            //if (elem.IsDie) continue;
-
-            if (elem.IsAction)
-            {
-                myHeroAction = true;
-            }
-        }
-
-        bool enemyHeroAction = false;
-        foreach (var elem in mListEnemyHeroes)
-        {
-            //if (elem.IsDie) continue;
-
-            if (elem.IsAction)
-            {
-                enemyHeroAction = true;
-            }
-        }
-
-        return myHeroAction || enemyHeroAction;
-    }
-
     public bool GetActiveHeroTeam()
     {
-        var hero = GetHeroControl(ActiveTurnHeroNo);
+        var hero = BattleHeroManager.Instance.GetHeroControl(ActiveTurnHeroNo);
         if (hero != null)
         {
             return hero.IsMyTeam;
         }
 
         return false;
-    }
-
-    // AI 용도. 상대팀 살아있는 한명 랜덤으로 넘겨줌
-    // 나중에 조건을 검색해서 넘겨줄수도 있음
-    public int GetRandomHeroTeam()
-    {
-        int Idx = UnityEngine.Random.Range(0, mListMyHeroes.Count);
-        Hero randomHero = mListMyHeroes[Idx];
-        while (randomHero.IsDie)
-        {
-            Idx = UnityEngine.Random.Range(0, mListMyHeroes.Count);
-            if (mListMyHeroes[Idx].IsDie == false)
-            {
-                randomHero = mListMyHeroes[Idx];
-            }
-        }
-
-        return randomHero.HeroNo;
-    }
-
-    public bool IsMyTeamAllDie()
-    {
-        for (int i = 0; i < mListMyHeroes.Count; ++i)
-        {
-            if (mListMyHeroes[i].IsDie == false)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public bool IsEnemyAllDie()
-    {
-        for (int i = 0; i < mListEnemyHeroes.Count; ++i)
-        {
-            if (mListEnemyHeroes[i].IsDie == false)
-            {
-                return false;
-            }
-        }
-
-        return true;
     }
 }

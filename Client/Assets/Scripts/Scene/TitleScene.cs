@@ -15,6 +15,7 @@ public class TitleScene : SceneBase
             {
                 Global.SoundMgr.PlayBGM(SoundManager.eBGMType.eBGM_Title);
 
+                widget.OwnerScene = this;
                 widget.Show();
                 SetEnterPageProgressInfo(0.5f);
             }

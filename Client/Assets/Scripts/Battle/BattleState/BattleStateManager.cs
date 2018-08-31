@@ -43,7 +43,7 @@ public class BattleStateManager
             m_States[i].Initialize(m_Owner, this);
         }
 
-        m_States[(int)m_eCurrentState].DoStart();
+        m_Owner.StartCoroutine(m_States[(int)m_eCurrentState].DoStart());
     }
    
     public void Update(float fTimeDelta)

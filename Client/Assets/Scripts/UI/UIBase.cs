@@ -12,6 +12,8 @@ public abstract class UIBase : NotifyHanlderBehaviour
 
     protected UIPanel uIPanel;
 
+    public SceneBase OwnerScene { get; set; }
+
     public bool IsActive
     {
         get { return m_isActive; }

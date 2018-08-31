@@ -11,22 +11,22 @@ public class BattleStateNormal : BattleState
         base.Initialize(owner, state_manager);
     }
 
-    public override void DoStart(byte[] data = null)
+    public override IEnumerator DoStart(byte[] data = null)
     {
-        base.DoStart();
+        yield return base.DoStart();
 
         int place = 0;
 
         int heroNo = System.BitConverter.ToInt32(data, place);
-        m_Owner.ActiveOutline(false);
-        m_Owner.SetOutlineHero(heroNo);
+        BattleHeroManager.Instance.ActiveHeroOutline(false);
+        BattleHeroManager.Instance.SetHeroOutline(heroNo);
         m_Owner.SetActiveTurnHero(heroNo);
         m_Owner.TurnUI.TurnPause = true;        
 
         TimeElapsed = 0;
         BeforeHeroNo = 0;
 
-        if (BattleManager.Instance.GetActiveHeroTeam() == false)
+        if (m_Owner.GetActiveHeroTeam() == false)
         {
             m_Owner.BattleAIManager.ProceserAI();
         }
@@ -42,7 +42,7 @@ public class BattleStateNormal : BattleState
         base.Update(fTimeDelta);
         TimeElapsed += fTimeDelta;
 
-        if (BattleManager.Instance.GetActiveHeroTeam())
+        if (m_Owner.GetActiveHeroTeam())
         {
             if (Input.GetMouseButtonDown(0) && m_Owner.OnlyActionInput == false)
             {
@@ -58,7 +58,7 @@ public class BattleStateNormal : BattleState
                     if (BeforeHeroNo.Equals(heroCont.HeroNo)) continue;
 
                     m_Owner.ActiveTargetHeroNo = heroCont.HeroNo;
-                    m_Owner.SetOutlineHero(heroCont.HeroNo);
+                    BattleHeroManager.Instance.SetHeroOutline(heroCont.HeroNo);
 
                     var battleUI = Global.UIMgr.GetUIBattle();
                     if (battleUI != null)

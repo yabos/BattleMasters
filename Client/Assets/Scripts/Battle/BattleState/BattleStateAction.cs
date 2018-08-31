@@ -11,9 +11,9 @@ public class BattleStateAction : BattleState
         base.Initialize(owner, state_manager);
     }
 
-    public override void DoStart(byte[] data = null)
+    public override IEnumerator DoStart(byte[] data = null)
     {
-        base.DoStart();
+        yield return base.DoStart();
 
         if (data != null)
         {
@@ -27,14 +27,14 @@ public class BattleStateAction : BattleState
 
         TimeElapsed = 0;
 
-        BattleManager.Instance.SetBattleStateActionStart(IsTurnOut);
+        m_Owner.SetBattleStateActionStart(IsTurnOut);
     }
 
     public override void DoEnd()
     {
         base.DoEnd();
 
-        BattleManager.Instance.SetBattleStateActionEnd();
+        m_Owner.SetBattleStateActionEnd();
     }
 
     public override void Update(float fTimeDelta)
@@ -42,13 +42,13 @@ public class BattleStateAction : BattleState
         TimeElapsed += fTimeDelta;
 
         // 행동중인 영웅이 없는지 체크
-        if (BattleManager.Instance.CheckAction() == false)
+        if (BattleHeroManager.Instance.CheckAction() == false)
         {
-            if (BattleManager.Instance.IsMyTeamAllDie())
+            if (BattleHeroManager.Instance.IsMyTeamAllDie())
             {
                 m_StateManager.ChangeState(EBattleState.BattleState_Lose);
             }
-            else if (BattleManager.Instance.IsEnemyAllDie())
+            else if (BattleHeroManager.Instance.IsEnemyAllDie())
             {
                 m_StateManager.ChangeState(EBattleState.BattleState_Win);
             }
