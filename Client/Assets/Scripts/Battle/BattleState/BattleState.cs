@@ -36,9 +36,9 @@ public class BattleState
     {
     }
 
-    public void ReceiveEvent(BattleEvent sender)
-    {
-    }
+    //public void ReceiveEvent(BattleEvent sender)
+    //{
+    //}
 
     public virtual void NotifyDamage(Hero damagedHero)
     {

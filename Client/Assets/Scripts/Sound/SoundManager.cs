@@ -25,9 +25,7 @@ public class SoundManager : GlobalManagerBase<ManagerSettingBase>
     };
 
     public AudioClip[] audioSources;
-    public GameObject audioPrefabSource;
     public Dictionary<string, AudioClip> audioClips;
-    static GameObject audioPrefab;
     static AudioSource musicPlayer;
     Dictionary<string, Audio> aliveSounds;
     AudioListener al;
@@ -60,8 +58,7 @@ public class SoundManager : GlobalManagerBase<ManagerSettingBase>
             var clip = Global.ResourceMgr.CreateSoundResource("Sound/SFX/" + name);
             audioClips.Add(name, clip.AudioClip);
         }
-
-        audioPrefab = audioPrefabSource;
+        
         musicPlayer = ComponentFactory.AddComponent<AudioSource>(RootObject);
         aliveSounds = new Dictionary<string, Audio>();
     }
@@ -158,7 +155,9 @@ public class SoundManager : GlobalManagerBase<ManagerSettingBase>
         {
             return;
         }
-        GameObject go = Object.Instantiate(audioPrefab) as GameObject;
+
+        var audio = Global.ResourceMgr.CreateSoundResource("Sound/Audio");
+        GameObject go = Object.Instantiate(audio.ResourceData) as GameObject;
         //go.transform.parent = this.transform;
         Audio a = go.GetComponent<Audio>();
         a.PlaySoundOnce(audioClips[name]);        

@@ -25,7 +25,7 @@ public class BattleStateReady : BattleState
     {
         base.DoEnd();
 
-        var battleUI = Global.UIMgr.GetUIBattle();
+        var battleUI = Global.UIMgr.GetUI<UIBattle>(UIManager.eUIType.eUI_Battle);
         if (battleUI != null)
         {
             battleUI.ActiveAllBattleProfile(false);
@@ -51,7 +51,7 @@ public class BattleStateReady : BattleState
 
                 BattleHeroManager.Instance.SetHeroOutline(heroCont.HeroNo);
 
-                var battleUI = Global.UIMgr.GetUIBattle();
+                var battleUI = Global.UIMgr.GetUI<UIBattle>(UIManager.eUIType.eUI_Battle);
                 if (battleUI != null)
                 {
                     battleUI.SetReadyStateProfileUI(heroCont);

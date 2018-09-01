@@ -12,8 +12,6 @@ public abstract class UIBase : NotifyHanlderBehaviour
 
     protected UIPanel uIPanel;
 
-    public SceneBase OwnerScene { get; set; }
-
     public bool IsActive
     {
         get { return m_isActive; }
@@ -136,7 +134,7 @@ public abstract class UIBase : NotifyHanlderBehaviour
 
             if (IsGameOjectActive == true)
             {
-                FadeCoroutine = StartCoroutine(CanvasFadeCoroutine(activeTime, false, () =>
+                FadeCoroutine = StartCoroutine(UIPanelFadeCoroutine(activeTime, false, () =>
                 {
                     if (uIPanel != null)
                     {
@@ -182,7 +180,7 @@ public abstract class UIBase : NotifyHanlderBehaviour
 
             if (IsGameOjectActive == true)
             {
-                FadeCoroutine = StartCoroutine(CanvasFadeCoroutine(deactiveTime, true, () =>
+                FadeCoroutine = StartCoroutine(UIPanelFadeCoroutine(deactiveTime, true, () =>
                 {
                     gameObject.SetActive(IsActive);
                     FadeCoroutine = null;
@@ -210,7 +208,7 @@ public abstract class UIBase : NotifyHanlderBehaviour
         HideWidget();
     }
 
-    private IEnumerator CanvasFadeCoroutine(float duration, bool inverse, System.Action completed)
+    private IEnumerator UIPanelFadeCoroutine(float duration, bool inverse, System.Action completed)
     {
         float t = 0.0f;
         while (t < 1.0f)

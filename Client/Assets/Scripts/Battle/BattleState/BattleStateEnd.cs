@@ -11,6 +11,14 @@ public class BattleStateEnd : BattleState
 
     public override IEnumerator DoStart(byte[] data = null)
     {
+        var btlWin = Global.UIMgr.GetUI<UIBattleEnd>(UIManager.eUIType.eUI_BattleEnd);
+        if (btlWin != null)
+        {
+            btlWin.Show(0.5f);
+        }
+        
+        m_Owner.TurnUI.DestroyTurnIcon();
+
         yield return base.DoStart();
     }
 

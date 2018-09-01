@@ -57,7 +57,7 @@ public class BattleAIManager
                             Owner.ActiveTargetHeroNo = targetHeroNo;
                             BattleHeroManager.Instance.SetHeroOutline(targetHeroNo);
 
-                            var battleUI = Global.UIMgr.GetUIBattle();
+                            var battleUI = Global.UIMgr.GetUI<UIBattle>(UIManager.eUIType.eUI_Battle);
                             if (battleUI != null)
                             {
                                 battleUI.SetProfileUI(targetHeroNo, false);

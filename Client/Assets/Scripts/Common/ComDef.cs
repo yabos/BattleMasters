@@ -63,11 +63,12 @@ public class ResourcePath
     public static readonly string UITitle = "UI/Prefabs/Title/UITitle";
     public static readonly string UILobby = "UI/Prefabs/Lobby/UILobby";
     public static readonly string UIBattle = "UI/Prefabs/Battle/UIBattle";
-    public static readonly string BattleUIWinPath = "UI/Battle/Prefabs/BattleWin";
-    public static readonly string BattleUILosePath = "UI/Battle/Prefabs/BattleLose";
+    public static readonly string BattleUIWinPath = "UI/Prefabs/Battle/BattleWin";
+    public static readonly string BattleUILosePath = "UI/Prefabs/Battle/BattleLose";
     public static readonly string MapLoadPath = "Map/";
     public static readonly string CommendPath = "Battle/CommendExcute/";
-    public static readonly string TurnIconPath = "UI/Battle/Prefabs/TurnIcon";
+    public static readonly string TurnIconPath = "UI/Prefabs/Battle/TurnIcon";
+    public static readonly string DamageUI = "UI/Prefabs/Common/HeroDamage";
 
     // tools
     public static readonly string CommendExcutePath = "Assets/Resources/Battle/CommendExcute/";    

@@ -18,13 +18,17 @@ public class BattleHeroManager : Singleton<BattleHeroManager>
         get { return mListEnemyHeroes; }
     }
 
+    public void Init()
+    {
+        mListMyHeroes.Clear();
+        mListEnemyHeroes.Clear();
+    }
+
     public IEnumerator CreateHero(GameObject goHero, Guid uid, int iHeroNo, bool MyTeam, int sortingOrder)
     {
         TB_Hero tbHero;
         if (Global.TBMgr.cont_Hero.TryGetValue(iHeroNo, out tbHero))
         {
-            Hero hero = new Hero();
-
             yield return Global.ResourceMgr.CreateResourceAsync(eResourceType.Prefab, tbHero.mResPath, (resource) =>
             {
                 GameObject goRes = resource.ResourceData as GameObject;
@@ -50,7 +54,7 @@ public class BattleHeroManager : Singleton<BattleHeroManager>
 
                         go.transform.localScale = Vector3.one;
 
-                        hero = go.GetComponent<Hero>();
+                        var hero = go.GetComponent<Hero>();
                         if (hero != null)
                         {
                             hero.InitHero(tbHero, uid, iHeroNo, MyTeam, sortingOrder, go);
@@ -126,8 +130,6 @@ public class BattleHeroManager : Singleton<BattleHeroManager>
         bool myHeroAction = false;
         foreach (var elem in mListMyHeroes)
         {
-            //if (elem.IsDie) continue;
-
             if (elem.IsAction)
             {
                 myHeroAction = true;
@@ -137,8 +139,6 @@ public class BattleHeroManager : Singleton<BattleHeroManager>
         bool enemyHeroAction = false;
         foreach (var elem in mListEnemyHeroes)
         {
-            //if (elem.IsDie) continue;
-
             if (elem.IsAction)
             {
                 enemyHeroAction = true;

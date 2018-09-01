@@ -8,13 +8,13 @@ public class LobbyScene : SceneBase
     {
         yield return base.OnEnter(progress);
 
-        yield return Global.UIMgr.OnCreateWidgetAsync<UILobby>(ResourcePath.UILobby, widget =>
+        yield return Global.UIMgr.OnCreateWidgetAsync<UILobby>(UIManager.eUIType.eUI_Lobby, widget =>
         {
             if (widget != null)
             {
                 Global.SoundMgr.PlayBGM(SoundManager.eBGMType.eBGM_Lobby);
 
-                widget.OwnerScene = this;
+                widget.LobbyScene = this;
                 widget.Show();
                 SetEnterPageProgressInfo(0.5f);
             }

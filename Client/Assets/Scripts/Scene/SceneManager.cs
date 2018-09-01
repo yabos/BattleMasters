@@ -103,6 +103,10 @@ public class SceneManager : GlobalManagerBase<SceneManagerSetting>
 
     public override void BhvUpdate(float dt)
     {
+        if (CurrentScene != null)
+        {
+            CurrentScene.OnUpdate(dt);
+        }
     }
 
     public override void BhvLateUpdate(float dt)
@@ -147,14 +151,34 @@ public class SceneManager : GlobalManagerBase<SceneManagerSetting>
         return m_pages.FirstOrDefault(c => (c.Key.IndexOf(key, System.StringComparison.OrdinalIgnoreCase) >= 0)).Value;
     }
 
-    public bool IsInGamePage()
+    public bool IsTitleScene()
     {
         if (CurrentScene == null)
         {
             return false;
         }
 
-        return CurrentScene.IsInGamePage();
+        return CurrentScene is TitleScene;
+    }
+
+    public bool IsLobbyScene()
+    {
+        if (CurrentScene == null)
+        {
+            return false;
+        }
+
+        return CurrentScene is LobbyScene;
+    }
+
+    public bool IsBattleScene()
+    {
+        if (CurrentScene == null)
+        {
+            return false;
+        }
+
+        return CurrentScene is BattleScene;
     }
 
     public void TransitionWithBackPage(float fadeInDuration, float fadeOutDuration, System.Action<eSceneTransitionErrorCode> completed)
@@ -288,6 +312,11 @@ public class SceneManager : GlobalManagerBase<SceneManagerSetting>
         }
 
         m_transitionCoroutine = null;
+    }
+
+    public BattleScene GetBattleScene()
+    {
+        return CurrentScene as BattleScene;
     }
 
     #endregion Methods

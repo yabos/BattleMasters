@@ -32,7 +32,7 @@ public class BattleStateManager
 
     protected BattleScene m_Owner;
 
-    public void Initialize(BattleScene owner)
+    public IEnumerator Initialize(BattleScene owner)
     {
         m_Owner = owner;
 
@@ -43,7 +43,7 @@ public class BattleStateManager
             m_States[i].Initialize(m_Owner, this);
         }
 
-        m_Owner.StartCoroutine(m_States[(int)m_eCurrentState].DoStart());
+        yield return m_States[(int)m_eCurrentState].DoStart();
     }
    
     public void Update(float fTimeDelta)
@@ -69,14 +69,14 @@ public class BattleStateManager
             m_States[(int)m_ePreviousState].DoEnd();
 
             m_eCurrentState = eNextState;
-            m_States[(int)m_eCurrentState].DoStart(data);
+            m_Owner.StartCoroutine(m_States[(int)m_eCurrentState].DoStart(data));
         }
     }    
 
-    public void ReceiveEvent(BattleEvent sender)
-    {
-        m_States[(int)m_eCurrentState].ReceiveEvent(sender);
-    }
+    //public void ReceiveEvent(BattleEvent sender)
+    //{
+    //    m_States[(int)m_eCurrentState].ReceiveEvent(sender);
+    //}
 
     public virtual void NotifyDamage(Hero damagedHero)
     {

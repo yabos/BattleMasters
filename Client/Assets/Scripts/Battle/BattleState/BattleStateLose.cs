@@ -14,12 +14,13 @@ public class BattleStateLose : BattleState
         yield return base.DoStart();
 
         m_Owner.TurnUI.TurnPause = true;
+
         BattleHeroManager.Instance.ActiveHeroOutline(false);
 
-        var battleUI = Global.UIMgr.GetUIBattle();
-        if (battleUI != null)
+        var btlLose = Global.UIMgr.GetUI<UIBattleLose>(UIManager.eUIType.eUI_BattleLose);
+        if (btlLose != null)
         {
-            battleUI.ActiveUI(eBattleUI.Lose, true);
+            btlLose.Show();
         }
     }
 

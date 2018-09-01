@@ -23,11 +23,6 @@ public abstract class SceneBase : NotifyHanlderBehaviour
         return eNotifyHandler.Page;
     }
 
-    public virtual bool IsInGamePage()
-    {
-        return false;
-    }
-
     public override void OnNotify(INotify notify)
     {
 
@@ -86,7 +81,7 @@ public abstract class SceneBase : NotifyHanlderBehaviour
     public void SetEnterPageProgressInfo(float progress)
     {
         m_currentProgress = m_baseProgress + (progress * m_remainProgress);
-        //Global.ResourceMgr.LogWarning(StringUtil.Format("OnTransitionCoroutine -> Enter Page {0} %", (int)(m_currentProgress * 100)));
+        Global.ResourceMgr.LogWarning(StringUtil.Format("OnTransitionCoroutine -> Enter Page {0} %", (int)(m_currentProgress * 100)));
         Global.UIMgr.SetLoadingProgressInfo(m_currentProgress);
     }
 

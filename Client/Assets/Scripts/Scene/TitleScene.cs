@@ -9,13 +9,13 @@ public class TitleScene : SceneBase
     {
         yield return base.OnEnter(progress);
 
-        yield return Global.UIMgr.OnCreateWidgetAsync<UITitle>(ResourcePath.UITitle, widget =>
+        yield return Global.UIMgr.OnCreateWidgetAsync<UITitle>(UIManager.eUIType.eUI_Title, widget =>
         {
             if (widget != null)
             {
                 Global.SoundMgr.PlayBGM(SoundManager.eBGMType.eBGM_Title);
 
-                widget.OwnerScene = this;
+                widget.TitleScene = this;
                 widget.Show();
                 SetEnterPageProgressInfo(0.5f);
             }

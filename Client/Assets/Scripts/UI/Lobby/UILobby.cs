@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class UILobby : UIBase
 {
+    public LobbyScene LobbyScene { get; set; }
 
     #region IBhvUpdatable
 

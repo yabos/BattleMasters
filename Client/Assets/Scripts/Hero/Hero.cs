@@ -119,14 +119,14 @@ public class Hero : Actor
             {
                 Debug.LogError("Not Find Ef_Effect!");
             }
+
+            SetPosHPUI();
         }
     }
 
     protected override void Update()
     {
         float fTimeDelta = Time.deltaTime;
-
-        HPGaugePosUpdate();
 
         if (mActionManager != null)
         {
@@ -150,12 +150,16 @@ public class Hero : Actor
         }
     }
 
-    void HPGaugePosUpdate()
+    void SetPosHPUI()
     {
-        if (IsDie) return;
-
-        if (BattleManager.Instance.BattleUI == null) return;
-        BattleManager.Instance.BattleUI.UpdatePosHPGauge(HeroUid, Ef_HP);
+        if (Global.SceneMgr.IsBattleScene())
+        {
+            var battleUI = Global.UIMgr.GetUI<UIBattle>(UIManager.eUIType.eUI_Battle);
+            if (battleUI != null)
+            {
+                battleUI.SetPosHPGauge(HeroUid, Ef_HP);
+            }
+        }
     }
 
     public void ChangeState(EHeroBattleAction eAction, byte[] data = null, bool bRefresh = false)
@@ -170,32 +174,42 @@ public class Hero : Actor
     {
         // if(immune) return false
 
-        HP -= atthero.Atk;
-        BattleUIManager bcUI = BattleManager.Instance.BattleUI;
-        if (bcUI == null) return;
-
-        float amount = (float)HP / MaxHP;
-        bcUI.UpdateHPGauge(HeroUid, amount);
-        bcUI.CreateDamage(atthero.Atk, Ef_HP.position, IsMyTeam);
-
-        // Effect
-        CreateDamageEfc(atthero.HeroNo);
-
-        if (HP <= 0)
+        if (Global.SceneMgr.IsBattleScene())
         {
-            IsDie = true;
+            var battleUI = Global.UIMgr.GetUI<UIBattle>(UIManager.eUIType.eUI_Battle);
+            if (battleUI != null)
+            {
+                HP -= atthero.Atk;
+
+                float amount = (float)HP / MaxHP;
+                battleUI.UpdateHPGauge(HeroUid, amount);
+                battleUI.CreateDamage(atthero.Atk, Ef_HP.position, IsMyTeam);
+
+                // Effect
+                CreateDamageEfc(atthero.HeroNo);
+
+                if (HP <= 0)
+                {
+                    IsDie = true;
+                }
+            }
         }
     }
 
     void CreateDamageEfc(int heroNo)
     {
+        if (Global.SceneMgr.IsBattleScene() == false) return;
+
+        var battleScene = Global.SceneMgr.CurrentScene as BattleScene;
+        if (battleScene == null) return;
+
         TB_Hero tbHero;
         if (Global.TBMgr.cont_Hero.TryGetValue(heroNo, out tbHero))
         {
             var goEfc = Instantiate(EffectManager.Instance.GetEffect(tbHero.mBaseAtkEfc)) as GameObject;
             if (goEfc != null)
             {
-                goEfc.transform.parent = BattleManager.Instance.EffectRoot;
+                goEfc.transform.parent = battleScene.EffectRoot;
                 goEfc.transform.position = Ef_Effect.position;
 
                 ParticleSystem[] pcs = goEfc.GetComponentsInChildren<ParticleSystem>();
@@ -318,18 +332,25 @@ public class Hero : Actor
 
     public void HeroDie()
     {
-        BattleUIManager bcUI = BattleManager.Instance.BattleUI;
-        if (bcUI == null) return;
+        if (Global.SceneMgr.IsBattleScene())
         {
-            bcUI.DestroyHPGauge(HeroUid);
-            BattleManager.Instance.TurnUI.DestroyTurnIcon(HeroNo);
-        }
+            var battleUI = Global.UIMgr.GetUI<UIBattle>(UIManager.eUIType.eUI_Battle);
+            if (battleUI != null)
+            {
+                battleUI.DestroyHPGauge(HeroUid);
 
-        StartCoroutine(HeroDieAlphaFade(() => 
-        {
-            IsAction = false;
-        }));
-            
+                var battleScene = Global.SceneMgr.CurrentScene as BattleScene;
+                if (battleScene != null)
+                {
+                    battleScene.TurnUI.DestroyTurnIcon(HeroNo);
+
+                    StartCoroutine(HeroDieAlphaFade(() =>
+                    {
+                        IsAction = false;
+                    }));
+                }
+            }
+        }            
     }
 
     IEnumerator HeroDieAlphaFade(Action endFade)

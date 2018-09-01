@@ -55,7 +55,16 @@ public class UITurnControl : MonoBehaviour
 
     void Update()
     {
-        
+        m_fTimeElapsed += Time.deltaTime;
+
+        if (TurnPause == false)
+        {
+            if (m_fTimeElapsed >= 0.1f)
+            {
+                UpdateTurnSpeed();
+                m_fTimeElapsed = 0;
+            }
+        }
     }
 
     public void UpdateTurnSpeed()

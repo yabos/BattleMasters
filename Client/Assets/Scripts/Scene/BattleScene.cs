@@ -4,37 +4,52 @@ using UnityEngine;
 using System;
 
 public class BattleScene : SceneBase
-{   
+{
     public GameObject BattleRoot { get; private set; }
     public BattleStateManager BattleStateManager { get; private set; }
     public BattleAIManager BattleAIManager { get; private set; }
     public Transform EffectRoot { get; private set; }
     public Battleground Battleground { get; set; }
-    public TurnUI_Control TurnUI { get; set; }
+    public UITurnControl TurnUI { get; set;}
 
     public int ActiveTurnHeroNo { get; set; }
     public int ActiveTargetHeroNo { get; set; }
     public bool OnlyActionInput { get; set; }
 
-    public GameObject Blur;
+    private GameObject Blur;
 
     public override IEnumerator OnEnter(float progress)
     {
         yield return base.OnEnter(progress);
 
-        yield return Global.UIMgr.OnCreateWidgetAsync<UIBattle>(ResourcePath.UIBattle, widget =>
+        Global.UIMgr.ShowLoadingWidget(999);
+
+        yield return Global.UIMgr.OnCreateWidgetAsync<UIBattle>(UIManager.eUIType.eUI_Battle, widget =>
         {
             if (widget != null)
             {
                 Global.SoundMgr.PlayBGM(SoundManager.eBGMType.eBGM_Battle);
 
-                TurnUI = transform.GetComponentInChildren<TurnUI_Control>();
+                TurnUI = widget.GetComponentInChildren<UITurnControl>(true);
 
-                widget.OwnerScene = this;
+                widget.BattleScene = this;
                 widget.Show();                
-
-                SetEnterPageProgressInfo(0.5f);
             }
+        });
+
+        yield return Global.UIMgr.OnCreateWidgetAsync<UIBattleWin>(UIManager.eUIType.eUI_BattleWin, widget => 
+        {
+            widget.Hide();
+        });
+
+        yield return Global.UIMgr.OnCreateWidgetAsync<UIBattleLose>(UIManager.eUIType.eUI_BattleLose, widget => 
+        {
+            widget.Hide();
+        });
+
+        yield return Global.UIMgr.OnCreateWidgetAsync<UIBattleEnd>(UIManager.eUIType.eUI_BattleEnd, widget =>
+        {
+            widget.Hide();
         });
 
         yield return Global.ResourceMgr.CreateResourceAsync( eResourceType.Prefab, "Battle/Prefabs/BattleRoot", (prefabResource) =>
@@ -48,26 +63,30 @@ public class BattleScene : SceneBase
                 BattleRoot.transform.rotation = Quaternion.identity;
                 BattleRoot.transform.localScale = Vector3.one;
 
-                SetEnterPageProgressInfo(0.5f);
+                Blur = ComponentFactory.FindInChildrenByName<Transform>(BattleRoot.transform, "Blur").gameObject;
             }
         });
         
         //BattleRoot
         EffectRoot = BattleRoot.transform.Find("Effect");
 
+        BattleHeroManager.Instance.Init();
+
         if (BattleStateManager == null)
         {
-            BattleStateManager = new BattleStateManager();
-            BattleStateManager.Initialize(this);
+            BattleStateManager = new BattleStateManager();            
         }
+
+        yield return BattleStateManager.Initialize(this);
 
         if (BattleAIManager == null)
         {
-            BattleAIManager = new BattleAIManager();
-            BattleAIManager.Initialize();
+            BattleAIManager = new BattleAIManager();            
         }
 
-        yield return new WaitForSeconds(1.0f);
+        BattleAIManager.Initialize();
+
+        Global.UIMgr.HideLoadingWidget();
     }
 
     public override void OnExit()
@@ -139,7 +158,7 @@ public class BattleScene : SceneBase
         SetBattleSpawnPos(goHero, MyTeam, spawnPos);
 
         // create hero hp
-        var battleUI = Global.UIMgr.GetUIBattle();
+        var battleUI = Global.UIMgr.GetUI<UIBattle>(UIManager.eUIType.eUI_Battle);
         if (battleUI != null)
         {
             battleUI.CreateHeroHp(uid, MyTeam);
@@ -162,7 +181,7 @@ public class BattleScene : SceneBase
         ActiveBlur(!isTurnOut);
         BattleHeroManager.Instance.ActiveHeroOutline(false);
 
-        var battleUI = Global.UIMgr.GetUIBattle();
+        var battleUI = Global.UIMgr.GetUI<UIBattle>(UIManager.eUIType.eUI_Battle);
         if (battleUI != null)
         {
             battleUI.ActiveAllBattleProfile(false);
@@ -181,7 +200,7 @@ public class BattleScene : SceneBase
         InitHeroTween();
         TurnUI.InitActiveTurnMember(ActiveTurnHeroNo);
 
-        var battleUI = Global.UIMgr.GetUIBattle();
+        var battleUI = Global.UIMgr.GetUI<UIBattle>(UIManager.eUIType.eUI_Battle);
         if (battleUI != null)
         {
             battleUI.ActiveSelActionType(false);
@@ -295,7 +314,7 @@ public class BattleScene : SceneBase
             hero.IsMyTurn = true;
         }
 
-        var battleUI = Global.UIMgr.GetUIBattle();
+        var battleUI = Global.UIMgr.GetUI<UIBattle>(UIManager.eUIType.eUI_Battle);
         if (battleUI != null)
         {
             battleUI.ActiveBattleProfile(true, hero.IsMyTeam);

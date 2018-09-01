@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class UITitle : UIBase
 {
+    public TitleScene TitleScene { get; set; }
+
     #region IBhvUpdatable
 
     public override void BhvOnEnter()

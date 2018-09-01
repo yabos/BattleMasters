@@ -21,7 +21,8 @@ public class BattleStateNormal : BattleState
         BattleHeroManager.Instance.ActiveHeroOutline(false);
         BattleHeroManager.Instance.SetHeroOutline(heroNo);
         m_Owner.SetActiveTurnHero(heroNo);
-        m_Owner.TurnUI.TurnPause = true;        
+
+        m_Owner.TurnUI.TurnPause = true;
 
         TimeElapsed = 0;
         BeforeHeroNo = 0;
@@ -60,7 +61,7 @@ public class BattleStateNormal : BattleState
                     m_Owner.ActiveTargetHeroNo = heroCont.HeroNo;
                     BattleHeroManager.Instance.SetHeroOutline(heroCont.HeroNo);
 
-                    var battleUI = Global.UIMgr.GetUIBattle();
+                    var battleUI = Global.UIMgr.GetUI<UIBattle>(UIManager.eUIType.eUI_Battle);
                     if (battleUI != null)
                     {
                         battleUI.SetProfileUI(heroCont.HeroNo, false);

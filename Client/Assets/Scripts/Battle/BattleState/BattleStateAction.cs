@@ -13,8 +13,6 @@ public class BattleStateAction : BattleState
 
     public override IEnumerator DoStart(byte[] data = null)
     {
-        yield return base.DoStart();
-
         if (data != null)
         {
             int place = 0;
@@ -25,22 +23,20 @@ public class BattleStateAction : BattleState
             IsTurnOut = false;
         }
 
-        TimeElapsed = 0;
-
         m_Owner.SetBattleStateActionStart(IsTurnOut);
+
+        yield return new WaitForEndOfFrame();
     }
 
     public override void DoEnd()
     {
-        base.DoEnd();
-
         m_Owner.SetBattleStateActionEnd();
+
+        base.DoEnd();
     }
 
     public override void Update(float fTimeDelta)
     {
-        TimeElapsed += fTimeDelta;
-
         // 행동중인 영웅이 없는지 체크
         if (BattleHeroManager.Instance.CheckAction() == false)
         {

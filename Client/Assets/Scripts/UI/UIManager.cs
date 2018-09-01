@@ -4,6 +4,27 @@ using UnityEngine;
 
 public class UIManager : GlobalManagerBase<ManagerSettingBase>
 {
+    public enum eUIType
+    {
+        eUI_Title,
+        eUI_Lobby,
+        eUI_Battle,
+        eUI_BattleWin,
+        eUI_BattleLose,
+        eUI_BattleEnd,
+        eUI_Max,
+    }
+
+    readonly string[] UIPath =
+    {
+        "UI/Prefabs/Title/UITitle",
+        "UI/Prefabs/Lobby/UILobby",
+        "UI/Prefabs/Battle/UIBattle",
+        "UI/Prefabs/Battle/UIBattleWin",
+        "UI/Prefabs/Battle/UIBattleLose",
+        "UI/Prefabs/Battle/UIBattleEnd",
+    };
+
     private UIRepositories m_widgetRepositories;
     private string m_currentUIName = string.Empty;
 
@@ -256,10 +277,10 @@ public class UIManager : GlobalManagerBase<ManagerSettingBase>
         return m_widgetRepositories.CreateWidget<T>(path, dontDestroyOnLoad);
     }
 
-    public IEnumerator OnCreateWidgetAsync<T>(string path, System.Action<T> action, bool dontDestroyOnLoad = false)
+    public IEnumerator OnCreateWidgetAsync<T>(eUIType type, System.Action<T> action, bool dontDestroyOnLoad = false)
         where T : UIBase
     {
-        yield return m_widgetRepositories.OnCreateWidgetAsync<T>(path, action, dontDestroyOnLoad);
+        yield return m_widgetRepositories.OnCreateWidgetAsync<T>(UIPath[(int)type], action, dontDestroyOnLoad);
     }
 
     public UIBase FindWidget(string widgetType)
@@ -267,17 +288,20 @@ public class UIManager : GlobalManagerBase<ManagerSettingBase>
         return m_widgetRepositories.FindWidget(widgetType);
     }
 
-    // 이거는 이거대로 쓸일 있으니 놔두고 나중에 NotifyMgr 만들면 지금  ui 들 다 이벤트로 바꿔야함
-    public UIBattle GetUIBattle()
-    {
-        var uibase = m_widgetRepositories.FindWidget("UIBattle");
-        return uibase as UIBattle;
-    }
-
     public void HideAllWidgets(float deactiveTime = 0.0f)
     {
         m_widgetRepositories.HideAllWidgets(deactiveTime);
     }
-    
+
     #endregion Methods
+
+    public string GetUIPath(eUIType type)
+    {
+        return UIPath[(int)type];
+    }
+
+    public T GetUI<T>(eUIType type)
+    {
+        return (T)System.Convert.ChangeType(m_widgetRepositories.FindWidget(UIPath[(int)type]), typeof(T));
+    }    
 }

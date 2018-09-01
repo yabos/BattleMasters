@@ -14,12 +14,13 @@ public class BattleStateWin : BattleState
         yield return base.DoStart();
 
         m_Owner.TurnUI.TurnPause = true;
+
         BattleHeroManager.Instance.ActiveHeroOutline(false);
 
-        var battleUI = Global.UIMgr.GetUIBattle();
-        if (battleUI != null)
+        var btlWin = Global.UIMgr.GetUI<UIBattleWin>(UIManager.eUIType.eUI_BattleWin);
+        if (btlWin != null)
         {
-            battleUI.ActiveUI(eBattleUI.Win, true);
+            btlWin.Show();
         }
     }
 
