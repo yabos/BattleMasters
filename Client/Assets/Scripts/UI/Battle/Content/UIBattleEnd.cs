@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIBattle_Lose : UIBase
+public class UIBattleEnd : UIBase
 {
     #region IBhvUpdatable
 
@@ -33,5 +33,13 @@ public class UIBattle_Lose : UIBase
     public override void OnNotify(INotify message)
     {
 
+    }
+
+    public void OnLobbyScene()
+    {
+        Global.SceneMgr.Transition<LobbyScene>("LobbyScene", 0.5f, 0.3f, (code) =>
+        {
+            Global.SceneMgr.LogWarning(StringUtil.Format("Scene Transition -> {0}", "LobbyScene"));
+        });
     }
 }

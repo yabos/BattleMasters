@@ -1,37 +1,18 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class TurnUI_Control : MonoBehaviour
+public class UITurnControl : MonoBehaviour
 {
-    public List<TurnIcon> ListTurnIcons
-    {
-        get;
-        private set;
-    }
+    [System.NonSerialized]
+    public List<TurnIcon> ListTurnIcons = new List<TurnIcon>();
 
     [System.NonSerialized]
     public bool TurnPause = true;
 
     float m_fTimeElapsed = 0;
     
-	void Update ()
-    {
-        m_fTimeElapsed += Time.deltaTime;
-
-        if (TurnPause == false)
-        {
-            if (m_fTimeElapsed >= 0.1f)
-            {
-                UpdateTurnSpeed();
-                m_fTimeElapsed = 0;
-            }
-        }
-    }
-
     public void CreateTurnIcon()
     {
-        ListTurnIcons = new List<TurnIcon>();
-
         CreateTurnIcon(BattleHeroManager.Instance.ListMyHeroes);
         CreateTurnIcon(BattleHeroManager.Instance.ListEnemyHeroes);
     }
@@ -61,7 +42,22 @@ public class TurnUI_Control : MonoBehaviour
             }
         }
     }
+
+    public void DestroyTurnIcon()
+    {
+        foreach (var elem in ListTurnIcons)
+        {
+            GameObject.Destroy(elem.gameObject);
+        }
+
+        ListTurnIcons.Clear();
+    }
+
+    void Update()
+    {
         
+    }
+
     public void UpdateTurnSpeed()
     {
         List<Hero> listTemp = new List<Hero>();

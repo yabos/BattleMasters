@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIBattle_Win : UIBase
+public class UIBattleWin : UIBase
 {
     #region IBhvUpdatable
 
@@ -33,5 +33,16 @@ public class UIBattle_Win : UIBase
     public override void OnNotify(INotify message)
     {
 
+    }
+
+    public void OnBattleEnd()
+    {
+        Hide();
+
+        var battleScene = Global.SceneMgr.CurrentScene as BattleScene;
+        if (battleScene != null)
+        {
+            battleScene.BattleStateManager.ChangeState(EBattleState.BattleState_End);
+        }
     }
 }

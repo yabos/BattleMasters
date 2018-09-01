@@ -11,7 +11,7 @@ public enum eBattleUI
 
 public class UIBattle : UIBase
 {
-    BattleScene Owner;
+    public BattleScene BattleScene { get; set; }
 
     Transform BattleLoading = null;
     Transform HeroHp = null;
@@ -21,14 +21,10 @@ public class UIBattle : UIBase
     GameObject GoTurnTimer;
     TurnTimer TurnTime;
 
-    Dictionary<eBattleUI, UIBase> DicBattleUI = new Dictionary<eBattleUI, UIBase>();
-
     #region IBhvUpdatable
 
     public override void BhvOnEnter()
     {
-        Owner = OwnerScene as BattleScene;
-
         HeroHp = transform.Find("Anchor/HeroHP");
         BattleLoading = transform.Find("Anchor/Loading");
         DamageRoot = transform.Find("Anchor/DamageRoot");
@@ -50,8 +46,6 @@ public class UIBattle : UIBase
         {
             TurnTime = GoTurnTimer.GetComponent<TurnTimer>();
         }
-
-        SetBattleUI();
     }
 
     public override void BhvOnLeave() { }
@@ -91,90 +85,49 @@ public class UIBattle : UIBase
     }
 
 
-    void SetBattleUI()
+    #region Btn event
+
+    public void OnBattleSelActionType()
     {
-        AddBattleUI(eBattleUI.Win, ResourcePath.BattleUIWinPath);
-        AddBattleUI(eBattleUI.Lose, ResourcePath.BattleUILosePath);
+        SetBattleSelActionType();
     }
 
-    void AddBattleUI(eBattleUI type, string Path)
+    public void OnHeroActionType_Atk()
     {
-        var goUI = Global.ResourceMgr.CreateUIResource(Path, true);
-        if (goUI != null)
-        {
-            GameObject uiRoot = Instantiate(goUI.ResourceData) as GameObject;
-            if (uiRoot != null)
-            {
-                uiRoot.transform.name = uiRoot.name;
-                uiRoot.transform.parent = GameObject.FindGameObjectWithTag("UICamera").transform;
-
-                uiRoot.transform.localPosition = Vector3.zero;
-                uiRoot.transform.localRotation = Quaternion.identity;
-                uiRoot.transform.localScale = Vector3.one;
-
-                var baseUI = uiRoot.GetComponent<UIBase>();
-                DicBattleUI.Add(type, baseUI);
-
-                uiRoot.SetActive(false);
-            }
-        }
+        SetHeroActionType(Hero.EAtionType.ACTION_ATK);
     }
 
-    public void ActiveUI(eBattleUI type, bool active)
+    public void OnHeroActionType_Count()
     {
-        if (DicBattleUI.ContainsKey(type))
-        {
-            if (DicBattleUI[type].gameObject.activeSelf != active)
-            {
-                DicBattleUI[type].gameObject.SetActive(active);
-            }
-        }
-        else
-        {
-            Debug.LogError("Load Failed UI : " + type.ToString());
-        }
+        SetHeroActionType(Hero.EAtionType.ACTION_COUNT);
     }
 
-    //public override void SendEvent(EBattleEvent uIEvent)
-    //{
-    //    if (uIEvent == EBattleEvent.UIEVENT_SELECT_TARGET)
-    //    {
-    //        SetBattleSelActionType();
-    //    }
-    //    else if (uIEvent == EBattleEvent.UIEVENT_ACTION_ATK)
-    //    {
-    //        SetHeroActionType(Hero.EAtionType.ACTION_ATK);
-    //    }
-    //    else if (uIEvent == EBattleEvent.UIEVENT_ACTION_COUNT)
-    //    {
-    //        SetHeroActionType(Hero.EAtionType.ACTION_COUNT);
-    //    }
-    //    else if (uIEvent == EBattleEvent.UIEVENT_ACTION_FAKE)
-    //    {
-    //        SetHeroActionType(Hero.EAtionType.ACTION_FAKE);
-    //    }
-    //}
+    public void OnHeroActionType_Fake()
+    {
+        SetHeroActionType(Hero.EAtionType.ACTION_FAKE);
+    }
+
+    #endregion
 
     public void SetBattleSelActionType()
-    {
-        
-        var profile = GetProfile(Owner.ActiveTargetHeroNo);
+    {        
+        var profile = GetProfile(BattleScene.ActiveTargetHeroNo);
         if (profile != null)
         {
             profile.TweenPosSpriteProfile(true);
             ActiveSelActionType(true, true);
             SetTurnTimer(Define.SELECT_ACTIONTYPE_LIMITTIME, ETurnTimeType.TURNTIME_SEL_ACTIONTYPE);
 
-            Owner.OnlyActionInput = true;
+            BattleScene.OnlyActionInput = true;
         }
     }
 
     public void SetHeroActionType(Hero.EAtionType eAtionType)
     {
-        int heroNo = Owner.ActiveTurnHeroNo;
-        if (Owner.GetActiveHeroTeam() == false)
+        int heroNo = BattleScene.ActiveTurnHeroNo;
+        if (BattleScene.GetActiveHeroTeam() == false)
         {
-            heroNo = Owner.ActiveTargetHeroNo;
+            heroNo = BattleScene.ActiveTargetHeroNo;
         }
 
         var heroCont = BattleHeroManager.Instance.GetHeroControl(heroNo);
@@ -185,15 +138,15 @@ public class UIBattle : UIBase
 
         // 원래는 상대방의 입력 정보를 알아와야되는데
         // 지금은 AI로 대체 . 랜덤으로 타입을 정해준다.
-        heroNo = Owner.ActiveTargetHeroNo;
-        if (Owner.GetActiveHeroTeam() == false)
+        heroNo = BattleScene.ActiveTargetHeroNo;
+        if (BattleScene.GetActiveHeroTeam() == false)
         {
-            heroNo = Owner.ActiveTurnHeroNo;
+            heroNo = BattleScene.ActiveTurnHeroNo;
         }
-        Owner.BattleAIManager.SetRandomActionType(heroNo);
+        BattleScene.BattleAIManager.SetRandomActionType(heroNo);
 
-        Owner.BattleStateManager.ChangeState(EBattleState.BattleState_Action);
-        Owner.OnlyActionInput = false;
+        BattleScene.BattleStateManager.ChangeState(EBattleState.BattleState_Action);
+        BattleScene.OnlyActionInput = false;
     }
 
     public void ActiveLoadingIMG(bool bActive)
@@ -240,7 +193,7 @@ public class UIBattle : UIBase
         }
     }
 
-    public void UpdatePosHPGauge(System.Guid uid, Transform tEf_HP)
+    public void SetPosHPGauge(System.Guid uid, Transform tEf_HP)
     {
         if (HeroHp == null) return;
 
@@ -309,7 +262,7 @@ public class UIBattle : UIBase
 
     public void ActiveHUDUI(bool active)
     {
-        Owner.TurnUI.ActiveTurnUI(active);
+        BattleScene.TurnUI.ActiveTurnUI(active);
         ActiveHPUI(active);
     }
 
@@ -365,7 +318,7 @@ public class UIBattle : UIBase
 
     public void CreateDamage(int iDamage, Vector3 vPos, bool bMyTeam)
     {
-        var goDamageRes = Global.ResourceMgr.CreateUIResource("UI/Common/Prefabs/HeroDamage", false);
+        var goDamageRes = Global.ResourceMgr.CreateUIResource(ResourcePath.DamageUI, false);
         if (goDamageRes != null)
         {
             GameObject goDamage = Instantiate(goDamageRes.ResourceData) as GameObject;

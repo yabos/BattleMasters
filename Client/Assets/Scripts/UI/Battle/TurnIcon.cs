@@ -2,7 +2,7 @@
 
 public class TurnIcon : MonoBehaviour
 {
-    TurnUI_Control Owner;
+    UITurnControl Owner;
     UISprite Sprite;
 
     public int HeroNo
@@ -21,7 +21,7 @@ public class TurnIcon : MonoBehaviour
         Sprite = GetComponent<UISprite>();
     }
 
-    public void InitTurn(TurnUI_Control turnUI, int heroNo)
+    public void InitTurn(UITurnControl turnUI, int heroNo)
     {
         Owner = turnUI;
         MoveSpeedCount = 0;
