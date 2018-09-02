@@ -17,7 +17,7 @@ public class UITurnControl : MonoBehaviour
         CreateTurnIcon(BattleHeroManager.Instance.ListEnemyHeroes);
     }
 
-    void CreateTurnIcon(List<Hero> listHero)
+    void CreateTurnIcon(List<BattleHero> listHero)
     {
         for (int i = 0; i < listHero.Count; ++i)
         {
@@ -69,7 +69,7 @@ public class UITurnControl : MonoBehaviour
 
     public void UpdateTurnSpeed()
     {
-        List<Hero> listTemp = new List<Hero>();
+        List<BattleHero> listTemp = new List<BattleHero>();
         listTemp.AddRange(BattleHeroManager.Instance.ListMyHeroes);
         listTemp.AddRange(BattleHeroManager.Instance.ListEnemyHeroes);
 

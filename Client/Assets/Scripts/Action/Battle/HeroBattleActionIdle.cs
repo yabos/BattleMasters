@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HeroBattleActionIdle : HeroBattleAction
 {
-    public override void Initialize(Hero owner, HeroBattleActionManager action_manager)
+    public override void Initialize(BattleHero owner, HeroBattleActionManager action_manager)
     {
         base.Initialize(owner, action_manager);
     }

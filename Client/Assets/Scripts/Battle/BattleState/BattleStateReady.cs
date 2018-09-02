@@ -45,7 +45,7 @@ public class BattleStateReady : BattleState
 
             foreach (var hit in hits)
             {
-                var heroCont = hit.collider.GetComponentInParent<Hero>();
+                var heroCont = hit.collider.GetComponentInParent<BattleHero>();
                 if (heroCont == null) continue;               
                 if (BeforeHeroNo.Equals(heroCont.HeroNo)) continue;
 

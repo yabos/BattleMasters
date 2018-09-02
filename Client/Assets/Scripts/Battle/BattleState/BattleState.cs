@@ -40,11 +40,11 @@ public class BattleState
     //{
     //}
 
-    public virtual void NotifyDamage(Hero damagedHero)
+    public virtual void NotifyDamage(BattleHero damagedHero)
     {
     }
 
-    public virtual void NotifyActiveSkill(Hero battle_player, int iSkillSequence)
+    public virtual void NotifyActiveSkill(BattleHero battle_player, int iSkillSequence)
     {
     }
 }

@@ -260,36 +260,36 @@ public class BattleScene : SceneBase
         TargetHero.ExcuteAction(TargetHeroAction, vPos, ActiveHero, isWinner);
     }
 
-    EHeroBattleAction ResultBattleAction(Hero mine, Hero yours, ref bool isWinner)
+    EHeroBattleAction ResultBattleAction(BattleHero mine, BattleHero yours, ref bool isWinner)
     {
         isWinner = false;
 
         // Win
-        if (mine.ActionType == Hero.EAtionType.ACTION_ATK && yours.ActionType == Hero.EAtionType.ACTION_FAKE)
+        if (mine.ActionType == BattleHero.EAtionType.ACTION_ATK && yours.ActionType == BattleHero.EAtionType.ACTION_FAKE)
         {
             isWinner = true;
             return EHeroBattleAction.HeroAction_AtkWin;
         }
-        else if (mine.ActionType == Hero.EAtionType.ACTION_COUNT && yours.ActionType == Hero.EAtionType.ACTION_ATK)
+        else if (mine.ActionType == BattleHero.EAtionType.ACTION_COUNT && yours.ActionType == BattleHero.EAtionType.ACTION_ATK)
         {
             isWinner = true;
             return EHeroBattleAction.HeroAction_CntWin;
         }
-        else if (mine.ActionType == Hero.EAtionType.ACTION_FAKE && yours.ActionType == Hero.EAtionType.ACTION_COUNT)
+        else if (mine.ActionType == BattleHero.EAtionType.ACTION_FAKE && yours.ActionType == BattleHero.EAtionType.ACTION_COUNT)
         {
             isWinner = true;
             return EHeroBattleAction.HeroAction_FakeWin;
         }
         // Defeat
-        else if (mine.ActionType == Hero.EAtionType.ACTION_FAKE && yours.ActionType == Hero.EAtionType.ACTION_ATK)
+        else if (mine.ActionType == BattleHero.EAtionType.ACTION_FAKE && yours.ActionType == BattleHero.EAtionType.ACTION_ATK)
         {
             return EHeroBattleAction.HeroAction_FakeDefeat;
         }
-        else if (mine.ActionType == Hero.EAtionType.ACTION_ATK && yours.ActionType == Hero.EAtionType.ACTION_COUNT)
+        else if (mine.ActionType == BattleHero.EAtionType.ACTION_ATK && yours.ActionType == BattleHero.EAtionType.ACTION_COUNT)
         {
             return EHeroBattleAction.HeroAction_AtkDefeat;
         }
-        else if (mine.ActionType == Hero.EAtionType.ACTION_COUNT && yours.ActionType == Hero.EAtionType.ACTION_FAKE)
+        else if (mine.ActionType == BattleHero.EAtionType.ACTION_COUNT && yours.ActionType == BattleHero.EAtionType.ACTION_FAKE)
         {
             return EHeroBattleAction.HeroAction_CntDefeat;
         }

@@ -78,12 +78,12 @@ public class BattleStateManager
     //    m_States[(int)m_eCurrentState].ReceiveEvent(sender);
     //}
 
-    public virtual void NotifyDamage(Hero damagedHero)
+    public virtual void NotifyDamage(BattleHero damagedHero)
     {
         m_States[(int)m_eCurrentState].NotifyDamage(damagedHero);
     }    
 
-    public virtual void NotifyActiveSkill(Hero battle_player, int iSkillSequence)
+    public virtual void NotifyActiveSkill(BattleHero battle_player, int iSkillSequence)
     {
         m_States[(int)m_eCurrentState].NotifyActiveSkill(battle_player, iSkillSequence);
     }

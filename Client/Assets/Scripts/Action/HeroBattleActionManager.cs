@@ -39,9 +39,9 @@ public class HeroBattleActionManager
 
     protected EHeroBattleAction m_eCurrentAction;
     protected EHeroBattleAction m_ePreviousAction;
-    protected Hero m_Owner;
+    protected BattleHero m_Owner;
 
-    public virtual void Initialize(Hero owner)
+    public virtual void Initialize(BattleHero owner)
     {
         m_ePreviousAction = m_eCurrentAction = EHeroBattleAction.HeroAction_Idle;
 
@@ -121,7 +121,7 @@ public class HeroBattleActionManager
         float dummy = System.Convert.ToSingle(list[1]);
         string aniType = System.Convert.ToString(list[2]);
 
-        Actor.AniType eAniType = m_Owner.Actor.GetAniType(aniType);
+        Actor.AniType eAniType = m_Owner.GetAniType(aniType);
         m_Owner.PlayAnimation(eAniType);
 
         yield return new WaitForSeconds(delay);
@@ -132,7 +132,7 @@ public class HeroBattleActionManager
         float duration = System.Convert.ToSingle(list[0]);
         float dist = System.Convert.ToSingle(list[1]);
         string aniType = System.Convert.ToString(list[2]);
-        Actor.AniType eAniType = m_Owner.Actor.GetAniType(aniType);
+        Actor.AniType eAniType = m_Owner.GetAniType(aniType);
 
         float ElapsedTime = 0;
         float SumX = 0;
@@ -165,7 +165,7 @@ public class HeroBattleActionManager
         float duration = System.Convert.ToSingle(list[0]);
         float dist = System.Convert.ToSingle(list[1]);        
         string aniType = System.Convert.ToString(list[2]);
-        Actor.AniType eAniType = m_Owner.Actor.GetAniType(aniType);
+        Actor.AniType eAniType = m_Owner.GetAniType(aniType);
 
         if (m_Owner.IsMyTeam == false)
         {
@@ -185,7 +185,7 @@ public class HeroBattleActionManager
         float duration = System.Convert.ToSingle(list[0]);
         float dist = System.Convert.ToSingle(list[1]);
         string aniType = System.Convert.ToString(list[2]);
-        Actor.AniType eAniType = m_Owner.Actor.GetAniType(aniType);
+        Actor.AniType eAniType = m_Owner.GetAniType(aniType);
 
         float ElapsedTime = 0;
         float SumX = 0;
@@ -218,7 +218,7 @@ public class HeroBattleActionManager
         float duration = System.Convert.ToSingle(list[0]);
         float dist = System.Convert.ToSingle(list[1]);
         string aniType = System.Convert.ToString(list[2]);
-        Actor.AniType eAniType = m_Owner.Actor.GetAniType(aniType);
+        Actor.AniType eAniType = m_Owner.GetAniType(aniType);
 
         if (m_Owner.IsMyTeam)
         {
@@ -238,7 +238,7 @@ public class HeroBattleActionManager
         float duration = System.Convert.ToSingle(list[0]);
         float dummy = System.Convert.ToSingle(list[1]);
         string aniType = System.Convert.ToString(list[2]);        
-        Actor.AniType eAniType = m_Owner.Actor.GetAniType(aniType);
+        Actor.AniType eAniType = m_Owner.GetAniType(aniType);
 
         m_Owner.PlayAnimation(eAniType);
         yield return m_Owner.HeroAlphaFade(duration);

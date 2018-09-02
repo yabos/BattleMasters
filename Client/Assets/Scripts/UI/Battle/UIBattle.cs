@@ -94,17 +94,17 @@ public class UIBattle : UIBase
 
     public void OnHeroActionType_Atk()
     {
-        SetHeroActionType(Hero.EAtionType.ACTION_ATK);
+        SetHeroActionType(BattleHero.EAtionType.ACTION_ATK);
     }
 
     public void OnHeroActionType_Count()
     {
-        SetHeroActionType(Hero.EAtionType.ACTION_COUNT);
+        SetHeroActionType(BattleHero.EAtionType.ACTION_COUNT);
     }
 
     public void OnHeroActionType_Fake()
     {
-        SetHeroActionType(Hero.EAtionType.ACTION_FAKE);
+        SetHeroActionType(BattleHero.EAtionType.ACTION_FAKE);
     }
 
     #endregion
@@ -122,7 +122,7 @@ public class UIBattle : UIBase
         }
     }
 
-    public void SetHeroActionType(Hero.EAtionType eAtionType)
+    public void SetHeroActionType(BattleHero.EAtionType eAtionType)
     {
         int heroNo = BattleScene.ActiveTurnHeroNo;
         if (BattleScene.GetActiveHeroTeam() == false)
@@ -279,7 +279,7 @@ public class UIBattle : UIBase
         }
     }
 
-    public void SetReadyStateProfileUI(Hero heroCont)
+    public void SetReadyStateProfileUI(BattleHero heroCont)
     {
         var bp = GetProfile(heroCont.HeroNo);
         if (bp != null)

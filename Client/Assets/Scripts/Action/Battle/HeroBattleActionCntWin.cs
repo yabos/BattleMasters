@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class HeroBattleActionCntWin : HeroBattleAction
 {
-    public override void Initialize(Hero owner, HeroBattleActionManager action_manager)
+    public override void Initialize(BattleHero owner, HeroBattleActionManager action_manager)
     {
         base.Initialize(owner, action_manager);
-        ReadCommend(Hero.EActionCommend.COMMEND_CNT_WIN);
+        ReadCommend(BattleHero.EActionCommend.COMMEND_CNT_WIN);
     }
 
     public override void DoStart(byte[] data = null)

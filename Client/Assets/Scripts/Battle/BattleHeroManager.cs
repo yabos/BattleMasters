@@ -5,15 +5,15 @@ using System;
 
 public class BattleHeroManager : Singleton<BattleHeroManager>
 {
-    readonly List<Hero> mListMyHeroes = new List<Hero>();
-    readonly List<Hero> mListEnemyHeroes = new List<Hero>();
+    readonly List<BattleHero> mListMyHeroes = new List<BattleHero>();
+    readonly List<BattleHero> mListEnemyHeroes = new List<BattleHero>();
 
-    public List<Hero> ListMyHeroes
+    public List<BattleHero> ListMyHeroes
     {
         get { return mListMyHeroes; }
     }
 
-    public List<Hero> ListEnemyHeroes
+    public List<BattleHero> ListEnemyHeroes
     {
         get { return mListEnemyHeroes; }
     }
@@ -54,7 +54,7 @@ public class BattleHeroManager : Singleton<BattleHeroManager>
 
                         go.transform.localScale = Vector3.one;
 
-                        var hero = go.GetComponent<Hero>();
+                        var hero = go.GetComponent<BattleHero>();
                         if (hero != null)
                         {
                             hero.InitHero(tbHero, uid, iHeroNo, MyTeam, sortingOrder, go);
@@ -74,7 +74,7 @@ public class BattleHeroManager : Singleton<BattleHeroManager>
         }
     }
 
-    public Hero GetHeroControl(int heroNo)
+    public BattleHero GetHeroControl(int heroNo)
     {
         var hero = ListMyHeroes.Find(x => x.HeroNo.Equals(heroNo));
         if (hero != null)
@@ -153,7 +153,7 @@ public class BattleHeroManager : Singleton<BattleHeroManager>
     public int GetRandomHeroTeam()
     {
         int Idx = UnityEngine.Random.Range(0, mListMyHeroes.Count);
-        Hero randomHero = mListMyHeroes[Idx];
+        BattleHero randomHero = mListMyHeroes[Idx];
         while (randomHero.IsDie)
         {
             Idx = UnityEngine.Random.Range(0, mListMyHeroes.Count);

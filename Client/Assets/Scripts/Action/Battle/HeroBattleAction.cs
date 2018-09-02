@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class HeroBattleAction
 {
-    protected Hero m_Owner;
+    protected BattleHero m_Owner;
     protected HeroBattleActionManager m_ActionManager;
     protected List<string> m_Commends;
     protected Vector3 m_veOriginalPos;
 
-    public virtual void Initialize(Hero owner, HeroBattleActionManager action_manager)
+    public virtual void Initialize(BattleHero owner, HeroBattleActionManager action_manager)
     {
         m_Owner = owner;
         m_ActionManager = action_manager;
@@ -91,7 +91,7 @@ public class HeroBattleAction
     {
     }
 
-    protected void ReadCommend(Hero.EActionCommend actionCommend)
+    protected void ReadCommend(BattleHero.EActionCommend actionCommend)
     {
         var textAsset = m_Owner.GetActionCommend(actionCommend);
         if (textAsset != null)

@@ -6,7 +6,7 @@ public class ActionEventListener : MonoBehaviour
 {
     public void OnAtk()
     {
-        var attackHero = transform.GetComponentInParent<Hero>();
+        var attackHero = transform.GetComponentInParent<BattleHero>();
         if (attackHero != null)
         {
             TB_Hero tbHero;
