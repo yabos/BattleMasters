@@ -307,7 +307,7 @@ public class SceneManager : GlobalManagerBase<SceneManagerSetting>
 
         if (completed != null)
         {
-            Global.UIMgr.HideLoadingWidget(fadeOutDuration);
+            //Global.UIMgr.HideLoadingWidget(fadeOutDuration);
             completed(eSceneTransitionErrorCode.Success);
         }
 

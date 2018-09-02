@@ -20,9 +20,9 @@ public class BattleScene : SceneBase
 
     public override IEnumerator OnEnter(float progress)
     {
-        yield return base.OnEnter(progress);
+        Global.UIMgr.ShowLoadingWidget(0.5f);
 
-        Global.UIMgr.ShowLoadingWidget(999);
+        yield return base.OnEnter(progress);        
 
         yield return Global.UIMgr.OnCreateWidgetAsync<UIBattle>(UIManager.eUIType.eUI_Battle, widget =>
         {
@@ -86,7 +86,11 @@ public class BattleScene : SceneBase
 
         BattleAIManager.Initialize();
 
-        Global.UIMgr.HideLoadingWidget();
+        yield return new WaitForSeconds(1f);
+
+        Global.UIMgr.HideLoadingWidget(0.5f);
+
+        BattleStateManager.ChangeState(EBattleState.BattleState_Ready);
     }
 
     public override void OnExit()

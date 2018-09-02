@@ -7,6 +7,8 @@ public class TitleScene : SceneBase
 
     public override IEnumerator OnEnter(float progress)
     {
+        Global.UIMgr.ShowLoadingWidget(0.5f);
+
         yield return base.OnEnter(progress);
 
         yield return Global.UIMgr.OnCreateWidgetAsync<UITitle>(UIManager.eUIType.eUI_Title, widget =>
@@ -21,7 +23,9 @@ public class TitleScene : SceneBase
             }
         });
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1f);
+
+        Global.UIMgr.HideLoadingWidget(0.5f);
     }
 
     public override void OnExit()

@@ -18,6 +18,7 @@ public class BattleStateLoad : BattleState
         LoadBattleground(10101);
         yield return LoadBattleHero();
         yield return LoadBattleEnemy();
+
         LoadEffects();
 
         foreach (Outline vCurOutline in (Outline[])Object.FindObjectsOfType(typeof(Outline)))
@@ -27,11 +28,7 @@ public class BattleStateLoad : BattleState
 
         m_Owner.TurnUI.CreateTurnIcon();
 
-        //m_Owner.TurnUI.CreateTurnIcon();
-
         Global.SoundMgr.PlayBGM(SoundManager.eBGMType.eBGM_Battle);
-
-        m_StateManager.ChangeState(EBattleState.BattleState_Ready);
     }
 
     public override void DoEnd()

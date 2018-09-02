@@ -6,6 +6,8 @@ public class LobbyScene : SceneBase
 {
     public override IEnumerator OnEnter(float progress)
     {
+        Global.UIMgr.ShowLoadingWidget(0.5f);
+
         yield return base.OnEnter(progress);
 
         yield return Global.UIMgr.OnCreateWidgetAsync<UILobby>(UIManager.eUIType.eUI_Lobby, widget =>
@@ -20,7 +22,9 @@ public class LobbyScene : SceneBase
             }
         });
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1f);
+
+        Global.UIMgr.HideLoadingWidget(0.5f);
     }
 
     public override void OnExit()
