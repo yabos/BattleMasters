@@ -1,0 +1,22 @@
+//damage = 방어 뚫림, 공격 감소 보정 전 값
+//DEF_Const = Const에 있는 방어력 보정 상수 값
+//resultDamage = 최종 Damage
+//공식의도 = 방어력과 공격력을 연산해서 데미지 보정을 해준다
+//지속적으로 공격력과 방어력 필요성을 요구하기 위해서
+//각종 버프 및 속성 효과는 아직 연산에 포함 되지 않음, 추후 포함
+// damage 연산 뒤쪽으로 붙일 예정
+
+damage = atk * (DEF_Const/(DEF_Const+DEF));
+
+if(atk*1.3 <= def)
+{
+	resultDamage = damage * 0.7;
+} 
+else if(atk*0.7 >= def)
+{
+	resultDamage = damage * 1.3;
+}
+else
+{
+	resultDamage = damage;
+}
