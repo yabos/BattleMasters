@@ -1,0 +1,7 @@
+nameTag,value,Description
+turnPoint,10000,턴 포인트 0.1초 마다 캐릭터의 속도를 캐릭터 객체에게 더해서 10000이 된 캐릭터 턴
+maxSkillGage,1000,스킬 게이지 최대치
+DEF_Const,450,데미지 감소율 연산 공식에 사용
+targetSelectTime,20000,"대상 선택 시간 (1000 = 1초), 스킬 사용도 여기에 포함"
+attackSelectTime,10000,공격유형 선택 시간 (1000 = 1초)
+affectTargetSelectTime,10000,효과 대상 선택 시간 (1000 = 1초)
