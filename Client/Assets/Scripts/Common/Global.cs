@@ -77,6 +77,15 @@ public class Global : SingletonMonoBehaviour<Global>
         }
     }
 
+    private NotificationManager m_notificationManager = null;
+    public static NotificationManager NotificationMgr
+    {
+        get
+        {
+            return m_instance.m_notificationManager;
+        }
+    }
+
     private UIManager m_UIManager = null;
     public static UIManager UIMgr
     {
@@ -429,6 +438,11 @@ public class Global : SingletonMonoBehaviour<Global>
             AddManager(m_soundManager);
         }
 
+        if (CreateManager<NotificationManager, ManagerSettingBase>(ref m_notificationManager))
+        {
+            AddManager(m_notificationManager);
+        }
+
         if (CreateManager<UIManager, ManagerSettingBase>(ref m_UIManager))
         {
             AddManager(m_UIManager);
@@ -475,6 +489,7 @@ public class Global : SingletonMonoBehaviour<Global>
         DestroyManager<FirebaseAuthManager>(ref m_AuthManager);
         DestroyManager<ResourceManager>(ref m_resourceManager);
         DestroyManager<SoundManager>(ref m_soundManager);
+        DestroyManager<NotificationManager>(ref m_notificationManager);
         DestroyManager<UIManager>(ref m_UIManager);
         DestroyManager<TableManager>(ref m_tableManager);
 

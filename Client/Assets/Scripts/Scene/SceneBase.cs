@@ -55,12 +55,12 @@ public abstract class SceneBase : NotifyHanlderBehaviour
 
     public override void ConnectHandler()
     {
-        //Global.NotificationMgr.ConnectHandler(this);
+        Global.NotificationMgr.ConnectHandler(this);
     }
 
     public override void DisconnectHandler()
     {
-        //Global.NotificationMgr.DisconnectHandler(this);
+        Global.NotificationMgr.DisconnectHandler(this);
     }
 
     public abstract void OnInitialize();

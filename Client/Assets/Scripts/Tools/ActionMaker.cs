@@ -148,7 +148,6 @@ public class ActionMaker : MonoBehaviour
             fileName = heroNo.ToString() + "_" + enmeyExcType.ToString() + ".txt";
         }
 
-        string stData = GetActionData(myTeam);
         string path = ResourcePath.CommendExcutePath + heroNo.ToString() + "/" + fileName;
 
         string data = File.ReadAllText(path);

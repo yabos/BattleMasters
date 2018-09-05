@@ -61,6 +61,16 @@ public class LobbyScene : SceneBase
 
     public override void OnNotify(INotify notify)
     {
+        eMessage msgType = (eMessage)notify.MsgCode;
+        switch (msgType)
+        {
+            case eMessage.PageTransition:
+                {
+                    Debug.LogError(msgType);
+                }
+                break;
+        }
+
         base.OnNotify(notify);
     }
 }

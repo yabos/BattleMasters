@@ -43,6 +43,8 @@ public class UILobby : UIBase
 
     public void OnTitleScene()
     {
+        //Global.NotificationMgr.NotifyToEventHandler("OnNotify", eNotifyHandler.Widget, new SendMessage((uint)eMessage.PageTransition));
+
         Global.SceneMgr.Transition<TitleScene>("TitleScene", 0.5f, 0.3f, (code) =>
         {
             Global.SceneMgr.LogWarning(StringUtil.Format("Scene Transition -> {0}", "TitleScene"));

@@ -37,6 +37,8 @@ public class UIBattleEnd : UIBase
 
     public void OnLobbyScene()
     {
+        Global.NotificationMgr.NotifyToEventHandler("OnNotify", eNotifyHandler.Util_GameFlow, new SendMessage((uint)eMessage.PageTransition));
+
         Global.SceneMgr.Transition<LobbyScene>("LobbyScene", 0.5f, 0.3f, (code) =>
         {
             Global.SceneMgr.LogWarning(StringUtil.Format("Scene Transition -> {0}", "LobbyScene"));
