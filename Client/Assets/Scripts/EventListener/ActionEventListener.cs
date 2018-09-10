@@ -10,7 +10,7 @@ public class ActionEventListener : MonoBehaviour
         if (attackHero != null)
         {
             TB_Hero tbHero;
-            if (Global.TBMgr.cont_Hero.TryGetValue(attackHero.HeroNo, out tbHero))
+            if (Global.TBMgr.DicHero.TryGetValue(attackHero.HeroNo, out tbHero))
             {
                 Global.SoundMgr.PlaySoundOnce(tbHero.mBaseAtkSound);
             }

@@ -158,7 +158,7 @@ public class BattleHero : Hero
         if (battleScene == null) return;
 
         TB_Hero tbHero;
-        if (Global.TBMgr.cont_Hero.TryGetValue(heroNo, out tbHero))
+        if (Global.TBMgr.DicHero.TryGetValue(heroNo, out tbHero))
         {
             var goEfc = Instantiate(EffectManager.Instance.GetEffect(tbHero.mBaseAtkEfc)) as GameObject;
             if (goEfc != null)

@@ -67,7 +67,7 @@ public class BattleStateLoad : BattleState
         {
             for (int i = 0; i < 4; ++i)
             {
-                yield return m_Owner.CreateBattleHero(tTeam, 1001 + i, true, (i + 1) * 10,  i);
+                yield return m_Owner.CreateBattleHero(tTeam, 1 + i, true, (i + 1) * 10,  i);
             }
         }
     }
@@ -79,7 +79,7 @@ public class BattleStateLoad : BattleState
         {
             for (int i = 0; i < 4; ++i)
             {
-                yield return m_Owner.CreateBattleHero(tTeam, 2001 + i, false, (i + 1) * 10, i);
+                yield return m_Owner.CreateBattleHero(tTeam, 5 + i, false, (i + 1) * 10, i);
             }
         }
     }

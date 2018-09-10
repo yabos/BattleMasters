@@ -20,7 +20,6 @@ public class SaveData
 public class Define
 {
     //  턴 종료까지 시간 1000 = 1초
-    public static readonly float TURN_MAX = 10000;
     public static readonly float TURNICON_START_POS_X = -240;
     public static readonly float TURNICON_END_POS_X = 240;
     public static readonly float TURNICON_POS_X_LENGTH = 480;

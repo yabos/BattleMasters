@@ -7,6 +7,7 @@ public enum eResourceType
     Prefab,
     Sound,
     UI,
+    Text,
     Max,
 }
 
@@ -138,6 +139,17 @@ public class ResourceManager : GlobalManagerBase<ManagerSettingBase>
         return (PrefabResource)CreateResource(eResourceType.Prefab, path);
     }
 
+    public PrefabResource CreateTextResource(string path)
+    {
+        IResource res = FindResource(eResourceType.Text, path);
+        if (res != null)
+        {
+            return (PrefabResource)res;
+        }
+
+        return (PrefabResource)CreateResource(eResourceType.Text, path);
+    }
+
     public SoundResource CreateSoundResource(string path)
     {
         IResource res = null;
@@ -173,7 +185,6 @@ public class ResourceManager : GlobalManagerBase<ManagerSettingBase>
         return CreateResource(eType, path, path, objresource, isAssetBundle);
     }
 
-
     private IResource CreateResource(eResourceType eType, string name, string assetpath, Object objresource, bool isAssetBundle)
     {
         IResource resource = null;
@@ -182,6 +193,7 @@ public class ResourceManager : GlobalManagerBase<ManagerSettingBase>
             //case E_ResourceType.Actor:
             case eResourceType.UI:
             case eResourceType.Prefab:
+            case eResourceType.Text:
                 resource = new PrefabResource(objresource, eType, isAssetBundle);
                 break;
 

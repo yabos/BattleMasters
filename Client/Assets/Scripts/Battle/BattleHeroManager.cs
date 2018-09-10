@@ -27,7 +27,7 @@ public class BattleHeroManager : Singleton<BattleHeroManager>
     public IEnumerator CreateHero(GameObject goHero, Guid uid, int iHeroNo, bool MyTeam, int sortingOrder)
     {
         TB_Hero tbHero;
-        if (Global.TBMgr.cont_Hero.TryGetValue(iHeroNo, out tbHero))
+        if (Global.TBMgr.DicHero.TryGetValue(iHeroNo, out tbHero))
         {
             yield return Global.ResourceMgr.CreateResourceAsync(eResourceType.Prefab, tbHero.mResPath, (resource) =>
             {

@@ -1,9 +1,9 @@
 char_ID,char_Name,elemental,maxHP,ATK,DEF,speed,critical_Rate,criticalDamage_Rate,growUp_TableGroupID,passive_SkillID,atk_SkillID,cut_SkillID,dod_SkillID,active_SkillID,resource_Prefab,char_Illust,char_Icon,description_ID
-1,Ag,화,100,20,5,15,5,150,1,0,0,0,0,0,Assets\Resources\Heroes\Prefabs\Ag,OriginalResource\UI\Profile\2001,OriginalResource\UI\Common\2001,0
-2,Ak,수,200,15,10,10,5,150,1,0,0,0,0,0,Assets\Resources\Heroes\Prefabs\Ak,OriginalResource\UI\Profile\2002,OriginalResource\UI\Common\2002,0
-3,Bc,목,150,18,8,12,5,150,1,0,0,0,0,0,Assets\Resources\Heroes\Prefabs\Bc,OriginalResource\UI\Profile\2004,OriginalResource\UI\Common\2004,0
-4,Ce,수,200,15,12,10,10,150,1,0,0,0,0,0,Assets\Resources\Heroes\Prefabs\Ce,OriginalResource\UI\Profile\1004,OriginalResource\UI\Common\1004,0
-5,El,화,100,20,3,18,5,150,1,0,0,0,0,0,Assets\Resources\Heroes\Prefabs\El,OriginalResource\UI\Profile\2003,OriginalResource\UI\Common\2003,0
-6,La,수,300,12,15,5,5,150,1,0,0,0,0,0,Assets\Resources\Heroes\Prefabs\La,OriginalResource\UI\Profile\1002,OriginalResource\UI\Common\1002,0
-7,Mi,목,150,18,7,10,5,150,1,0,0,0,0,0,Assets\Resources\Heroes\Prefabs\Mi,OriginalResource\UI\Profile\1003,OriginalResource\UI\Common\1003,0
-8,Yu,화,100,25,5,16,10,150,1,0,0,0,0,0,Assets\Resources\Heroes\Prefabs\Yu,OriginalResource\UI\Profile\1001,OriginalResource\UI\Common\1001,0
+1,Ag,화,100,20,5,15,5,150,1,0,0,0,0,0,Heroes/Prefabs/Ag,OriginalResource/UI/Profile/2001,OriginalResource/UI/Common/2001,0
+2,Ak,수,200,15,10,10,5,150,1,0,0,0,0,0,Heroes/Prefabs/Ak,OriginalResource/UI/Profile/2002,OriginalResource/UI/Common/2002,0
+3,Bc,목,150,18,8,12,5,150,1,0,0,0,0,0,Heroes/Prefabs/Bc,OriginalResource/UI/Profile/2004,OriginalResource/UI/Common/2004,0
+4,Ce,수,200,15,12,10,10,150,1,0,0,0,0,0,Heroes/Prefabs/Ce,OriginalResource/UI/Profile/1004,OriginalResource/UI/Common/1004,0
+5,El,화,100,20,3,18,5,150,1,0,0,0,0,0,Heroes/Prefabs/El,OriginalResource/UI/Profile/2003,OriginalResource/UI/Common/2003,0
+6,La,수,300,12,15,5,5,150,1,0,0,0,0,0,Heroes/Prefabs/La,OriginalResource/UI/Profile/1002,OriginalResource/UI/Common/1002,0
+7,Mi,목,150,18,7,10,5,150,1,0,0,0,0,0,Heroes/Prefabs/Mi,OriginalResource/UI/Profile/1003,OriginalResource/UI/Common/1003,0
+8,Yu,화,100,25,5,16,10,150,1,0,0,0,0,0,Heroes/Prefabs/Yu,OriginalResource/UI/Profile/1001,OriginalResource/UI/Common/1001,0

@@ -5,6 +5,8 @@ public class TurnIcon : MonoBehaviour
     UITurnControl Owner;
     UISprite Sprite;
 
+    float mMaxTurnPoint = 0;
+
     public int HeroNo
     {
         get; set;
@@ -19,6 +21,7 @@ public class TurnIcon : MonoBehaviour
     void Awake ()
     {
         Sprite = GetComponent<UISprite>();
+        mMaxTurnPoint = Global.TBMgr.GetConstValue(eConstType.TurnPoint);
     }
 
     public void InitTurn(UITurnControl turnUI, int heroNo)
@@ -49,7 +52,7 @@ public class TurnIcon : MonoBehaviour
 
     void UpdateTurnIconPos()
     {
-        float ratioMax = MoveSpeedCount / Define.TURN_MAX;
+        float ratioMax = MoveSpeedCount / mMaxTurnPoint;
         var pos = transform.localPosition;
         float ratioPos = (pos.x + Define.TURNICON_END_POS_X) / Define.TURNICON_POS_X_LENGTH;
 
