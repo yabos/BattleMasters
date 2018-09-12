@@ -31,7 +31,7 @@ public class TB_Hero
 public class TB_Const
 {
     public string mNameTag;
-    public int mValuel;
+    public float mValuel;
 }
 
 public enum eConstType
@@ -42,4 +42,6 @@ public enum eConstType
     TargetSelectTime,
     AttackSelectTIme,
     AffectTargetSelectTime,
+    Clean_DEF_Const,
+    Crash_DEF_Const,
 }

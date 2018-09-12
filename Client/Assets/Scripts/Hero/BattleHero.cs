@@ -133,11 +133,31 @@ public class BattleHero : Hero
             var battleUI = Global.UIMgr.GetUI<UIBattle>(UIManager.eUIType.eUI_Battle);
             if (battleUI != null)
             {
-                HP -= atthero.Atk;
+                // 임시 데미지 연산 공식
+                // 나중에 서버에서 주는 데미지로 감소. 지금은 기획테스트용 임시코드                
+                float resultDamage = 0;
+                float defConst = Global.TBMgr.GetConstValue(eConstType.Def_Const);
+                float damage = atthero.Atk * (defConst / (defConst + Def));
+                if (atthero.Atk * 1.3f <= Def)
+                {
+                    resultDamage = damage * Global.TBMgr.GetConstValue(eConstType.Clean_DEF_Const);
+                }
+                else if (atthero.Atk * 0.7f >= Def)
+                {
+                    resultDamage = damage * Global.TBMgr.GetConstValue(eConstType.Crash_DEF_Const);
+                }
+                else
+                {
+                    resultDamage = damage;
+                }
+
+                ///////////////////////
+                int floorDamage = Mathf.FloorToInt(resultDamage);
+                HP -= floorDamage;
 
                 float amount = (float)HP / MaxHP;
                 battleUI.UpdateHPGauge(HeroUid, amount);
-                battleUI.CreateDamage(atthero.Atk, Ef_HP.position, IsMyTeam);
+                battleUI.CreateDamage(floorDamage, Ef_HP.position, IsMyTeam);
 
                 // Effect
                 CreateDamageEfc(atthero.HeroNo);

@@ -110,8 +110,8 @@ public class TableManager : GlobalManagerBase<ManagerSettingBase>
             tbHero.mResPath = System.Convert.ToString(data[i]["resource_Prefab"]);
             tbHero.mChar_Illust = System.Convert.ToString(data[i]["char_Illust"]);
             tbHero.mChar_Icon = System.Convert.ToString(data[i]["char_Icon"]);
-            //tbHero.mBaseAtkEfc = System.Convert.ToString(data[i]["BaseAtkEfc"]);
-            //tbHero.mBaseAtkSound = System.Convert.ToString(data[i]["BaseAtkSound"]);            
+            tbHero.mBaseAtkEfc = System.Convert.ToString(data[i]["BaseAtkEfc"]);
+            tbHero.mBaseAtkSound = System.Convert.ToString(data[i]["BaseAtkSound"]);            
 
             int key = tbHero.mHeroNo;
             if (DicHero.ContainsKey(key))
@@ -136,7 +136,7 @@ public class TableManager : GlobalManagerBase<ManagerSettingBase>
             TB_Const tbConst = new TB_Const();
 
             tbConst.mNameTag = System.Convert.ToString(data[i]["nameTag"]);
-            tbConst.mValuel = System.Convert.ToInt32(data[i]["value"]);
+            tbConst.mValuel = System.Convert.ToSingle(data[i]["value"]);
             eConstType key = (eConstType)i;
             if (DicConst.ContainsKey(key))
             {
@@ -166,7 +166,7 @@ public class TableManager : GlobalManagerBase<ManagerSettingBase>
         return 0;
     }
 
-    public int GetConstValue(eConstType type)
+    public float GetConstValue(eConstType type)
     {
         if (DicConst.ContainsKey(type))
         {
