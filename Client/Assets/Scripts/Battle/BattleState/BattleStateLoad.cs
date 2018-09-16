@@ -65,10 +65,10 @@ public class BattleStateLoad : BattleState
         Transform tTeam = m_Owner.BattleRoot.transform.Find("Team/MyTeam");
         if (tTeam != null)
         {
-            for (int i = 0; i < 4; ++i)
-            {
-                yield return m_Owner.CreateBattleHero(tTeam, 1 + i, true, (i + 1) * 10,  i);
-            }
+            yield return m_Owner.CreateBattleHero(tTeam, 9, true, (0 + 1) * 10, 0);
+            yield return m_Owner.CreateBattleHero(tTeam, 1, true, (1 + 1) * 10, 1);
+            yield return m_Owner.CreateBattleHero(tTeam, 2, true, (2 + 1) * 10, 2);
+            yield return m_Owner.CreateBattleHero(tTeam, 3, true, (3 + 1) * 10, 3);
         }
     }
 

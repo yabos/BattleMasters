@@ -11,7 +11,7 @@ public class Global : SingletonMonoBehaviour<Global>
 
     private bool m_hasSetOriginalScreenResolution = false;
 
-    private const int m_highMaxResolutionWidth = 1280;
+    private const int m_highMaxResolutionWidth = 2960;
     private int m_originalScreenWidth = 1280;
     private int m_originalScreenHeight = 720;
 

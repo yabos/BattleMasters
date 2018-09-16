@@ -57,7 +57,7 @@ public class UIManager : GlobalManagerBase<ManagerSettingBase>
         }
 
         uiRoot.scalingStyle = UIRoot.Scaling.ConstrainedOnMobiles;
-        uiRoot.fitHeight = true;
+        uiRoot.fitHeight = false;
         uiRoot.fitWidth = true;
 
         BhvOnEnter();
