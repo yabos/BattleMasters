@@ -66,7 +66,7 @@ public class BattleStateLoad : BattleState
         if (tTeam != null)
         {
             yield return m_Owner.CreateBattleHero(tTeam, 9, true, (0 + 1) * 10, 0);
-            yield return m_Owner.CreateBattleHero(tTeam, 1, true, (1 + 1) * 10, 1);
+            yield return m_Owner.CreateBattleHero(tTeam, 10, true, (1 + 1) * 10, 1);
             yield return m_Owner.CreateBattleHero(tTeam, 2, true, (2 + 1) * 10, 2);
             yield return m_Owner.CreateBattleHero(tTeam, 3, true, (3 + 1) * 10, 3);
         }

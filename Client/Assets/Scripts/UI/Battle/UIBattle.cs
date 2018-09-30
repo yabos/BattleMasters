@@ -14,7 +14,7 @@ public class UIBattle : UIBase
     public BattleScene BattleScene { get; set; }
 
     Transform BattleLoading = null;
-    Transform HeroHp = null;
+    //Transform HeroHp = null;
     Transform DamageRoot = null;
 
     BattleProfile[] Profiles = new BattleProfile[2];
@@ -25,7 +25,7 @@ public class UIBattle : UIBase
 
     public override void BhvOnEnter()
     {
-        HeroHp = transform.Find("Anchor/HeroHP");
+        //HeroHp = transform.Find("Anchor/HeroHP");
         BattleLoading = transform.Find("Anchor/Loading");
         DamageRoot = transform.Find("Anchor/DamageRoot");
 
@@ -154,77 +154,77 @@ public class UIBattle : UIBase
         BattleLoading.gameObject.SetActive(bActive);
     }
 
-    public void CreateHeroHp(System.Guid uid, bool bMyTeam)
-    {
-        var goHPRes = Global.ResourceMgr.CreateUIResource("UI/Common/Prefabs/HPGauge", false);
-        if (goHPRes == null) return;
+    //public void CreateHeroHp(System.Guid uid, bool bMyTeam)
+    //{
+    //    var goHPRes = Global.ResourceMgr.CreateUIResource("UI/Common/Prefabs/HPGauge", false);
+    //    if (goHPRes == null) return;
 
-        GameObject goHP = Instantiate(goHPRes.ResourceData) as GameObject;
-        if (goHP != null)
-        {
-            goHP.transform.parent = HeroHp.transform;
-            goHP.transform.name = uid.ToString();
+    //    GameObject goHP = Instantiate(goHPRes.ResourceData) as GameObject;
+    //    if (goHP != null)
+    //    {
+    //        goHP.transform.parent = HeroHp.transform;
+    //        goHP.transform.name = uid.ToString();
 
-            goHP.transform.position = Vector3.zero;
-            goHP.transform.rotation = Quaternion.identity;
-            goHP.transform.localScale = new Vector3(0.8f, 0.8f, 1);
+    //        goHP.transform.position = Vector3.zero;
+    //        goHP.transform.rotation = Quaternion.identity;
+    //        goHP.transform.localScale = new Vector3(0.8f, 0.8f, 1);
 
-            goHP.SetActive(true);
-        }
-    }
+    //        goHP.SetActive(true);
+    //    }
+    //}
 
-    public void UpdateHPGauge(System.Guid uid, float fFillAmountHp)
-    {
-        if (HeroHp == null) return;
+    //public void UpdateHPGauge(System.Guid uid, float fFillAmountHp)
+    //{
+    //    if (HeroHp == null) return;
 
-        for (int i = 0; i < HeroHp.childCount; ++i)
-        {
-            Transform tChild = HeroHp.GetChild(i);
-            if (tChild == null) continue;
+    //    for (int i = 0; i < HeroHp.childCount; ++i)
+    //    {
+    //        Transform tChild = HeroHp.GetChild(i);
+    //        if (tChild == null) continue;
 
-            if (tChild.name.Equals(uid.ToString()))
-            {
-                Transform tSlider = tChild.Find("SpriteSlider");
-                if (tSlider == null) continue;
-                UISprite sprite = tSlider.GetComponent<UISprite>();
-                if (sprite == null) continue;
-                sprite.fillAmount = fFillAmountHp;
-            }
-        }
-    }
+    //        if (tChild.name.Equals(uid.ToString()))
+    //        {
+    //            Transform tSlider = tChild.Find("SpriteSlider");
+    //            if (tSlider == null) continue;
+    //            UISprite sprite = tSlider.GetComponent<UISprite>();
+    //            if (sprite == null) continue;
+    //            sprite.fillAmount = fFillAmountHp;
+    //        }
+    //    }
+    //}
 
-    public void SetPosHPGauge(System.Guid uid, Transform tEf_HP)
-    {
-        if (HeroHp == null) return;
+    //public void SetPosHPGauge(System.Guid uid, Transform tEf_HP)
+    //{
+    //    if (HeroHp == null) return;
 
-        for (int i = 0; i < HeroHp.childCount; ++i)
-        {
-            Transform tChild = HeroHp.GetChild(i);
-            if (tChild == null) continue;
+    //    for (int i = 0; i < HeroHp.childCount; ++i)
+    //    {
+    //        Transform tChild = HeroHp.GetChild(i);
+    //        if (tChild == null) continue;
 
-            if (tChild.name.Equals(uid.ToString()))
-            {
-                Vector3 vScreenPos = Camera.main.WorldToScreenPoint(tEf_HP.position);
-                tChild.position = UICamera.currentCamera.ScreenToWorldPoint(new Vector3(vScreenPos.x, vScreenPos.y, 0));
-            }
-        }
-    }
+    //        if (tChild.name.Equals(uid.ToString()))
+    //        {
+    //            Vector3 vScreenPos = Camera.main.WorldToScreenPoint(tEf_HP.position);
+    //            tChild.position = UICamera.currentCamera.ScreenToWorldPoint(new Vector3(vScreenPos.x, vScreenPos.y, 0));
+    //        }
+    //    }
+    //}
 
-    public void DestroyHPGauge(System.Guid uid)
-    {
-        if (HeroHp == null) return;
+    //public void DestroyHPGauge(System.Guid uid)
+    //{
+    //    if (HeroHp == null) return;
 
-        for (int i = 0; i < HeroHp.childCount; ++i)
-        {
-            Transform tChild = HeroHp.GetChild(i);
-            if (tChild == null) continue;
+    //    for (int i = 0; i < HeroHp.childCount; ++i)
+    //    {
+    //        Transform tChild = HeroHp.GetChild(i);
+    //        if (tChild == null) continue;
 
-            if (tChild.name.Equals(uid.ToString()))
-            {
-                NGUITools.Destroy(tChild.gameObject);
-            }
-        }
-    }
+    //        if (tChild.name.Equals(uid.ToString()))
+    //        {
+    //            NGUITools.Destroy(tChild.gameObject);
+    //        }
+    //    }
+    //}
 
     BattleProfile GetProfile(int heroNo)
     {
@@ -290,7 +290,7 @@ public class UIBattle : UIBase
 
     void ActiveHPUI(bool active)
     {
-        HeroHp.gameObject.SetActive(active);
+        //HeroHp.gameObject.SetActive(active);
     }
 
     public void ActiveTurnTimer(bool active)

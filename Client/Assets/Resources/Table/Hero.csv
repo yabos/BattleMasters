@@ -8,3 +8,4 @@ char_ID,char_Name,elemental,maxHP,ATK,DEF,speed,critical_Rate,criticalDamage_Rat
 7,Mi,TREE,1500,180,140,100,10,150,1,0,0,0,0,0,Heroes/Prefabs/Mi,OriginalResource/UI/Profile/1003,OriginalResource/UI/Common/1003,0,Blow1,Blow2
 8,Yu,FIRE,1000,250,100,160,20,150,1,0,0,0,0,0,Heroes/Prefabs/Yu,OriginalResource/UI/Profile/1001,OriginalResource/UI/Common/1001,0,Blow1,Blow2
 9,Xing,FIRE,1200,210,120,140,10,150,1,0,0,0,0,0,Heroes/Prefabs/Xing,OriginalResource/UI/Profile/Xing,OriginalResource/UI/Common/Xing,0,Blow1,Blow2
+10,Torao,FIRE,1200,210,120,140,10,150,1,0,0,0,0,0,Heroes/Prefabs/Torao,OriginalResource/UI/Profile/Torao,OriginalResource/UI/Common/Torao,0,Blow1,Blow2

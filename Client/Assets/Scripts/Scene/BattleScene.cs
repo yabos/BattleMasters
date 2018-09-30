@@ -165,7 +165,7 @@ public class BattleScene : SceneBase
         var battleUI = Global.UIMgr.GetUI<UIBattle>(UIManager.eUIType.eUI_Battle);
         if (battleUI != null)
         {
-            battleUI.CreateHeroHp(uid, MyTeam);
+            //battleUI.CreateHeroHp(uid, MyTeam);
         }
     }
 

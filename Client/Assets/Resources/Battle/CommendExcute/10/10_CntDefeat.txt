@@ -1,0 +1,3 @@
+MoveForward, 0.8, 1.5, Cnt
+MoveBackward, 0.2, 4, Defeat
+MoveBackward, 0.5, 1, Defeat

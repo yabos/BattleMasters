@@ -111,7 +111,7 @@ public class BattleHero : Hero
             var battleUI = Global.UIMgr.GetUI<UIBattle>(UIManager.eUIType.eUI_Battle);
             if (battleUI != null)
             {
-                battleUI.SetPosHPGauge(HeroUid, Ef_HP);
+                //battleUI.SetPosHPGauge(HeroUid, Ef_HP);
             }
         }
     }
@@ -156,7 +156,7 @@ public class BattleHero : Hero
                 HP -= floorDamage;
 
                 float amount = (float)HP / MaxHP;
-                battleUI.UpdateHPGauge(HeroUid, amount);
+                //battleUI.UpdateHPGauge(HeroUid, amount);
                 battleUI.CreateDamage(floorDamage, Ef_HP.position, IsMyTeam);
 
                 // Effect
@@ -301,7 +301,7 @@ public class BattleHero : Hero
             var battleUI = Global.UIMgr.GetUI<UIBattle>(UIManager.eUIType.eUI_Battle);
             if (battleUI != null)
             {
-                battleUI.DestroyHPGauge(HeroUid);
+                //battleUI.DestroyHPGauge(HeroUid);
 
                 var battleScene = Global.SceneMgr.CurrentScene as BattleScene;
                 if (battleScene != null)
